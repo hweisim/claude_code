@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SplitTrip</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- First-time Setup Overlay -->
+  <div id="setup-overlay" class="overlay hidden">
+    <div class="setup-card">
+      <div class="setup-icon">✈️</div>
+      <h1>SplitTrip</h1>
+      <p class="setup-sub">Track and split travel expenses with your friends</p>
+      <div class="setup-form">
+        <div class="form-group">
+          <label>Trip Name</label>
+          <input type="text" id="setup-trip-name" placeholder="e.g. Europe 2026" value="Our Trip">
+        </div>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="setup-name-1" placeholder="Your name" value="You">
+        </div>
+        <div class="form-group">
+          <label>Friend 1</label>
+          <input type="text" id="setup-name-2" placeholder="Friend's name" value="Alex">
+        </div>
+        <div class="form-group">
+          <label>Friend 2</label>
+          <input type="text" id="setup-name-3" placeholder="Friend's name" value="Sam">
+        </div>
+        <div class="form-group">
+          <label>Currency</label>
+          <select id="setup-currency">
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="JPY">JPY (¥)</option>
+            <option value="CAD">CAD (C$)</option>
+            <option value="AUD">AUD (A$)</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="App.setupComplete()">Start Trip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <span class="logo-mark">✈️</span>
+        <div>
+          <span class="logo-text">SplitTrip</span>
+          <span id="trip-name-display" class="trip-name-badge"></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main" id="main-content">
+
+    <!-- Dashboard View -->
+    <div id="view-dashboard" class="view active">
+      <div class="section">
+        <div class="section-header">
+          <h2>Balances</h2>
+          <span id="balance-summary-text" class="tag tag-neutral"></span>
+        </div>
+        <div id="balance-cards" class="balance-grid"></div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <h2>Who Owes Whom</h2>
+        </div>
+        <div id="debts-list"></div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <h2>Recent Activity</h2>
+          <button class="text-btn" onclick="App.showView('expenses')">See all →</button>
+        </div>
+        <div id="recent-activity"></div>
+      </div>
+    </div>
+
+    <!-- Expenses View -->
+    <div id="view-expenses" class="view">
+      <div class="section">
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="expense-search" placeholder="Search expenses…" oninput="App.filterExpenses()">
+        </div>
+        <div class="chip-row" id="category-filters">
+          <button class="chip active" data-cat="all"            onclick="App.setCategory(this,'all')">All</button>
+          <button class="chip" data-cat="food"            onclick="App.setCategory(this,'food')">🍽️ Food</button>
+          <button class="chip" data-cat="transport"        onclick="App.setCategory(this,'transport')">🚌 Transport</button>
+          <button class="chip" data-cat="accommodation"    onclick="App.setCategory(this,'accommodation')">🏨 Stay</button>
+          <button class="chip" data-cat="entertainment"    onclick="App.setCategory(this,'entertainment')">🎉 Fun</button>
+          <button class="chip" data-cat="shopping"         onclick="App.setCategory(this,'shopping')">🛍️ Shop</button>
+          <button class="chip" data-cat="other"            onclick="App.setCategory(this,'other')">📦 Other</button>
+        </div>
+        <div id="total-bar" class="total-bar hidden"></div>
+        <div id="expenses-list"></div>
+      </div>
+    </div>
+
+    <!-- Settle View -->
+    <div id="view-settle" class="view">
+      <div class="section">
+        <div class="section-header"><h2>Settle Up</h2></div>
+        <div id="settle-list"></div>
+      </div>
+      <div class="section">
+        <div class="section-header"><h2>Payment History</h2></div>
+        <div id="settlement-history"></div>
+      </div>
+    </div>
+
+    <!-- Settings View -->
+    <div id="view-settings" class="view">
+      <div class="section">
+        <h2>Settings</h2>
+        <div class="settings-group">
+          <div class="form-group">
+            <label>Trip Name</label>
+            <input type="text" id="settings-trip-name" oninput="App.updateSettings()">
+          </div>
+        </div>
+
+        <h3 class="settings-label">Travelers</h3>
+        <div class="settings-group">
+          <div class="form-group">
+            <label>Your Name</label>
+            <div class="member-input-row">
+              <span class="dot" id="dot-1"></span>
+              <input type="text" id="settings-name-1" oninput="App.updateSettings()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Friend 1</label>
+            <div class="member-input-row">
+              <span class="dot" id="dot-2"></span>
+              <input type="text" id="settings-name-2" oninput="App.updateSettings()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Friend 2</label>
+            <div class="member-input-row">
+              <span class="dot" id="dot-3"></span>
+              <input type="text" id="settings-name-3" oninput="App.updateSettings()">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Currency</label>
+          <select id="settings-currency" onchange="App.updateSettings()">
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="JPY">JPY (¥)</option>
+            <option value="CAD">CAD (C$)</option>
+            <option value="AUD">AUD (A$)</option>
+          </select>
+        </div>
+
+        <h3 class="settings-label">Trip Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div id="stat-total" class="stat-val">—</div>
+            <div class="stat-lbl">Total Spent</div>
+          </div>
+          <div class="stat-card">
+            <div id="stat-count" class="stat-val">0</div>
+            <div class="stat-lbl">Expenses</div>
+          </div>
+          <div class="stat-card">
+            <div id="stat-per-person" class="stat-val">—</div>
+            <div class="stat-lbl">Per Person</div>
+          </div>
+        </div>
+
+        <div class="danger-zone">
+          <h3 class="settings-label">Danger Zone</h3>
+          <button class="btn btn-danger btn-full" onclick="App.confirmReset()">Reset All Data</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-view="dashboard" onclick="App.showView('dashboard')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-lbl">Dashboard</span>
+    </button>
+    <button class="nav-btn" data-view="expenses" onclick="App.showView('expenses')">
+      <span class="nav-icon">📋</span>
+      <span class="nav-lbl">Expenses</span>
+    </button>
+    <button class="nav-btn add-fab" onclick="App.showAddExpense()">
+      <span class="fab-inner">+</span>
+    </button>
+    <button class="nav-btn" data-view="settle" onclick="App.showView('settle')">
+      <span class="nav-icon">💸</span>
+      <span class="nav-lbl">Settle</span>
+    </button>
+    <button class="nav-btn" data-view="settings" onclick="App.showView('settings')">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-lbl">Settings</span>
+    </button>
+  </nav>
+
+  <!-- Add / Edit Expense Modal -->
+  <div id="expense-modal" class="modal-bg hidden" onclick="App.closeOnBg(event,'expense-modal')">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Add Expense</h3>
+        <button class="close-btn" onclick="App.closeExpenseModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="expense-id">
+        <div class="form-group">
+          <label>Description *</label>
+          <input type="text" id="expense-desc" placeholder="e.g. Dinner at Mario's">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Amount *</label>
+            <input type="number" id="expense-amount" placeholder="0.00" min="0" step="0.01"
+              oninput="App.updateSplitTotal()">
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="expense-category">
+              <option value="food">🍽️ Food</option>
+              <option value="transport">🚌 Transport</option>
+              <option value="accommodation">🏨 Stay</option>
+              <option value="entertainment">🎉 Fun</option>
+              <option value="shopping">🛍️ Shopping</option>
+              <option value="other">📦 Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Date *</label>
+          <input type="date" id="expense-date">
+        </div>
+        <div class="form-group">
+          <label>Paid by</label>
+          <div id="paid-by-options" class="member-pill-row"></div>
+        </div>
+        <div class="form-group">
+          <label>Split among</label>
+          <div id="split-among-options" class="member-pill-row"></div>
+        </div>
+        <div class="form-group">
+          <label>Split type</label>
+          <div class="tab-row">
+            <button class="tab active" data-type="equal"  onclick="App.setSplitType('equal',this)">Equal</button>
+            <button class="tab"        data-type="custom" onclick="App.setSplitType('custom',this)">Custom</button>
+          </div>
+          <div id="custom-splits" class="custom-splits hidden"></div>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <input type="text" id="expense-notes" placeholder="e.g. Cash, receipt #42">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="App.closeExpenseModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="App.saveExpense()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settle Payment Modal -->
+  <div id="settle-modal" class="modal-bg hidden" onclick="App.closeOnBg(event,'settle-modal')">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Record Payment</h3>
+        <button class="close-btn" onclick="App.closeSettleModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="settle-modal-content"></div>
+        <div class="form-group">
+          <label>Amount</label>
+          <input type="number" id="settle-amount" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="settle-date">
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <input type="text" id="settle-notes" placeholder="e.g. Venmo, cash…">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="App.closeSettleModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="App.saveSettlement()">Record Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
