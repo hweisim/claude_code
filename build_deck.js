@@ -745,7 +745,139 @@ pres.title = "CLICX Camp - Campaign Performance Key Insights";
   );
 }
 
-/* === 6. Value delivered ================================================== */
+/* === 6. Product group breakdown ========================================== */
+{
+  const s = pres.addSlide();
+  s.background = { color: PAPER };
+  title(s, "Loan is the entire credit business", "Product group breakdown · Strict criteria");
+
+  const stats = [
+    ["100%", "of approvals and bookings", "All 13.0K approvals and all 9.7K bookings reconcile to Loan alone — no other group contributes any.", TEAL],
+    ["8.3%", "of leads is all Loan gets", "714.6K of the 8,564.5K leads across the four groups, spread over just 11 campaigns.", TEAL],
+    ["50.9%", "of leads sit in Marketing", "4,357.3K leads, the lowest click rate of any group at 4.6%, and zero conversions out the other end.", CORAL],
+  ];
+  stats.forEach(([big, lbl, body, c], i) => {
+    const x = 0.6 + i * 4.07;
+    card(s, x, 1.5, 3.86, 1.62, i === 2 ? TINT_WARM : TINT_COOL, { shadow: false });
+    s.addText(big, {
+      x: x + 0.28,
+      y: 1.62,
+      w: 3.3,
+      h: 0.46,
+      margin: 0,
+      fontFace: H,
+      fontSize: 26,
+      bold: true,
+      color: c,
+    });
+    s.addText(lbl, {
+      x: x + 0.28,
+      y: 2.08,
+      w: 3.3,
+      h: 0.3,
+      margin: 0,
+      valign: "top",
+      fontFace: B,
+      fontSize: 12,
+      bold: true,
+      color: INK,
+    });
+    s.addText(body, {
+      x: x + 0.28,
+      y: 2.4,
+      w: 3.3,
+      h: 0.62,
+      margin: 0,
+      valign: "top",
+      fontFace: B,
+      fontSize: 10,
+      color: "44536B",
+    });
+  });
+
+  const head = [
+    "Product group",
+    "Campaigns",
+    "Leads",
+    "View rate",
+    "Click rate",
+    "Conv. rate",
+    "Approve",
+    "Book",
+    "What it means",
+  ];
+  const body = [
+    ["Loan", "11 · 19d", "714.6K", "12.9%", "44.7%", "72.4%", "13.0K", "9.7K", "The only group that reaches credit approval"],
+    ["Deposit", "18 · 46d", "1,926.9K", "16.5%", "5.5%", "46.3%", "—", "—", "Converts well; no credit approval step"],
+    ["Service", "6 · 2d", "1,565.7K", "23.9%", "10.6%", "0.1%", "—", "—", "Deepest engagement; ends offline"],
+    ["Marketing", "14 · 45d", "4,357.3K", "12.7%", "4.6%", "0.0%", "—", "—", "Half the leads, nothing out the other end"],
+  ];
+
+  const rows = [
+    head.map((t) => ({
+      text: t,
+      options: { bold: true, color: PAPER, fill: { color: NAVY }, fontFace: B, fontSize: 10.5 },
+    })),
+    ...body.map((r) => {
+      const isLoan = r[0] === "Loan";
+      return r.map((t, j) => ({
+        text: t,
+        options: {
+          color: j === 8 ? "5A6B82" : INK,
+          bold: j === 0 || (isLoan && (j === 6 || j === 7)),
+          fill: { color: isLoan ? TINT_COOL : PAPER },
+          fontFace: j >= 2 && j <= 7 ? H : B,
+          fontSize: j === 8 ? 10 : 11,
+        },
+      }));
+    }),
+  ];
+
+  s.addTable(rows, {
+    x: 0.6,
+    y: 3.32,
+    w: 12.1,
+    colW: [1.7, 1.15, 1.35, 0.95, 0.95, 0.95, 0.95, 0.85, 3.25],
+    rowH: 0.44,
+    border: { type: "solid", color: RULE, pt: 0.5 },
+    align: "left",
+    valign: "middle",
+    margin: [0.04, 0.09, 0.04, 0.09],
+  });
+
+  card(s, 0.6, 5.62, 12.1, 1.06, NAVY, { shadow: false });
+  s.addText(
+    [
+      { text: "Loan carries all 0.1B of approved amount and all 0.1B of set credit", options: { color: MINT, bold: true } },
+      { text: " at 11.3K / 10.8K per customer. Deposit adds 5.5M of amount at 0.7K each but never enters approval. Service sends ", options: { color: "C3D0E2" } },
+      { text: "79.6% of its clickers to a detail page", options: { color: MINT, bold: true } },
+      { text: " and 0.3K through a branch door — the only Thru-The-Door volume anywhere. Marketing produces none of it.", options: { color: "C3D0E2" } },
+    ],
+    {
+      x: 1.0,
+      y: 5.62,
+      w: 11.3,
+      h: 1.06,
+      margin: 0,
+      valign: "middle",
+      fontFace: B,
+      fontSize: 12.5,
+    }
+  );
+
+  footnote(
+    s,
+    "Strict View-and-Click criteria (the rest of this deck is the Loose all-groups view). Windows differ by group — Service spans 2 days, Loan 19, Marketing 45, Deposit 46 — so rates are not like-for-like. Administrative (3 campaigns, ~609.8K leads) not shown."
+  );
+  s.addNotes(
+    "Reconciliation: the four groups sum to 49 of 52 campaigns and 8,564.5K of 9,174.3K leads, leaving Administrative. " +
+      "Approvals (13.0K) and bookings (9.7K) match the all-groups totals exactly, so Loan accounts for 100% of both. " +
+      "Loan converts 1.36% of its leads into a booking against 0.11% blended — roughly 13x. " +
+      "Note also that the credit end of the funnel is identical under Loose and Strict criteria; only the top of the funnel moves."
+  );
+}
+
+/* === 7. Value delivered ================================================== */
 {
   const s = pres.addSlide();
   s.background = { color: NAVY };
@@ -875,7 +1007,7 @@ pres.title = "CLICX Camp - Campaign Performance Key Insights";
   );
 }
 
-/* === 7. Data integrity flags ============================================= */
+/* === 8. Data integrity flags ============================================= */
 {
   const s = pres.addSlide();
   s.background = { color: PAPER };
@@ -975,7 +1107,7 @@ pres.title = "CLICX Camp - Campaign Performance Key Insights";
   );
 }
 
-/* === 8. Quantified opportunity =========================================== */
+/* === 9. Quantified opportunity =========================================== */
 {
   const s = pres.addSlide();
   s.background = { color: PAPER };
@@ -1096,7 +1228,7 @@ pres.title = "CLICX Camp - Campaign Performance Key Insights";
   );
 }
 
-/* === 9. Recommendations ================================================== */
+/* === 10. Recommendations ================================================== */
 {
   const s = pres.addSlide();
   s.background = { color: NAVY };
@@ -1160,7 +1292,7 @@ pres.title = "CLICX Camp - Campaign Performance Key Insights";
   );
 }
 
-/* === 10. Appendix ======================================================== */
+/* === 11. Appendix ======================================================== */
 {
   const s = pres.addSlide();
   s.background = { color: PAPER };
