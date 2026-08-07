@@ -946,133 +946,187 @@ s4.addNotes(
 );
 
 /* ================================================================= SLIDE 6
-   Slides 4 and 5 redone on value: cl, os and the four mixes, one slide  */
+   The four book-date mixes, each measured on credit line AND outstanding */
 
 {
   const sv = pres.addSlide();
   sv.background = { color: PAPER };
-  // horizontal bars plot the first label at the bottom, so reverse for top-down chronology
-  const D = ["5-Aug", "4-Aug", "3-Aug", "2-Aug", "1-Aug", "bef 1 Aug"];
 
-  const ch = tsv("charge.tsv");
-  const val = (d, lt, m) =>
-    ch.filter((r) => r.book_date === d && r.loan_type === lt).reduce((a, r) => a + num(r[m]), 0);
-  const mil = (d, lt, m) => Number((val(d, lt, m) / 1e6).toFixed(1));
-  const util = (d, lt) => Number(((val(d, lt, "os") / val(d, lt, "cl")) * 100).toFixed(1));
+  // horizontal bars plot the first label at the bottom, so build bottom-up:
+  // newest first, and OS above CL within each date
+  const PAIRS = [];
+  ["5-Aug", "4-Aug", "3-Aug", "2-Aug", "1-Aug", "bef 1 Aug"].forEach((d) => {
+    PAIRS.push({ date: d, meas: "os" }, { date: d, meas: "cl" });
+  });
+  const catLabels = PAIRS.map((p) => `${p.date} ${p.meas.toUpperCase()}`);
 
-  sv.addText("AIS BASE INFORMATION  ·  BY BOOK DATE  ·  CREDIT LINE AND OUTSTANDING", {
+  sv.addText("AIS BASE INFORMATION  ·  BY BOOK DATE  ·  CREDIT LINE vs OUTSTANDING", {
     x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
     fontFace: B, fontSize: 11.5, bold: true, charSpacing: 2.2, color: TEAL,
   });
-  sv.addText("Later cohorts draw far less of their line", {
+  sv.addText("Weaker segments draw more of their line", {
     x: 0.6, y: 0.66, w: 12.1, h: 0.62, margin: 0, valign: "top",
     fontFace: H, fontSize: 30, bold: true, color: INK,
   });
   sv.addText(
-    "DL utilisation falls from 72.7% on 1 Aug to 39.0% on 5 Aug, and PL alone brings 162.2M of credit line on the last day — more than DL's 62.4M.",
+    "Prepaid, short tenure, no nano flag and non-TRUE each take a larger share of OS than of CL — they use more of what they are granted.",
     { x: 0.6, y: 1.18, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12, color: MUTED }
   );
 
-  const baseOpts = {
-    barDir: "bar",
-    barGapWidthPct: 40,
-    showTitle: true,
-    titleFontFace: B, titleFontSize: 11, titleColor: INK,
-    showValue: true,
-    dataLabelFontFace: B, dataLabelFontSize: 7.5,
-    showLegend: true, legendPos: "b",
-    legendFontFace: B, legendFontSize: 9, legendColor: INK,
-    catAxisLabelFontFace: B, catAxisLabelColor: INK,
-    valAxisHidden: true,
-    valGridLine: { style: "none" },
-    catGridLine: { style: "none" },
-  };
-
-  /* row 1 - value and utilisation ---------------------------------------- */
-  const row1 = [
-    { title: "Credit line by book date (M)", m: "cl", fc: '0.0' },
-    { title: "Outstanding by book date (M)", m: "os", fc: '0.0' },
-    { title: "Utilisation by book date (%)", util: true, fc: '0"%"' },
-  ];
-  row1.forEach((p, i) => {
-    const px = 0.6 + i * 4.117;
-    sv.addShape("roundRect", {
-      x: px, y: 1.52, w: 3.867, h: 2.36, rectRadius: 0.09,
-      fill: { color: TINT }, line: { type: "none" },
-    });
-    const series = ["DL", "PL"].map((lt) => ({
-      name: lt,
-      labels: D,
-      values: D.map((d) => (p.util ? util(d, lt) : mil(d, lt, p.m))),
-    }));
-    sv.addChart(pres.charts.BAR, series, Object.assign({}, baseOpts, {
-      x: px + 0.1, y: 1.6, w: 3.667, h: 2.2,
-      barGrouping: "clustered",
-      chartColors: [R4, R2],
-      title: p.title,
-      dataLabelPosition: "outEnd",
-      dataLabelColor: INK,
-      dataLabelFormatCode: p.fc,
-      catAxisLabelFontSize: 8.5,
-    }));
-  });
-
-  /* row 2 - the four mixes, on credit line -------------------------------- */
   const mixes = [
-    { file: "charge.tsv", dim: "charge_type", order: ["FBB", "Prepaid", "Postpaid"], title: "Charge type · % of CL", colors: [R2, R3, R4] },
-    { file: "tenure.tsv", dim: "tenure", order: ["0-1", "2-4", ">=5"], title: "Tenure · % of CL", colors: [R2, R3, R4], rename: { "0-1": "0–1", "2-4": "2–4", ">=5": "5+" } },
-    { file: "nano.tsv", dim: "nano_f", order: ["N", "Y"], title: "Nano-loan flag · % of CL", colors: [R1, R4] },
-    { file: "true.tsv", dim: "true_f", order: ["N", "Y"], title: "TRUE ecosystem · % of CL", colors: [R1, R4] },
+    { file: "charge.tsv", dim: "charge_type", order: ["FBB", "Prepaid", "Postpaid"], title: "Charge type", colors: [R2, R3, R4] },
+    { file: "tenure.tsv", dim: "tenure", order: ["0-1", "2-4", ">=5"], title: "Tenure in years", colors: [R2, R3, R4], rename: { "0-1": "0–1", "2-4": "2–4", ">=5": "5+" } },
+    { file: "nano.tsv", dim: "nano_f", order: ["N", "Y"], title: "Nano-loan flag", colors: [R1, R4] },
+    { file: "true.tsv", dim: "true_f", order: ["N", "Y"], title: "TRUE ecosystem", colors: [R1, R4] },
   ];
+
   mixes.forEach((p, i) => {
     const ds = tsv(p.file);
-    const share = (d, k) => {
-      const rows = ds.filter((r) => r.book_date === d);
-      const tot = rows.reduce((a, r) => a + num(r.cl), 0);
-      const part = rows.filter((r) => r[p.dim] === k).reduce((a, r) => a + num(r.cl), 0);
+    const share = (date, meas, k) => {
+      const rows = ds.filter((r) => r.book_date === date);
+      const tot = rows.reduce((a, r) => a + num(r[meas]), 0);
+      const part = rows.filter((r) => r[p.dim] === k).reduce((a, r) => a + num(r[meas]), 0);
       return Number(((part / tot) * 100).toFixed(1));
     };
     const px = 0.6 + i * 3.075;
     sv.addShape("roundRect", {
-      x: px, y: 4.04, w: 2.875, h: 2.44, rectRadius: 0.09,
+      x: px, y: 1.56, w: 2.875, h: 4.94, rectRadius: 0.09,
       fill: { color: TINT }, line: { type: "none" },
     });
     sv.addChart(
       pres.charts.BAR,
       p.order.map((k) => ({
         name: (p.rename && p.rename[k]) || k,
-        labels: D,
-        values: D.map((d) => share(d, k)),
+        labels: catLabels,
+        values: PAIRS.map((c) => share(c.date, c.meas, k)),
       })),
-      Object.assign({}, baseOpts, {
-        x: px + 0.09, y: 4.12, w: 2.695, h: 2.28,
+      {
+        x: px + 0.09, y: 1.64, w: 2.695, h: 4.78,
+        barDir: "bar",
         barGrouping: "percentStacked",
+        barGapWidthPct: 35,
         chartColors: p.colors,
-        title: p.title,
+        showTitle: true,
+        title: `${p.title} (CL / OS)`,
+        titleFontFace: B, titleFontSize: 11, titleColor: INK,
+        showValue: true,
         dataLabelPosition: "ctr",
-        dataLabelColor: PAPER,
-        dataLabelFontSize: 7,
+        dataLabelFontFace: B, dataLabelFontSize: 7.5, dataLabelColor: PAPER,
         dataLabelFormatCode: '0"%"',
-        catAxisLabelFontSize: 8,
-      })
+        showLegend: true, legendPos: "b",
+        legendFontFace: B, legendFontSize: 9, legendColor: INK,
+        catAxisLabelFontFace: B, catAxisLabelFontSize: 7.5, catAxisLabelColor: INK,
+        valAxisHidden: true,
+        valGridLine: { style: "none" },
+        catGridLine: { style: "none" },
+      }
     );
   });
 
   sv.addText(
-    "Source: figures as supplied, AIS base. CL = credit line, OS = outstanding; M = millions. The four mix panels use credit line; the outstanding mix tracks it within about 2 points everywhere " +
-      "except charge type on 4–5 Aug, where prepaid runs up to 6.5 points higher on OS than on CL. Combines the charts from the two preceding book-date slides, which show the same cuts by customer count.",
-    { x: 0.6, y: 6.62, w: 12.1, h: 0.44, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
+    "Source: figures as supplied, AIS base. CL = credit line, OS = outstanding; each bar is a mix within that date and measure, so every bar reads to 100%. " +
+      "The OS-above-CL pattern holds in all five August cohorts on charge type and tenure, and in four of five on the nano and TRUE flags — the exceptions are the 708-customer pre-August cohort " +
+      "and a 0.2-point wobble on TRUE on 3 Aug. Slides 4 and 5 show the same four cuts by customer count.",
+    { x: 0.6, y: 6.62, w: 12.1, h: 0.5, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
   );
   sv.addNotes(
-    "Everything from the two customer-count book-date slides, restated on value. " +
-      "Utilisation by date: DL 52.8, 72.7, 67.9, 70.5, 54.4, 39.0; PL 31.9, 70.9, 65.0, 66.2, 50.0, 43.7. " +
-      "The 5 Aug cohort is the outlier on both counts - PL contributes 162.2M of the 224.6M credit line booked that day, and only 42.4% of it is drawn. " +
-      "Read alongside the volume charts: 2 Aug is the biggest cohort by customers and by credit line, but 5 Aug is a close second on value despite far fewer customers."
+    "Pairing CL and OS on the same axis makes the utilisation story readable per segment. " +
+      "In every August cohort the prepaid share of outstanding exceeds its share of credit line - by 1.6pt on 1 Aug widening to 6.0pt on 5 Aug - " +
+      "and the same direction holds for 0-1 year tenure, no-nano and non-TRUE. " +
+      "Read plainly: the segments granted smaller lines draw a higher fraction of them, so outstanding is tilted toward the weaker end of every cut."
+  );
+}
+
+/* ================================================================= SLIDE 7
+   Slide 1's cash-need / risk mix chart, measured on credit line and OS  */
+
+{
+  const sv = pres.addSlide();
+  sv.background = { color: PAPER };
+  const cr = tsv("cash_risk.tsv");
+  const LEVELS = ["Null", "Low", "Mid", "High"];
+  // bottom-up, so DL - CL ends up on top
+  const cats = [
+    { lt: "PL", m: "os" }, { lt: "PL", m: "cl" },
+    { lt: "DL", m: "os" }, { lt: "DL", m: "cl" },
+  ];
+  const catLabels = cats.map((c) => `${c.lt} · ${c.m.toUpperCase()}`);
+  const share = (field, lvl, lt, m) => {
+    const rows = cr.filter((r) => r.loan_type === lt);
+    const tot = rows.reduce((a, r) => a + num(r[m]), 0);
+    const part = rows.filter((r) => r[field] === lvl).reduce((a, r) => a + num(r[m]), 0);
+    return Number(((part / tot) * 100).toFixed(1));
+  };
+
+  sv.addText("CASH NEED AND RISK LEVEL  ·  CREDIT LINE vs OUTSTANDING", {
+    x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
+    fontFace: B, fontSize: 11.5, bold: true, charSpacing: 2.2, color: TEAL,
+  });
+  sv.addText("Riskier customers draw a bigger share", {
+    x: 0.6, y: 0.66, w: 12.1, h: 0.62, margin: 0, valign: "top",
+    fontFace: H, fontSize: 30, bold: true, color: INK,
+  });
+  sv.addText(
+    `High risk is ${share("risk_level", "High", "DL", "cl")}% of DL credit line but ${share("risk_level", "High", "DL", "os")}% of DL outstanding, ` +
+      `while low risk falls from ${share("risk_level", "Low", "DL", "cl")}% to ${share("risk_level", "Low", "DL", "os")}%.`,
+    { x: 0.6, y: 1.18, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12, color: MUTED }
+  );
+
+  [
+    // labelMin hides labels too narrow to render inside their segment
+    { field: "cash_need", title: "Cash need · % of CL / OS", labelMin: 3 },
+    { field: "risk_level", title: "Risk level · % of CL / OS", labelMin: 6 },
+  ].forEach((p, i) => {
+    const px = 0.6 + i * 6.15;
+    sv.addShape("roundRect", {
+      x: px, y: 1.58, w: 5.95, h: 4.7, rectRadius: 0.09,
+      fill: { color: TINT }, line: { type: "none" },
+    });
+    sv.addChart(
+      pres.charts.BAR,
+      LEVELS.map((lvl) => ({
+        name: lvl,
+        labels: catLabels,
+        values: cats.map((c) => share(p.field, lvl, c.lt, c.m)),
+      })),
+      {
+        x: px + 0.12, y: 1.68, w: 5.71, h: 4.5,
+        barDir: "bar",
+        barGrouping: "percentStacked",
+        barGapWidthPct: 90,
+        chartColors: [R1, R2, R3, R4],
+        showTitle: true,
+        title: p.title,
+        titleFontFace: B, titleFontSize: 12, titleColor: INK,
+        showValue: true,
+        dataLabelPosition: "ctr",
+        dataLabelFontFace: B, dataLabelFontSize: 9.5, dataLabelColor: PAPER,
+        dataLabelFormatCode: `[<${p.labelMin}]"";0.0"%"`,
+        showLegend: true, legendPos: "b",
+        legendFontFace: B, legendFontSize: 10, legendColor: INK,
+        catAxisLabelFontFace: B, catAxisLabelFontSize: 11, catAxisLabelColor: INK,
+        valAxisHidden: true,
+        valGridLine: { style: "none" },
+        catGridLine: { style: "none" },
+      }
+    );
+  });
+
+  sv.addText(
+    "Source: figures as supplied. CL = credit line, OS = outstanding; each bar is a mix within that loan type and measure, so every bar reads to 100%. " +
+      "Slide 1 shows the same two cuts by customer count, where cash need and risk are the only figures the source states as percentages.",
+    { x: 0.6, y: 6.44, w: 12.1, h: 0.44, margin: 0, fontFace: B, fontSize: 9, italic: true, color: MUTED }
+  );
+  sv.addNotes(
+    "Same chart form as slide 1, on value instead of headcount, with CL and OS paired. " +
+      "Risk: High rises from 36.3% of DL credit line to 39.1% of outstanding, and 31.7% to 36.9% on PL; Low falls 35.8% to 33.1% and 39.9% to 34.3%. " +
+      "Cash need moves less - High 67.8% to 68.6% on DL, 52.2% to 55.7% on PL. " +
+      "This is the same direction as the book-date cuts on the previous slide: the weaker segment of every dimension draws a higher fraction of its line."
   );
 }
 
 /* ============================================================ DATA TABLES
-   Slides 7-12: the source tables, reproduced from data/*.tsv              */
+   Slides 8-13: the source tables, reproduced from data/*.tsv              */
 
 /* generic table slide ---------------------------------------------------- */
 function tableSlide({ kicker, title, subtitle, headers, colW, body, total, footnote, notes, numericFrom }) {
@@ -1140,7 +1194,7 @@ function tableSlide({ kicker, title, subtitle, headers, colW, body, total, footn
 const SRC = "Source: figures as supplied. cl = credit line, os = outstanding. ";
 const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
 
-/* --- slide 6: customer base -------------------------------------------- */
+/* --- slide 8: customer base -------------------------------------------- */
 {
   const cb = tsv("cust_base.tsv").map((r) => ({
     base: r.cust_base, cl: num(r.cl), os: num(r.os), cnt: num(r.cust_cnt),
@@ -1173,7 +1227,7 @@ const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
   });
 }
 
-/* --- slide 7: cash need and risk level, as two separate tables --------- */
+/* --- slide 9: cash need and risk level, as two separate tables --------- */
 {
   const cr = tsv("cash_risk.tsv").map((r) => ({
     cash: r.cash_need, risk: r.risk_level, lt: r.loan_type, cl: num(r.cl), os: num(r.os),
@@ -1267,7 +1321,7 @@ const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
   );
 }
 
-/* --- slides 8-11: the four AIS breakdowns by book date ------------------ */
+/* --- slides 10-13: the four AIS breakdowns by book date ------------------ */
 function aisTableSlide(file, dimField, dimOrder, dimLabel, kicker, titleFn, subtitleFn, notes) {
   const ds = tsv(file);
   const get = (d, k, lt) => {
