@@ -966,41 +966,98 @@ const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
   });
 }
 
-/* --- slide 6: cash need x risk level ------------------------------------ */
+/* --- slide 6: cash need and risk level, as two separate tables --------- */
 {
-  const cr = tsv("cash_risk.tsv");
-  const order = ["Null", "Low", "Mid", "High"];
-  const get = (c, r, lt) => {
-    const row = cr.find((x) => x.cash_need === c && x.risk_level === r && x.loan_type === lt);
-    return { cl: num(row.cl), os: num(row.os) };
-  };
-  const body = [];
-  const T = { dcl: 0, dos: 0, pcl: 0, pos: 0 };
-  order.forEach((c) =>
-    order.forEach((r) => {
-      const d = get(c, r, "DL"), p = get(c, r, "PL");
-      T.dcl += d.cl; T.dos += d.os; T.pcl += p.cl; T.pos += p.os;
-      body.push([c, r, fmt(d.cl), fmt(d.os), pct(d.os, d.cl), fmt(p.cl), fmt(p.os), pct(p.os, p.cl)]);
-    })
-  );
-  const highCl = order.reduce((a, r) => a + get("High", r, "DL").cl + get("High", r, "PL").cl, 0);
-  tableSlide({
-    kicker: "Cash need × risk level · credit line and outstanding",
-    title: `High cash need carries ${pct(highCl, T.dcl + T.pcl)} of the credit line`,
-    subtitle: `DL utilises ${pct(T.dos, T.dcl)} of its ${M(T.dcl)} line against PL's ${pct(T.pos, T.pcl)} of ${M(T.pcl)} — PL draws down far less of what it is granted.`,
-    headers: ["Cash need", "Risk level", "DL credit line", "DL outstanding", "DL util.", "PL credit line", "PL outstanding", "PL util."],
-    colW: [1.3, 1.3, 1.9, 1.9, 0.95, 1.9, 1.9, 0.95],
-    numericFrom: 2,
-    body,
-    total: ["Total", "", fmt(T.dcl), fmt(T.dos), pct(T.dos, T.dcl), fmt(T.pcl), fmt(T.pos), pct(T.pos, T.pcl)],
-    footnote:
-      SRC +
-      "Credit line and outstanding total 1,092,262,000 and 660,543,706, matching the customer-base table exactly. " +
-      "This table has no customer counts in the source, so utilisation is the only derived column.",
-    notes:
-      "The DL/PL utilisation gap is the story: DL draws 61.9% of its line, PL only 55.2%. " +
-      "High cash need holds 691.7M of the 1,092.3M credit line across both loan types.",
+  const cr = tsv("cash_risk.tsv").map((r) => ({
+    cash: r.cash_need, risk: r.risk_level, lt: r.loan_type, cl: num(r.cl), os: num(r.os),
+  }));
+  const LEVELS = ["Null", "Low", "Mid", "High"];
+
+  // roll the 4x4 grid up along one axis at a time
+  const rollup = (field) =>
+    LEVELS.map((lvl) => {
+      const pick = (lt) =>
+        cr.filter((r) => r[field] === lvl && r.lt === lt)
+          .reduce((a, r) => ({ cl: a.cl + r.cl, os: a.os + r.os }), { cl: 0, os: 0 });
+      const d = pick("DL"), pl = pick("PL");
+      return { lvl, d, pl, cl: d.cl + pl.cl, os: d.os + pl.os };
+    });
+  const byCash = rollup("cash");
+  const byRisk = rollup("risk");
+  const GT = byCash.reduce((a, r) => ({ cl: a.cl + r.cl, os: a.os + r.os }), { cl: 0, os: 0 });
+
+  const sl = pres.addSlide();
+  sl.background = { color: PAPER };
+  sl.addText("CASH NEED AND RISK LEVEL  ·  CREDIT LINE AND OUTSTANDING", {
+    x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
+    fontFace: B, fontSize: 11.5, bold: true, charSpacing: 2.2, color: TEAL,
   });
+  const hiCash = byCash.find((r) => r.lvl === "High");
+  const lowRisk = byRisk.find((r) => r.lvl === "Low");
+  const hiRisk = byRisk.find((r) => r.lvl === "High");
+  const midRisk = byRisk.find((r) => r.lvl === "Mid");
+  sl.addText("Cash need concentrates, risk does not", {
+    x: 0.6, y: 0.66, w: 12.1, h: 0.62, margin: 0, valign: "top",
+    fontFace: H, fontSize: 30, bold: true, color: INK,
+  });
+  sl.addText(
+    `High cash need holds ${pct(hiCash.cl, GT.cl)} of the credit line; risk splits ` +
+      `${pct(lowRisk.cl, GT.cl)} low / ${pct(midRisk.cl, GT.cl)} mid / ${pct(hiRisk.cl, GT.cl)} high.`,
+    { x: 0.6, y: 1.18, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12, color: MUTED }
+  );
+
+  const headers = ["Level", "DL credit line", "DL outstanding", "DL util.", "PL credit line", "PL outstanding", "PL util.", "Total credit line", "% of line"];
+  const colW = [1.3, 1.65, 1.65, 0.9, 1.65, 1.65, 0.9, 1.45, 0.95];
+
+  function block(label, data, y) {
+    sl.addText(label, {
+      x: 0.6, y, w: 12.1, h: 0.24, margin: 0,
+      fontFace: H, fontSize: 14, bold: true, color: INK,
+    });
+    const T = data.reduce(
+      (a, r) => ({ dcl: a.dcl + r.d.cl, dos: a.dos + r.d.os, pcl: a.pcl + r.pl.cl, pos: a.pos + r.pl.os }),
+      { dcl: 0, dos: 0, pcl: 0, pos: 0 }
+    );
+    const cell = (t, j, o = {}) => ({
+      text: t,
+      options: Object.assign(
+        { fontFace: j >= 1 ? H : B, fontSize: 10.5, align: j >= 1 ? "right" : "left", color: INK },
+        o
+      ),
+    });
+    const rows = [
+      headers.map((t, j) => ({
+        text: t,
+        options: { bold: true, color: PAPER, fill: { color: NAVY }, fontFace: B, fontSize: 10.5, align: j >= 1 ? "right" : "left" },
+      })),
+      ...data.map((r, i) =>
+        [r.lvl, fmt(r.d.cl), fmt(r.d.os), pct(r.d.os, r.d.cl), fmt(r.pl.cl), fmt(r.pl.os), pct(r.pl.os, r.pl.cl), fmt(r.cl), pct(r.cl, GT.cl)]
+          .map((t, j) => cell(t, j, { fill: { color: i % 2 ? TINT : PAPER }, bold: j === 0 }))
+      ),
+      ["Total", fmt(T.dcl), fmt(T.dos), pct(T.dos, T.dcl), fmt(T.pcl), fmt(T.pos), pct(T.pos, T.pcl), fmt(T.dcl + T.pcl), "100.0%"]
+        .map((t, j) => cell(t, j, { fill: { color: TINT_COOL }, bold: true })),
+    ];
+    sl.addTable(rows, {
+      x: 0.6, y: y + 0.26, w: 12.1, colW, rowH: 0.37,
+      border: { type: "solid", color: RULE, pt: 0.5 },
+      valign: "middle", margin: [0.02, 0.07, 0.02, 0.07],
+    });
+  }
+  block("By cash need", byCash, 1.54);
+  block("By risk level", byRisk, 4.24);
+
+  sl.addText(
+    SRC +
+      "Each table rolls the same 4×4 cash-need × risk-level grid up along one axis, so both total to 1,092,262,000 of credit line and 660,543,706 outstanding — matching the customer-base table. " +
+      "The source has no customer counts at this cut, so utilisation and share of line are the only derived columns. Low risk holds 37.0% of the line against 29.0% of customers in the deck's risk counts — low-risk customers carry larger lines.",
+    { x: 0.6, y: 6.9, w: 12.1, h: 0.44, margin: 0, fontFace: B, fontSize: 9, italic: true, color: MUTED }
+  );
+  sl.addNotes(
+    "Split out of the combined 4x4 table so each dimension reads on its own. " +
+      "Cash need is heavily concentrated - High alone is 63.3% of the credit line. Risk is not: Low 37.0%, Mid 25.5%, High 35.0%. " +
+      "Low risk holding 37.0% of the line against 29.0% of customers means low-risk customers are granted larger lines on average. " +
+      "The DL/PL utilisation gap persists on both cuts: DL 65.2% against PL 48.7%."
+  );
 }
 
 /* --- slides 7-10: the four AIS breakdowns by book date ------------------ */
