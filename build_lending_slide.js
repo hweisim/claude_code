@@ -945,8 +945,134 @@ s4.addNotes(
     "and PL runs a higher prepaid share than DL (56.0% vs 48.8%)."
 );
 
+/* ================================================================= SLIDE 6
+   Slides 4 and 5 redone on value: cl, os and the four mixes, one slide  */
+
+{
+  const sv = pres.addSlide();
+  sv.background = { color: PAPER };
+  // horizontal bars plot the first label at the bottom, so reverse for top-down chronology
+  const D = ["5-Aug", "4-Aug", "3-Aug", "2-Aug", "1-Aug", "bef 1 Aug"];
+
+  const ch = tsv("charge.tsv");
+  const val = (d, lt, m) =>
+    ch.filter((r) => r.book_date === d && r.loan_type === lt).reduce((a, r) => a + num(r[m]), 0);
+  const mil = (d, lt, m) => Number((val(d, lt, m) / 1e6).toFixed(1));
+  const util = (d, lt) => Number(((val(d, lt, "os") / val(d, lt, "cl")) * 100).toFixed(1));
+
+  sv.addText("AIS BASE INFORMATION  ·  BY BOOK DATE  ·  CREDIT LINE AND OUTSTANDING", {
+    x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
+    fontFace: B, fontSize: 11.5, bold: true, charSpacing: 2.2, color: TEAL,
+  });
+  sv.addText("Later cohorts draw far less of their line", {
+    x: 0.6, y: 0.66, w: 12.1, h: 0.62, margin: 0, valign: "top",
+    fontFace: H, fontSize: 30, bold: true, color: INK,
+  });
+  sv.addText(
+    "DL utilisation falls from 72.7% on 1 Aug to 39.0% on 5 Aug, and PL alone brings 162.2M of credit line on the last day — more than DL's 62.4M.",
+    { x: 0.6, y: 1.18, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12, color: MUTED }
+  );
+
+  const baseOpts = {
+    barDir: "bar",
+    barGapWidthPct: 40,
+    showTitle: true,
+    titleFontFace: B, titleFontSize: 11, titleColor: INK,
+    showValue: true,
+    dataLabelFontFace: B, dataLabelFontSize: 7.5,
+    showLegend: true, legendPos: "b",
+    legendFontFace: B, legendFontSize: 9, legendColor: INK,
+    catAxisLabelFontFace: B, catAxisLabelColor: INK,
+    valAxisHidden: true,
+    valGridLine: { style: "none" },
+    catGridLine: { style: "none" },
+  };
+
+  /* row 1 - value and utilisation ---------------------------------------- */
+  const row1 = [
+    { title: "Credit line by book date (M)", m: "cl", fc: '0.0' },
+    { title: "Outstanding by book date (M)", m: "os", fc: '0.0' },
+    { title: "Utilisation by book date (%)", util: true, fc: '0"%"' },
+  ];
+  row1.forEach((p, i) => {
+    const px = 0.6 + i * 4.117;
+    sv.addShape("roundRect", {
+      x: px, y: 1.52, w: 3.867, h: 2.36, rectRadius: 0.09,
+      fill: { color: TINT }, line: { type: "none" },
+    });
+    const series = ["DL", "PL"].map((lt) => ({
+      name: lt,
+      labels: D,
+      values: D.map((d) => (p.util ? util(d, lt) : mil(d, lt, p.m))),
+    }));
+    sv.addChart(pres.charts.BAR, series, Object.assign({}, baseOpts, {
+      x: px + 0.1, y: 1.6, w: 3.667, h: 2.2,
+      barGrouping: "clustered",
+      chartColors: [R4, R2],
+      title: p.title,
+      dataLabelPosition: "outEnd",
+      dataLabelColor: INK,
+      dataLabelFormatCode: p.fc,
+      catAxisLabelFontSize: 8.5,
+    }));
+  });
+
+  /* row 2 - the four mixes, on credit line -------------------------------- */
+  const mixes = [
+    { file: "charge.tsv", dim: "charge_type", order: ["FBB", "Prepaid", "Postpaid"], title: "Charge type · % of CL", colors: [R2, R3, R4] },
+    { file: "tenure.tsv", dim: "tenure", order: ["0-1", "2-4", ">=5"], title: "Tenure · % of CL", colors: [R2, R3, R4], rename: { "0-1": "0–1", "2-4": "2–4", ">=5": "5+" } },
+    { file: "nano.tsv", dim: "nano_f", order: ["N", "Y"], title: "Nano-loan flag · % of CL", colors: [R1, R4] },
+    { file: "true.tsv", dim: "true_f", order: ["N", "Y"], title: "TRUE ecosystem · % of CL", colors: [R1, R4] },
+  ];
+  mixes.forEach((p, i) => {
+    const ds = tsv(p.file);
+    const share = (d, k) => {
+      const rows = ds.filter((r) => r.book_date === d);
+      const tot = rows.reduce((a, r) => a + num(r.cl), 0);
+      const part = rows.filter((r) => r[p.dim] === k).reduce((a, r) => a + num(r.cl), 0);
+      return Number(((part / tot) * 100).toFixed(1));
+    };
+    const px = 0.6 + i * 3.075;
+    sv.addShape("roundRect", {
+      x: px, y: 4.04, w: 2.875, h: 2.44, rectRadius: 0.09,
+      fill: { color: TINT }, line: { type: "none" },
+    });
+    sv.addChart(
+      pres.charts.BAR,
+      p.order.map((k) => ({
+        name: (p.rename && p.rename[k]) || k,
+        labels: D,
+        values: D.map((d) => share(d, k)),
+      })),
+      Object.assign({}, baseOpts, {
+        x: px + 0.09, y: 4.12, w: 2.695, h: 2.28,
+        barGrouping: "percentStacked",
+        chartColors: p.colors,
+        title: p.title,
+        dataLabelPosition: "ctr",
+        dataLabelColor: PAPER,
+        dataLabelFontSize: 7,
+        dataLabelFormatCode: '0"%"',
+        catAxisLabelFontSize: 8,
+      })
+    );
+  });
+
+  sv.addText(
+    "Source: figures as supplied, AIS base. CL = credit line, OS = outstanding; M = millions. The four mix panels use credit line; the outstanding mix tracks it within about 2 points everywhere " +
+      "except charge type on 4–5 Aug, where prepaid runs up to 6.5 points higher on OS than on CL. Combines the charts from the two preceding book-date slides, which show the same cuts by customer count.",
+    { x: 0.6, y: 6.62, w: 12.1, h: 0.44, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
+  );
+  sv.addNotes(
+    "Everything from the two customer-count book-date slides, restated on value. " +
+      "Utilisation by date: DL 52.8, 72.7, 67.9, 70.5, 54.4, 39.0; PL 31.9, 70.9, 65.0, 66.2, 50.0, 43.7. " +
+      "The 5 Aug cohort is the outlier on both counts - PL contributes 162.2M of the 224.6M credit line booked that day, and only 42.4% of it is drawn. " +
+      "Read alongside the volume charts: 2 Aug is the biggest cohort by customers and by credit line, but 5 Aug is a close second on value despite far fewer customers."
+  );
+}
+
 /* ============================================================ DATA TABLES
-   Slides 6-11: the source tables, reproduced from data/*.tsv              */
+   Slides 7-12: the source tables, reproduced from data/*.tsv              */
 
 /* generic table slide ---------------------------------------------------- */
 function tableSlide({ kicker, title, subtitle, headers, colW, body, total, footnote, notes, numericFrom }) {
