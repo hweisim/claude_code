@@ -38,6 +38,23 @@ const RULE = "D8DFE9"; // table borders
 const H = "Cambria";
 const B = "Calibri";
 
+const fs = require("fs");
+function tsv(name) {
+  const lines = fs.readFileSync(path.join(__dirname, "data", name), "utf8").trim().split("\n");
+  const head = lines[0].split("\t");
+  return lines.slice(1).map((l) => {
+    const c = l.split("\t");
+    const o = {};
+    head.forEach((h, i) => (o[h] = c[i]));
+    return o;
+  });
+}
+const num = (x) => Number(String(x).replace(/,/g, ""));
+const fmt = (v) => v.toLocaleString("en-US");
+const pct = (a, b) => (b ? (a / b) * 100 : 0).toFixed(1) + "%";
+const M = (v) => Number((v / 1e6).toFixed(1)).toLocaleString("en-US") + "M";
+
+
 const pres = new PptxGenJS();
 pres.layout = "LAYOUT_WIDE";
 pres.author = "Lending";
@@ -487,6 +504,86 @@ s2.addNotes(
 );
 
 /* ================================================================= SLIDE 3
+   Same grid as slide 2, measured by credit line and outstanding          */
+
+const s2b = pres.addSlide();
+s2b.background = { color: PAPER };
+s2b.addText("AIS BASE INFORMATION  ·  SHARE OF CREDIT LINE AND OUTSTANDING", {
+  x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
+  fontFace: B, fontSize: 11.5, bold: true, charSpacing: 2.2, color: TEAL,
+});
+s2b.addText("Postpaid punches far above its headcount", {
+  x: 0.6, y: 0.66, w: 12.1, h: 0.62, margin: 0, valign: "top",
+  fontFace: H, fontSize: 32, bold: true, color: INK,
+});
+s2b.addText(
+  "Prepaid is 48.8% of DL customers but 30.9% of DL credit line; postpaid runs 44.7% to 61.8%.",
+  { x: 0.6, y: 1.2, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12.5, color: MUTED }
+);
+
+const valueCats = ["DL · CL", "DL · OS", "PL · CL", "PL · OS"];
+const valuePanels = [
+  { file: "charge.tsv", dim: "charge_type", order: ["FBB", "Prepaid", "Postpaid"], title: "Charge type · share of value (%)", colors: [R2, R3, R4] },
+  { file: "tenure.tsv", dim: "tenure", order: ["0-1", "2-4", ">=5"], title: "Tenure in years · share of value (%)", colors: [R2, R3, R4], rename: { "0-1": "0–1", "2-4": "2–4", ">=5": "5 or more" } },
+  { file: "nano.tsv", dim: "nano_f", order: ["N", "Y"], title: "Nano-loan flag · share of value (%)", colors: [R1, R4] },
+  { file: "true.tsv", dim: "true_f", order: ["N", "Y"], title: "TRUE ecosystem · share of value (%)", colors: [R1, R4] },
+];
+
+valuePanels.forEach((p, i) => {
+  const ds = tsv(p.file);
+  // one bar per loan type x measure; each bar is the mix across the dimension
+  const share = (lt, meas, k) => {
+    const tot = ds.filter((r) => r.loan_type === lt).reduce((a, r) => a + num(r[meas]), 0);
+    const part = ds.filter((r) => r.loan_type === lt && r[p.dim] === k).reduce((a, r) => a + num(r[meas]), 0);
+    return Number(((part / tot) * 100).toFixed(1));
+  };
+  const series = p.order.map((k) => ({
+    name: (p.rename && p.rename[k]) || k,
+    labels: valueCats,
+    values: [share("DL", "cl", k), share("DL", "os", k), share("PL", "cl", k), share("PL", "os", k)],
+  }));
+
+  const col = i % 2, row = Math.floor(i / 2);
+  const px = 0.6 + col * 6.15, py = 1.6 + row * 2.6;
+  s2b.addShape("roundRect", {
+    x: px, y: py, w: 5.95, h: 2.44, rectRadius: 0.09,
+    fill: { color: TINT }, line: { type: "none" },
+  });
+  s2b.addChart(pres.charts.BAR, series, {
+    x: px + 0.12, y: py + 0.1, w: 5.71, h: 2.24,
+    barDir: "bar",
+    barGrouping: "percentStacked",
+    barGapWidthPct: 40,
+    chartColors: p.colors,
+    showTitle: true,
+    title: p.title,
+    titleFontFace: B, titleFontSize: 12, titleColor: INK,
+    showValue: true,
+    dataLabelPosition: "ctr",
+    dataLabelFontFace: B, dataLabelFontSize: 8.5, dataLabelColor: PAPER,
+    dataLabelFormatCode: '0.0"%"',
+    showLegend: true, legendPos: "b",
+    legendFontFace: B, legendFontSize: 10, legendColor: INK,
+    catAxisLabelFontFace: B, catAxisLabelFontSize: 10, catAxisLabelColor: INK,
+    valAxisHidden: true,
+    valGridLine: { style: "none" },
+    catGridLine: { style: "none" },
+  });
+});
+
+s2b.addText(
+  "Source: figures as supplied, AIS base, aggregated across all book dates. CL = credit line, OS = outstanding. " +
+    "Each bar is a mix within that loan type and measure, so all four bars in a panel read to 100%. Compare against slide 2, which shows the same four splits by customer count.",
+  { x: 0.6, y: 6.9, w: 12.1, h: 0.44, margin: 0, fontFace: B, fontSize: 9, italic: true, color: MUTED }
+);
+s2b.addNotes(
+  "Same four dimensions as slide 2, measured by value instead of headcount. " +
+    "Charge type is the only mix that moves materially: DL prepaid falls from 48.8% of customers to 30.9% of credit line while postpaid rises 44.7% to 61.8% - postpaid customers carry roughly twice the line each. " +
+    "The other three shift only a few points toward the favourable category: tenure 5+ years 66.3% to 71.3% of DL line, nano Y 61.8% to 66.6%, TRUE Y 68.5% to 73.3%. " +
+    "PL is flatter throughout, and its OS mix leans more to prepaid (52.2%) than its CL mix (46.0%)."
+);
+
+/* ================================================================= SLIDE 4
    Book date - volume, and the mixes that actually move across cohorts    */
 
 const s3 = pres.addSlide();
@@ -670,7 +767,7 @@ s3.addNotes(
     "TRUE Y drifts down more gently, 70.3% to 66.6%. Charge type and tenure are effectively flat across the same window."
 );
 
-/* ================================================================= SLIDE 4
+/* ================================================================= SLIDE 5
    Charge type and tenure by book date - the mixes that hold steady       */
 
 const s4 = pres.addSlide();
@@ -849,23 +946,7 @@ s4.addNotes(
 );
 
 /* ============================================================ DATA TABLES
-   Slides 5-10: the source tables, reproduced from data/*.tsv              */
-
-const fs = require("fs");
-function tsv(name) {
-  const lines = fs.readFileSync(path.join(__dirname, "data", name), "utf8").trim().split("\n");
-  const head = lines[0].split("\t");
-  return lines.slice(1).map((l) => {
-    const c = l.split("\t");
-    const o = {};
-    head.forEach((h, i) => (o[h] = c[i]));
-    return o;
-  });
-}
-const num = (x) => Number(String(x).replace(/,/g, ""));
-const fmt = (v) => v.toLocaleString("en-US");
-const pct = (a, b) => (b ? (a / b) * 100 : 0).toFixed(1) + "%";
-const M = (v) => Number((v / 1e6).toFixed(1)).toLocaleString("en-US") + "M";
+   Slides 6-11: the source tables, reproduced from data/*.tsv              */
 
 /* generic table slide ---------------------------------------------------- */
 function tableSlide({ kicker, title, subtitle, headers, colW, body, total, footnote, notes, numericFrom }) {
@@ -933,7 +1014,7 @@ function tableSlide({ kicker, title, subtitle, headers, colW, body, total, footn
 const SRC = "Source: figures as supplied. cl = credit line, os = outstanding. ";
 const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
 
-/* --- slide 5: customer base -------------------------------------------- */
+/* --- slide 6: customer base -------------------------------------------- */
 {
   const cb = tsv("cust_base.tsv").map((r) => ({
     base: r.cust_base, cl: num(r.cl), os: num(r.os), cnt: num(r.cust_cnt),
@@ -966,7 +1047,7 @@ const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
   });
 }
 
-/* --- slide 6: cash need and risk level, as two separate tables --------- */
+/* --- slide 7: cash need and risk level, as two separate tables --------- */
 {
   const cr = tsv("cash_risk.tsv").map((r) => ({
     cash: r.cash_need, risk: r.risk_level, lt: r.loan_type, cl: num(r.cl), os: num(r.os),
@@ -1060,7 +1141,7 @@ const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
   );
 }
 
-/* --- slides 7-10: the four AIS breakdowns by book date ------------------ */
+/* --- slides 8-11: the four AIS breakdowns by book date ------------------ */
 function aisTableSlide(file, dimField, dimOrder, dimLabel, kicker, titleFn, subtitleFn, notes) {
   const ds = tsv(file);
   const get = (d, k, lt) => {
