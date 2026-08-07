@@ -584,368 +584,127 @@ s2b.addNotes(
 );
 
 /* ================================================================= SLIDE 4
-   Book date - volume, and the mixes that actually move across cohorts    */
+   Book date on customer count - the two earlier slides merged, laid out
+   as tall panels to match the value slide that follows                   */
 
-const s3 = pres.addSlide();
-s3.background = { color: PAPER };
+{
+  const sv = pres.addSlide();
+  sv.background = { color: PAPER };
+  // horizontal bars plot the first label at the bottom, so reverse for top-down
+  const D = ["5-Aug", "4-Aug", "3-Aug", "2-Aug", "1-Aug", "bef 1 Aug"];
 
-s3.addText("AIS BASE INFORMATION  ·  BY BOOK DATE", {
-  x: 0.6,
-  y: 0.36,
-  w: 12.1,
-  h: 0.26,
-  margin: 0,
-  fontFace: B,
-  fontSize: 11.5,
-  bold: true,
-  charSpacing: 2.2,
-  color: TEAL,
-});
-s3.addText("Nearly half the base booked on 2 August", {
-  x: 0.6,
-  y: 0.66,
-  w: 12.1,
-  h: 0.62,
-  margin: 0,
-  valign: "top",
-  fontFace: H,
-  fontSize: 32,
-  bold: true,
-  color: INK,
-});
-s3.addText(
-  "PL arrives almost entirely on 5 Aug, and each later cohort is a little less nano-loan — the flag falls 9.5 points from 1 to 5 Aug.",
-  {
-    x: 0.6,
-    y: 1.2,
-    w: 12.1,
-    h: 0.28,
-    margin: 0,
-    valign: "top",
-    fontFace: B,
-    fontSize: 12.5,
-    color: MUTED,
-  }
-);
-
-const bookDates = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
-
-/* volume ---------------------------------------------------------------- */
-s3.addShape("roundRect", {
-  x: 0.6,
-  y: 1.56,
-  w: 12.1,
-  h: 2.34,
-  rectRadius: 0.09,
-  fill: { color: TINT },
-  line: { type: "none" },
-});
-s3.addChart(
-  pres.charts.BAR,
-  [
-    { name: "DL", labels: bookDates, values: [641, 12182, 32182, 2060, 7173, 9522] },
-    { name: "PL", labels: bookDates, values: [67, 398, 1159, 90, 371, 4255] },
-  ],
-  {
-    x: 0.72,
-    y: 1.66,
-    w: 11.86,
-    h: 2.14,
-    barDir: "col",
-    barGrouping: "clustered",
-    barGapWidthPct: 55,
-    chartColors: [R4, R2],
-    showTitle: true,
-    title: "Bookings by book date (customers)",
-    titleFontFace: B,
-    titleFontSize: 12,
-    titleColor: INK,
-    showValue: true,
-    dataLabelPosition: "outEnd",
-    dataLabelFontFace: B,
-    dataLabelFontSize: 9.5,
-    dataLabelColor: INK,
-    dataLabelFormatCode: "#,##0",
-    showLegend: true,
-    legendPos: "b",
-    legendFontFace: B,
-    legendFontSize: 10,
-    legendColor: INK,
-    catAxisLabelFontFace: B,
-    catAxisLabelFontSize: 11,
-    catAxisLabelColor: INK,
-    valAxisHidden: true,
-    valAxisMinVal: 0,
-    valAxisMaxVal: 36000,
-    valGridLine: { style: "none" },
-    catGridLine: { style: "none" },
-  }
-);
-
-/* the two mixes that move ----------------------------------------------- */
-const dateMixes = [
-  {
-    title: "Nano-loan flag by book date (% of customers)",
-    series: [
-      { name: "N", labels: bookDates, values: [37.1, 35.2, 38.0, 36.8, 39.6, 44.7] },
-      { name: "Y", labels: bookDates, values: [62.9, 64.8, 62.0, 63.2, 60.4, 55.3] },
-    ],
-  },
-  {
-    title: "TRUE ecosystem by book date (% of customers)",
-    series: [
-      { name: "N", labels: bookDates, values: [18.1, 29.7, 31.9, 31.3, 32.7, 33.4] },
-      { name: "Y", labels: bookDates, values: [81.9, 70.3, 68.1, 68.7, 67.3, 66.6] },
-    ],
-  },
-];
-dateMixes.forEach((p, i) => {
-  const px = 0.6 + i * 6.15;
-  s3.addShape("roundRect", {
-    x: px,
-    y: 4.06,
-    w: 5.95,
-    h: 2.46,
-    rectRadius: 0.09,
-    fill: { color: TINT },
-    line: { type: "none" },
+  sv.addText("AIS BASE INFORMATION  ·  BY BOOK DATE  ·  CUSTOMER COUNT", {
+    x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
+    fontFace: B, fontSize: 11.5, bold: true, charSpacing: 2.2, color: TEAL,
   });
-  s3.addChart(pres.charts.BAR, p.series, {
-    x: px + 0.12,
-    y: 4.16,
-    w: 5.71,
-    h: 2.26,
-    barDir: "col",
-    barGrouping: "percentStacked",
-    barGapWidthPct: 45,
-    chartColors: [R1, R4],
+  sv.addText("Nearly half the base booked on 2 August", {
+    x: 0.6, y: 0.66, w: 12.1, h: 0.62, margin: 0, valign: "top",
+    fontFace: H, fontSize: 30, bold: true, color: INK,
+  });
+  sv.addText(
+    "PL arrives almost entirely on 5 Aug; the nano-loan flag falls 9.5 points across the cohorts while charge type and tenure barely move.",
+    { x: 0.6, y: 1.18, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12, color: MUTED }
+  );
+
+  const PW = 2.276, PGAP = 0.18, PY = 1.56, PH = 4.94;
+  const panelX = (i) => 0.6 + i * (PW + PGAP);
+  const shell = (i) =>
+    sv.addShape("roundRect", {
+      x: panelX(i), y: PY, w: PW, h: PH, rectRadius: 0.09,
+      fill: { color: TINT }, line: { type: "none" },
+    });
+  const common = {
+    barDir: "bar",
     showTitle: true,
-    title: p.title,
-    titleFontFace: B,
-    titleFontSize: 12,
-    titleColor: INK,
+    titleFontFace: B, titleFontSize: 11, titleColor: INK,
     showValue: true,
-    dataLabelPosition: "ctr",
-    dataLabelFontFace: B,
-    dataLabelFontSize: 9,
-    dataLabelColor: PAPER,
-    dataLabelFormatCode: '0"%"',
-    showLegend: true,
-    legendPos: "b",
-    legendFontFace: B,
-    legendFontSize: 10,
-    legendColor: INK,
-    catAxisLabelFontFace: B,
-    catAxisLabelFontSize: 10,
-    catAxisLabelColor: INK,
+    dataLabelFontFace: B, dataLabelFontSize: 7.5,
+    showLegend: true, legendPos: "b",
+    legendFontFace: B, legendFontSize: 9, legendColor: INK,
+    catAxisLabelFontFace: B, catAxisLabelFontSize: 7.5, catAxisLabelColor: INK,
     valAxisHidden: true,
     valGridLine: { style: "none" },
     catGridLine: { style: "none" },
-  });
-});
+  };
 
-s3.addText(
-  "Source: Lending_2026.08.07.pptx, AIS Base Information slides. Volumes are the grand totals per book date; the two mixes combine DL and PL. " +
-    "'bef 1 Aug' holds only 708 customers, so its mix is a small-sample outlier. " +
-    "Charge type and tenure move far less across the same window and are charted on the next slide.",
+  /* panel 0 - bookings volume ------------------------------------------- */
   {
-    x: 0.6,
-    y: 6.66,
-    w: 12.1,
-    h: 0.56,
-    margin: 0,
-    fontFace: B,
-    fontSize: 9,
-    italic: true,
-    color: MUTED,
+    const ch = tsv("charge.tsv");
+    const cnt = (d, lt) =>
+      ch.filter((r) => r.book_date === d && r.loan_type === lt).reduce((a, r) => a + num(r.cust_cnt), 0);
+    shell(0);
+    sv.addChart(
+      pres.charts.BAR,
+      ["DL", "PL"].map((lt) => ({
+        name: lt,
+        labels: D,
+        values: D.map((d) => Number((cnt(d, lt) / 1000).toFixed(1))),
+      })),
+      Object.assign({}, common, {
+        x: panelX(0) + 0.09, y: PY + 0.08, w: PW - 0.18, h: PH - 0.16,
+        barGrouping: "clustered",
+        barGapWidthPct: 40,
+        chartColors: [R4, R2],
+        title: "Bookings (K)",
+        dataLabelPosition: "outEnd",
+        dataLabelColor: INK,
+        dataLabelFormatCode: '0.0',
+        valAxisMinVal: 0,
+        valAxisMaxVal: 40,
+      })
+    );
   }
-);
 
-s3.addNotes(
-  "2 Aug alone accounts for 33,341 of the 70,100 AIS bookings (47.6%). PL is back-loaded: 4,255 of its 6,340 bookings (67%) land on 5 Aug. " +
-    "Nano-loan Y falls from 64.8% on 1 Aug to 55.3% on 5 Aug, a 9.5 point drop, and the PL surge on 5 Aug is part of why - PL runs a lower nano share than DL. " +
-    "TRUE Y drifts down more gently, 70.3% to 66.6%. Charge type and tenure are effectively flat across the same window."
-);
+  /* panels 1-4 - the four dimension mixes -------------------------------- */
+  const mixes = [
+    { file: "charge.tsv", dim: "charge_type", order: ["FBB", "Prepaid", "Postpaid"], title: "Charge type (%)", colors: [R2, R3, R4], labelMin: 8 },
+    { file: "tenure.tsv", dim: "tenure", order: ["0-1", "2-4", ">=5"], title: "Tenure in years (%)", colors: [R2, R3, R4], rename: { "0-1": "0–1", "2-4": "2–4", ">=5": "5+" }, labelMin: 8 },
+    { file: "nano.tsv", dim: "nano_f", order: ["N", "Y"], title: "Nano-loan flag (%)", colors: [R1, R4], labelMin: 5 },
+    { file: "true.tsv", dim: "true_f", order: ["N", "Y"], title: "TRUE flag (%)", colors: [R1, R4], labelMin: 5 },
+  ];
+  mixes.forEach((p, i) => {
+    const ds = tsv(p.file);
+    const share = (d, k) => {
+      const rows = ds.filter((r) => r.book_date === d);
+      const tot = rows.reduce((a, r) => a + num(r.cust_cnt), 0);
+      const part = rows.filter((r) => r[p.dim] === k).reduce((a, r) => a + num(r.cust_cnt), 0);
+      return Number(((part / tot) * 100).toFixed(1));
+    };
+    shell(i + 1);
+    sv.addChart(
+      pres.charts.BAR,
+      p.order.map((k) => ({
+        name: (p.rename && p.rename[k]) || k,
+        labels: D,
+        values: D.map((d) => share(d, k)),
+      })),
+      Object.assign({}, common, {
+        x: panelX(i + 1) + 0.09, y: PY + 0.08, w: PW - 0.18, h: PH - 0.16,
+        barGrouping: "percentStacked",
+        barGapWidthPct: 35,
+        chartColors: p.colors,
+        title: p.title,
+        dataLabelPosition: "ctr",
+        dataLabelColor: PAPER,
+        dataLabelFormatCode: `[<${p.labelMin}]"";0"%"`,
+      })
+    );
+  });
+
+  sv.addText(
+    "Source: figures as supplied, AIS base; mixes combine DL and PL, bookings are split by loan type. Segments too narrow to hold a label are left blank — exact values are in the tables. " +
+      "'bef 1 Aug' holds only 708 customers, so its mix is a small-sample outlier. The next slide shows the same four cuts on credit line and outstanding.",
+    { x: 0.6, y: 6.62, w: 12.1, h: 0.5, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
+  );
+  sv.addNotes(
+    "Merges the two earlier book-date slides into one, in the same tall-panel layout as the value slide that follows. " +
+      "2 Aug alone is 33,341 of the 70,100 AIS bookings (47.6%); PL is back-loaded, with 4,255 of its 6,340 bookings on 5 Aug. " +
+      "Nano-loan Y falls from 64.8% on 1 Aug to 55.3% on 5 Aug (9.5pt); TRUE Y drifts 70.3% to 66.6%. " +
+      "Charge type and tenure barely move - prepaid 46-55%, tenure 5+ years 65-68%."
+  );
+}
 
 /* ================================================================= SLIDE 5
-   Charge type and tenure by book date - the mixes that hold steady       */
-
-const s4 = pres.addSlide();
-s4.background = { color: PAPER };
-
-s4.addText("AIS BASE INFORMATION  ·  BY BOOK DATE", {
-  x: 0.6,
-  y: 0.36,
-  w: 12.1,
-  h: 0.26,
-  margin: 0,
-  fontFace: B,
-  fontSize: 11.5,
-  bold: true,
-  charSpacing: 2.2,
-  color: TEAL,
-});
-s4.addText("Charge type and tenure hold steady", {
-  x: 0.6,
-  y: 0.66,
-  w: 12.1,
-  h: 0.62,
-  margin: 0,
-  valign: "top",
-  fontFace: H,
-  fontSize: 32,
-  bold: true,
-  color: INK,
-});
-s4.addText(
-  "Unlike the nano-loan flag, these two barely move from 1 Aug onward — only the small pre-August cohort looks different.",
-  {
-    x: 0.6,
-    y: 1.2,
-    w: 12.1,
-    h: 0.28,
-    margin: 0,
-    valign: "top",
-    fontFace: B,
-    fontSize: 12.5,
-    color: MUTED,
-  }
-);
-
-const bookDates4 = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
-const steady = [
-  {
-    title: "Charge type by book date (% of customers)",
-    series: [
-      { name: "FBB", labels: bookDates4, values: [3.8, 6.9, 6.9, 7.6, 6.9, 4.9] },
-      { name: "Prepaid", labels: bookDates4, values: [17.5, 46.4, 49.4, 47.9, 47.9, 55.0] },
-      { name: "Postpaid", labels: bookDates4, values: [78.7, 46.7, 43.8, 44.5, 45.1, 40.1] },
-    ],
-  },
-  {
-    title: "Tenure in years by book date (% of customers)",
-    series: [
-      { name: "0–1", labels: bookDates4, values: [4.4, 11.6, 11.6, 10.9, 10.5, 9.7] },
-      { name: "2–4", labels: bookDates4, values: [14.7, 22.7, 23.3, 23.1, 22.7, 21.9] },
-      { name: "5 or more", labels: bookDates4, values: [80.9, 65.7, 65.1, 66.0, 66.8, 68.4] },
-    ],
-  },
-];
-steady.forEach((p, i) => {
-  const px = 0.6 + i * 6.15;
-  s4.addShape("roundRect", {
-    x: px,
-    y: 1.58,
-    w: 5.95,
-    h: 3.42,
-    rectRadius: 0.09,
-    fill: { color: TINT },
-    line: { type: "none" },
-  });
-  s4.addChart(pres.charts.BAR, p.series, {
-    x: px + 0.12,
-    y: 1.68,
-    w: 5.71,
-    h: 3.22,
-    barDir: "col",
-    barGrouping: "percentStacked",
-    barGapWidthPct: 45,
-    chartColors: [R2, R3, R4],
-    showTitle: true,
-    title: p.title,
-    titleFontFace: B,
-    titleFontSize: 12,
-    titleColor: INK,
-    showValue: true,
-    dataLabelPosition: "ctr",
-    dataLabelFontFace: B,
-    dataLabelFontSize: 9,
-    dataLabelColor: PAPER,
-    dataLabelFormatCode: '0"%"',
-    showLegend: true,
-    legendPos: "b",
-    legendFontFace: B,
-    legendFontSize: 10,
-    legendColor: INK,
-    catAxisLabelFontFace: B,
-    catAxisLabelFontSize: 10,
-    catAxisLabelColor: INK,
-    valAxisHidden: true,
-    valGridLine: { style: "none" },
-    catGridLine: { style: "none" },
-  });
-});
-
-s4.addShape("roundRect", {
-  x: 0.6,
-  y: 5.2,
-  w: 12.1,
-  h: 1.3,
-  rectRadius: 0.09,
-  fill: { color: NAVY },
-  line: { type: "none" },
-});
-s4.addText("HOW MUCH EACH MIX MOVES, 1 AUG TO 5 AUG", {
-  x: 1.0,
-  y: 5.38,
-  w: 11.3,
-  h: 0.26,
-  margin: 0,
-  fontFace: B,
-  fontSize: 10.5,
-  bold: true,
-  charSpacing: 1.8,
-  color: MINT,
-});
-s4.addText(
-  [
-    { text: "Prepaid 46–55% (8.6pt) · Tenure 5+ years 65–68% (3.3pt)", options: { color: MINT, bold: true } },
-    {
-      text: " — against the nano-loan flag's 9.5pt slide on the previous slide. Charge type drifts toward prepaid on 5 Aug, tracking the PL surge; tenure is flat throughout.",
-      options: { color: "C3D0E2" },
-    },
-    {
-      text: "\nThe pre-1-Aug cohort is the exception — 79% postpaid, 81% long-tenured — but holds just 708 of the 70,100 customers.",
-      options: { color: "C3D0E2" },
-    },
-  ],
-  {
-    x: 1.0,
-    y: 5.66,
-    w: 11.3,
-    h: 0.76,
-    margin: 0,
-    valign: "top",
-    lineSpacing: 16,
-    fontFace: B,
-    fontSize: 11,
-  }
-);
-
-s4.addText(
-  "Source: Lending_2026.08.07.pptx, the charge type and tenure AIS Base Information slides, DL and PL combined and aggregated to each book date. " +
-    "Percentages are computed from the deck's own counts; each date column sums to that date's grand total, and the six together sum to 70,100.",
-  {
-    x: 0.6,
-    y: 6.66,
-    w: 12.1,
-    h: 0.56,
-    margin: 0,
-    fontFace: B,
-    fontSize: 9,
-    italic: true,
-    color: MUTED,
-  }
-);
-
-s4.addNotes(
-  "Completes the by-book-date view: charge type and tenure alongside the nano-loan flag and TRUE on slide 3. " +
-    "From 1 Aug onward prepaid runs 46.4, 49.4, 47.9, 47.9, 55.0 and tenure 5+ years runs 65.7, 65.1, 66.0, 66.8, 68.4 - " +
-    "spreads of 8.6 and 3.3 points against 9.5 for the nano-loan flag. The 5 Aug prepaid uptick coincides with the PL surge, " +
-    "and PL runs a higher prepaid share than DL (56.0% vs 48.8%)."
-);
-
-/* ================================================================= SLIDE 6
    The four book-date mixes, each measured on credit line AND outstanding */
 
 {
@@ -1026,7 +785,7 @@ s4.addNotes(
   sv.addText(
     "Source: figures as supplied, AIS base. CL = credit line, OS = outstanding; each bar is a mix within that date and measure, so every bar reads to 100%. " +
       "The OS-above-CL pattern holds in all five August cohorts on charge type and tenure, and in four of five on the nano and TRUE flags — the exceptions are the 708-customer pre-August cohort " +
-      "and a 0.2-point wobble on TRUE on 3 Aug. Slides 4 and 5 show the same four cuts by customer count.",
+      "and a 0.2-point wobble on TRUE on 3 Aug. The previous slide shows the same four cuts by customer count.",
     { x: 0.6, y: 6.62, w: 12.1, h: 0.5, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
   );
   sv.addNotes(
@@ -1037,7 +796,7 @@ s4.addNotes(
   );
 }
 
-/* ================================================================= SLIDE 7
+/* ================================================================= SLIDE 6
    Slide 1's cash-need / risk mix chart, measured on credit line and OS  */
 
 {
@@ -1114,7 +873,7 @@ s4.addNotes(
 
   sv.addText(
     "Source: figures as supplied. CL = credit line, OS = outstanding; each bar is a mix within that loan type and measure, so every bar reads to 100%. " +
-      "Slide 1 shows the same two cuts by customer count, where cash need and risk are the only figures the source states as percentages.",
+      "Slide 1 shows the same two cuts by customer count.",
     { x: 0.6, y: 6.44, w: 12.1, h: 0.44, margin: 0, fontFace: B, fontSize: 9, italic: true, color: MUTED }
   );
   sv.addNotes(
@@ -1126,7 +885,7 @@ s4.addNotes(
 }
 
 /* ============================================================ DATA TABLES
-   Slides 8-13: the source tables, reproduced from data/*.tsv              */
+   Slides 7-12: the source tables, reproduced from data/*.tsv              */
 
 /* generic table slide ---------------------------------------------------- */
 function tableSlide({ kicker, title, subtitle, headers, colW, body, total, footnote, notes, numericFrom }) {
@@ -1194,7 +953,7 @@ function tableSlide({ kicker, title, subtitle, headers, colW, body, total, footn
 const SRC = "Source: figures as supplied. cl = credit line, os = outstanding. ";
 const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
 
-/* --- slide 8: customer base -------------------------------------------- */
+/* --- slide 7: customer base -------------------------------------------- */
 {
   const cb = tsv("cust_base.tsv").map((r) => ({
     base: r.cust_base, cl: num(r.cl), os: num(r.os), cnt: num(r.cust_cnt),
@@ -1227,7 +986,7 @@ const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
   });
 }
 
-/* --- slide 9: cash need and risk level, as two separate tables --------- */
+/* --- slide 8: cash need and risk level, as two separate tables --------- */
 {
   const cr = tsv("cash_risk.tsv").map((r) => ({
     cash: r.cash_need, risk: r.risk_level, lt: r.loan_type, cl: num(r.cl), os: num(r.os),
@@ -1321,7 +1080,7 @@ const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
   );
 }
 
-/* --- slides 10-13: the four AIS breakdowns by book date ------------------ */
+/* --- slides 9-12: the four AIS breakdowns by book date ------------------ */
 function aisTableSlide(file, dimField, dimOrder, dimLabel, kicker, titleFn, subtitleFn, notes) {
   const ds = tsv(file);
   const get = (d, k, lt) => {
