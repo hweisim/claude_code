@@ -71,7 +71,10 @@ function clOsPanel(sl, cfg) {
   const avail = cfg.h - 0.52;
   const h1 = avail * 0.44, h2 = avail * 0.56;
   ["cl", "os"].forEach((m, i) => {
-    sl.addChart(pres.charts.BAR, cfg.series(m), {
+    // every bar is 100% wide, so the bar's own total rides on its label
+    const tot = cfg.totals(m);
+    const labels = cfg.cats.map((c, j) => `${c}  ${M(tot[j])}`);
+    sl.addChart(pres.charts.BAR, cfg.series(m, labels), {
       x: cfg.x + 0.09,
       y: i === 0 ? top : top + h1,
       w: cfg.w - 0.18,
@@ -284,14 +287,16 @@ s.addShape("roundRect", {
   line: { type: "none" },
 });
 
-const cats = ["Cash need · DL", "Cash need · PL", "Risk · DL", "Risk · PL"];
+// reversed - bars plot the first label at the bottom, so this reads
+// Cash need PL, Cash need DL, Risk PL, Risk DL from the top
+const cats = ["Risk · DL", "Risk · PL", "Cash need · DL", "Cash need · PL"];
 s.addChart(
   pres.charts.BAR,
   [
-    { name: "Null", labels: cats, values: [13, 18, 2, 6] },
-    { name: "Low", labels: cats, values: [5, 9, 29, 31] },
-    { name: "Mid", labels: cats, values: [16, 21, 25, 23] },
-    { name: "High", labels: cats, values: [66, 52, 44, 40] },
+    { name: "Null", labels: cats, values: [2, 6, 13, 18] },
+    { name: "Low", labels: cats, values: [29, 31, 5, 9] },
+    { name: "Mid", labels: cats, values: [25, 23, 16, 21] },
+    { name: "High", labels: cats, values: [44, 40, 66, 52] },
   ],
   {
     x: 6.88,
@@ -312,7 +317,7 @@ s.addChart(
     dataLabelFontFace: B,
     dataLabelFontSize: 9,
     dataLabelColor: PAPER,
-    dataLabelFormatCode: '0"%"',
+    dataLabelFormatCode: '[<4]"";0"%"',
     showLegend: true,
     legendPos: "b",
     legendFontFace: B,
@@ -572,7 +577,7 @@ s2.addNotes(
     { x: 0.6, y: 1.18, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12.5, color: MUTED }
   );
 
-  const LT = ["PL", "DL"]; // reversed - horizontal bars plot the first label at the bottom
+  const LT = ["DL", "PL"]; // reversed - bars plot the first label at the bottom, so PL reads first
 
   AIS_DIMS.forEach((p, i) => {
     const ds = tsv(p.file);
@@ -587,12 +592,15 @@ s2.addNotes(
       header: p.header,
       colors: p.colors,
       labelMin: p.labelMin,
-      catFont: 10,
+      catFont: 8.5,
       labelFont: 8.5,
-      series: (m) =>
+      cats: LT,
+      totals: (m) =>
+        LT.map((lt) => ds.filter((r) => r.loan_type === lt).reduce((a2, r) => a2 + num(r[m]), 0)),
+      series: (m, labels) =>
         p.order.map((k) => ({
           name: (p.rename && p.rename[k]) || k,
-          labels: LT,
+          labels,
           values: LT.map((lt) => share(lt, m, k)),
         })),
     });
@@ -600,7 +608,7 @@ s2.addNotes(
 
   sv.addText(
     "Source: figures as supplied, AIS base, aggregated across all book dates. CL = credit line, OS = outstanding; each bar is a mix within that loan type and measure, so every bar reads to 100%. " +
-      "Segments too narrow to hold a label are left blank. Slide 2 shows the same four splits by customer count.",
+      "The figure beside each bar is that bar's total for the measure shown. Segments too narrow to hold a label are left blank. Slide 2 shows the same four splits by customer count.",
     { x: 0.6, y: 6.62, w: 12.1, h: 0.5, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
   );
   sv.addNotes(
@@ -765,18 +773,21 @@ s2.addNotes(
       header: p.header,
       colors: p.colors,
       labelMin: p.labelMin,
-      catFont: 7.5,
-      series: (m) =>
+      catFont: 6.5,
+      cats: D,
+      totals: (m) =>
+        D.map((d) => ds.filter((r) => r.book_date === d).reduce((a2, r) => a2 + num(r[m]), 0)),
+      series: (m, labels) =>
         p.order.map((k) => ({
           name: (p.rename && p.rename[k]) || k,
-          labels: D,
+          labels,
           values: D.map((d) => share(d, m, k)),
         })),
     });
   });
 
   sv.addText(
-    "Source: figures as supplied, AIS base. Each bar is a mix within that date and measure, so every bar reads to 100%; segments too narrow to hold a label are left blank. " +
+    "Source: figures as supplied, AIS base. Each bar is a mix within that date and measure, so every bar reads to 100%; the figure beside each bar is that cohort's total for the measure shown, and narrow segments are left unlabelled. " +
       "The OS-above-CL pattern holds in all five August cohorts on charge type and tenure, and in four of five on the nano and TRUE flags — the exceptions are the 708-customer pre-August cohort " +
       "and a 0.2-point wobble on TRUE on 3 Aug. The previous slide shows the same four cuts by customer count.",
     { x: 0.6, y: 6.62, w: 12.1, h: 0.5, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
@@ -797,7 +808,7 @@ s2.addNotes(
   sv.background = { color: PAPER };
   const cr = tsv("cash_risk.tsv");
   const LEVELS = ["Null", "Low", "Mid", "High"];
-  const LT = ["PL", "DL"]; // reversed - first label plots at the bottom
+  const LT = ["DL", "PL"]; // reversed - first label plots at the bottom, so PL reads first
   const share = (field, lvl, lt, m) => {
     const rows = cr.filter((r) => r.loan_type === lt);
     const tot = rows.reduce((a, r) => a + num(r[m]), 0);
@@ -830,11 +841,14 @@ s2.addNotes(
       labelMin: p.labelMin,
       decimals: true,
       labelFont: 9.5,
-      catFont: 11,
-      series: (m) =>
+      catFont: 10.5,
+      cats: LT,
+      totals: (m) =>
+        LT.map((lt) => cr.filter((r) => r.loan_type === lt).reduce((a2, r) => a2 + num(r[m]), 0)),
+      series: (m, labels) =>
         LEVELS.map((lvl) => ({
           name: lvl,
-          labels: LT,
+          labels,
           values: LT.map((lt) => share(p.field, lvl, lt, m)),
         })),
     });
@@ -842,7 +856,7 @@ s2.addNotes(
 
   sv.addText(
     "Source: figures as supplied. CL = credit line, OS = outstanding; each bar is a mix within that loan type and measure, so every bar reads to 100%. " +
-      "Segments too narrow to hold a label are left blank. Slide 1 shows the same two cuts by customer count.",
+      "The figure beside each bar is that bar's total for the measure shown. Segments too narrow to hold a label are left blank. Slide 1 shows the same two cuts by customer count.",
     { x: 0.6, y: 6.44, w: 12.1, h: 0.44, margin: 0, fontFace: B, fontSize: 9, italic: true, color: MUTED }
   );
   sv.addNotes(
@@ -995,7 +1009,7 @@ const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
     { x: 0.6, y: 1.18, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12, color: MUTED }
   );
 
-  const headers = ["Level", "DL credit line", "DL outstanding", "DL util.", "PL credit line", "PL outstanding", "PL util.", "Total credit line", "% of line"];
+  const headers = ["Level", "PL credit line", "PL outstanding", "PL util.", "DL credit line", "DL outstanding", "DL util.", "Total credit line", "% of line"];
   const colW = [1.3, 1.65, 1.65, 0.9, 1.65, 1.65, 0.9, 1.45, 0.95];
 
   function block(label, data, y) {
@@ -1020,10 +1034,10 @@ const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
         options: { bold: true, color: PAPER, fill: { color: NAVY }, fontFace: B, fontSize: 10.5, align: j >= 1 ? "right" : "left" },
       })),
       ...data.map((r, i) =>
-        [r.lvl, fmt(r.d.cl), fmt(r.d.os), pct(r.d.os, r.d.cl), fmt(r.pl.cl), fmt(r.pl.os), pct(r.pl.os, r.pl.cl), fmt(r.cl), pct(r.cl, GT.cl)]
+        [r.lvl, fmt(r.pl.cl), fmt(r.pl.os), pct(r.pl.os, r.pl.cl), fmt(r.d.cl), fmt(r.d.os), pct(r.d.os, r.d.cl), fmt(r.cl), pct(r.cl, GT.cl)]
           .map((t, j) => cell(t, j, { fill: { color: i % 2 ? TINT : PAPER }, bold: j === 0 }))
       ),
-      ["Total", fmt(T.dcl), fmt(T.dos), pct(T.dos, T.dcl), fmt(T.pcl), fmt(T.pos), pct(T.pos, T.pcl), fmt(T.dcl + T.pcl), "100.0%"]
+      ["Total", fmt(T.pcl), fmt(T.pos), pct(T.pos, T.pcl), fmt(T.dcl), fmt(T.dos), pct(T.dos, T.dcl), fmt(T.dcl + T.pcl), "100.0%"]
         .map((t, j) => cell(t, j, { fill: { color: TINT_COOL }, bold: true })),
     ];
     sl.addTable(rows, {
@@ -1067,7 +1081,7 @@ function aisTableSlide(file, dimField, dimOrder, dimLabel, kicker, titleFn, subt
       byDim[k] = byDim[k] || { c: 0, cl: 0 };
       byDim[k].c += a.c + b.c;
       byDim[k].cl += a.cl + b.cl;
-      body.push([d, k, fmt(a.c), fmt(a.cl), fmt(a.os), fmt(b.c), fmt(b.cl), fmt(b.os)]);
+      body.push([d, k, fmt(b.c), fmt(b.cl), fmt(b.os), fmt(a.c), fmt(a.cl), fmt(a.os)]);
     })
   );
   const totCl = T.dcl + T.pcl, totC = T.dc + T.pc;
@@ -1075,11 +1089,11 @@ function aisTableSlide(file, dimField, dimOrder, dimLabel, kicker, titleFn, subt
     kicker,
     title: titleFn(byDim, totC, totCl),
     subtitle: subtitleFn(byDim, totC, totCl),
-    headers: ["Book date", dimLabel, "DL customers", "DL credit line", "DL outstanding", "PL customers", "PL credit line", "PL outstanding"],
-    colW: [1.25, 1.35, 1.35, 1.9, 1.9, 1.35, 1.5, 1.5],
+    headers: ["Book date", dimLabel, "PL customers", "PL credit line", "PL outstanding", "DL customers", "DL credit line", "DL outstanding"],
+    colW: [1.25, 1.35, 1.35, 1.5, 1.5, 1.35, 1.9, 1.9],
     numericFrom: 2,
     body,
-    total: ["Total", "", fmt(T.dc), fmt(T.dcl), fmt(T.dos), fmt(T.pc), fmt(T.pcl), fmt(T.pos)],
+    total: ["Total", "", fmt(T.pc), fmt(T.pcl), fmt(T.pos), fmt(T.dc), fmt(T.dcl), fmt(T.dos)],
     footnote:
       SRC +
       "Customers total 70,100 with 801,481,000 of credit line and 476,272,677 outstanding — identical across all four AIS breakdowns, and 74.3% of the 94,371-customer book.",
