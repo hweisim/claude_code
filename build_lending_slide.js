@@ -485,5 +485,189 @@ s2.addNotes(
     "Counts behind the percentages - DL 63,760 and PL 6,340, totalling 70,100."
 );
 
+/* ================================================================= SLIDE 3
+   Book date - volume, and the mixes that actually move across cohorts    */
+
+const s3 = pres.addSlide();
+s3.background = { color: PAPER };
+
+s3.addText("AIS BASE INFORMATION  ·  BY BOOK DATE", {
+  x: 0.6,
+  y: 0.36,
+  w: 12.1,
+  h: 0.26,
+  margin: 0,
+  fontFace: B,
+  fontSize: 11.5,
+  bold: true,
+  charSpacing: 2.2,
+  color: TEAL,
+});
+s3.addText("Nearly half the base booked on 2 August", {
+  x: 0.6,
+  y: 0.66,
+  w: 12.1,
+  h: 0.62,
+  margin: 0,
+  valign: "top",
+  fontFace: H,
+  fontSize: 32,
+  bold: true,
+  color: INK,
+});
+s3.addText(
+  "PL arrives almost entirely on 5 Aug, and each later cohort is a little less nano-loan — the flag falls 9.5 points from 1 to 5 Aug.",
+  {
+    x: 0.6,
+    y: 1.2,
+    w: 12.1,
+    h: 0.28,
+    margin: 0,
+    valign: "top",
+    fontFace: B,
+    fontSize: 12.5,
+    color: MUTED,
+  }
+);
+
+const bookDates = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
+
+/* volume ---------------------------------------------------------------- */
+s3.addShape("roundRect", {
+  x: 0.6,
+  y: 1.56,
+  w: 12.1,
+  h: 2.34,
+  rectRadius: 0.09,
+  fill: { color: TINT },
+  line: { type: "none" },
+});
+s3.addChart(
+  pres.charts.BAR,
+  [
+    { name: "DL", labels: bookDates, values: [641, 12182, 32182, 2060, 7173, 9522] },
+    { name: "PL", labels: bookDates, values: [67, 398, 1159, 90, 371, 4255] },
+  ],
+  {
+    x: 0.72,
+    y: 1.66,
+    w: 11.86,
+    h: 2.14,
+    barDir: "col",
+    barGrouping: "clustered",
+    barGapWidthPct: 55,
+    chartColors: [R4, R2],
+    showTitle: true,
+    title: "Bookings by book date (customers)",
+    titleFontFace: B,
+    titleFontSize: 12,
+    titleColor: INK,
+    showValue: true,
+    dataLabelPosition: "outEnd",
+    dataLabelFontFace: B,
+    dataLabelFontSize: 9.5,
+    dataLabelColor: INK,
+    dataLabelFormatCode: "#,##0",
+    showLegend: true,
+    legendPos: "b",
+    legendFontFace: B,
+    legendFontSize: 10,
+    legendColor: INK,
+    catAxisLabelFontFace: B,
+    catAxisLabelFontSize: 11,
+    catAxisLabelColor: INK,
+    valAxisHidden: true,
+    valAxisMinVal: 0,
+    valAxisMaxVal: 36000,
+    valGridLine: { style: "none" },
+    catGridLine: { style: "none" },
+  }
+);
+
+/* the two mixes that move ----------------------------------------------- */
+const dateMixes = [
+  {
+    title: "Nano-loan flag by book date (% of customers)",
+    series: [
+      { name: "N", labels: bookDates, values: [37.1, 35.2, 38.0, 36.8, 39.6, 44.7] },
+      { name: "Y", labels: bookDates, values: [62.9, 64.8, 62.0, 63.2, 60.4, 55.3] },
+    ],
+  },
+  {
+    title: "TRUE ecosystem by book date (% of customers)",
+    series: [
+      { name: "N", labels: bookDates, values: [18.1, 29.7, 31.9, 31.3, 32.7, 33.4] },
+      { name: "Y", labels: bookDates, values: [81.9, 70.3, 68.1, 68.7, 67.3, 66.6] },
+    ],
+  },
+];
+dateMixes.forEach((p, i) => {
+  const px = 0.6 + i * 6.15;
+  s3.addShape("roundRect", {
+    x: px,
+    y: 4.06,
+    w: 5.95,
+    h: 2.46,
+    rectRadius: 0.09,
+    fill: { color: TINT },
+    line: { type: "none" },
+  });
+  s3.addChart(pres.charts.BAR, p.series, {
+    x: px + 0.12,
+    y: 4.16,
+    w: 5.71,
+    h: 2.26,
+    barDir: "col",
+    barGrouping: "percentStacked",
+    barGapWidthPct: 45,
+    chartColors: [R1, R4],
+    showTitle: true,
+    title: p.title,
+    titleFontFace: B,
+    titleFontSize: 12,
+    titleColor: INK,
+    showValue: true,
+    dataLabelPosition: "ctr",
+    dataLabelFontFace: B,
+    dataLabelFontSize: 9,
+    dataLabelColor: PAPER,
+    dataLabelFormatCode: '0"%"',
+    showLegend: true,
+    legendPos: "b",
+    legendFontFace: B,
+    legendFontSize: 10,
+    legendColor: INK,
+    catAxisLabelFontFace: B,
+    catAxisLabelFontSize: 10,
+    catAxisLabelColor: INK,
+    valAxisHidden: true,
+    valGridLine: { style: "none" },
+    catGridLine: { style: "none" },
+  });
+});
+
+s3.addText(
+  "Source: Lending_2026.08.07.pptx, AIS Base Information slides. Volumes are the grand totals per book date; the two mixes combine DL and PL. " +
+    "'bef 1 Aug' holds only 708 customers, so its mix is a small-sample outlier. Charge type and tenure barely move across the August dates " +
+    "(prepaid 46–55%, tenure 5+ years 65–68%) and are shown by loan type on the previous slide.",
+  {
+    x: 0.6,
+    y: 6.66,
+    w: 12.1,
+    h: 0.56,
+    margin: 0,
+    fontFace: B,
+    fontSize: 9,
+    italic: true,
+    color: MUTED,
+  }
+);
+
+s3.addNotes(
+  "2 Aug alone accounts for 33,341 of the 70,100 AIS bookings (47.6%). PL is back-loaded: 4,255 of its 6,340 bookings (67%) land on 5 Aug. " +
+    "Nano-loan Y falls from 64.8% on 1 Aug to 55.3% on 5 Aug, a 9.5 point drop, and the PL surge on 5 Aug is part of why - PL runs a lower nano share than DL. " +
+    "TRUE Y drifts down more gently, 70.3% to 66.6%. Charge type and tenure are effectively flat across the same window."
+);
+
 const out = path.join(__dirname, "Lending_Book_Loan_Summary.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
