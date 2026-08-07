@@ -33,6 +33,7 @@ const R1 = "8DA0B8"; // null / none
 const R2 = "3FB89F"; // low
 const R3 = "1E8E86"; // mid
 const R4 = "165A73"; // high
+const RULE = "D8DFE9"; // table borders
 
 const H = "Cambria";
 const B = "Calibri";
@@ -845,6 +846,233 @@ s4.addNotes(
     "From 1 Aug onward prepaid runs 46.4, 49.4, 47.9, 47.9, 55.0 and tenure 5+ years runs 65.7, 65.1, 66.0, 66.8, 68.4 - " +
     "spreads of 8.6 and 3.3 points against 9.5 for the nano-loan flag. The 5 Aug prepaid uptick coincides with the PL surge, " +
     "and PL runs a higher prepaid share than DL (56.0% vs 48.8%)."
+);
+
+/* ============================================================ DATA TABLES
+   Slides 5-10: the source tables, reproduced from data/*.tsv              */
+
+const fs = require("fs");
+function tsv(name) {
+  const lines = fs.readFileSync(path.join(__dirname, "data", name), "utf8").trim().split("\n");
+  const head = lines[0].split("\t");
+  return lines.slice(1).map((l) => {
+    const c = l.split("\t");
+    const o = {};
+    head.forEach((h, i) => (o[h] = c[i]));
+    return o;
+  });
+}
+const num = (x) => Number(String(x).replace(/,/g, ""));
+const fmt = (v) => v.toLocaleString("en-US");
+const pct = (a, b) => (b ? (a / b) * 100 : 0).toFixed(1) + "%";
+const M = (v) => Number((v / 1e6).toFixed(1)).toLocaleString("en-US") + "M";
+
+/* generic table slide ---------------------------------------------------- */
+function tableSlide({ kicker, title, subtitle, headers, colW, body, total, footnote, notes, numericFrom }) {
+  const sl = pres.addSlide();
+  sl.background = { color: PAPER };
+  sl.addText(kicker.toUpperCase(), {
+    x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
+    fontFace: B, fontSize: 11.5, bold: true, charSpacing: 2.2, color: TEAL,
+  });
+  sl.addText(title, {
+    x: 0.6, y: 0.66, w: 12.1, h: 0.62, margin: 0, valign: "top",
+    fontFace: H, fontSize: 30, bold: true, color: INK,
+  });
+  sl.addText(subtitle, {
+    x: 0.6, y: 1.2, w: 12.1, h: 0.28, margin: 0, valign: "top",
+    fontFace: B, fontSize: 12, color: MUTED,
+  });
+
+  const y = 1.58;
+  const nRows = body.length + (total ? 1 : 0) + 1;
+  const rowH = Math.min(0.42, (6.76 - y) / nRows);
+  const fs2 = rowH >= 0.36 ? 11 : rowH >= 0.30 ? 10 : 9;
+
+  const cell = (t, j, opts = {}) => ({
+    text: t,
+    options: Object.assign(
+      {
+        fontFace: j >= numericFrom ? H : B,
+        fontSize: fs2,
+        align: j >= numericFrom ? "right" : "left",
+        color: INK,
+      },
+      opts
+    ),
+  });
+  const rows = [
+    headers.map((t, j) => ({
+      text: t,
+      options: {
+        bold: true, color: PAPER, fill: { color: NAVY }, fontFace: B,
+        fontSize: fs2, align: j >= numericFrom ? "right" : "left",
+      },
+    })),
+    ...body.map((r, i) =>
+      r.map((t, j) => cell(t, j, { fill: { color: i % 2 ? TINT : PAPER }, bold: j === 0 }))
+    ),
+  ];
+  if (total) {
+    rows.push(total.map((t, j) => cell(t, j, { fill: { color: TINT_COOL }, bold: true })));
+  }
+  sl.addTable(rows, {
+    x: 0.6, y, w: 12.1, colW, rowH,
+    border: { type: "solid", color: RULE, pt: 0.5 },
+    valign: "middle",
+    margin: [0.02, 0.07, 0.02, 0.07],
+  });
+  sl.addText(footnote, {
+    x: 0.6, y: 6.88, w: 12.1, h: 0.44, margin: 0,
+    fontFace: B, fontSize: 9, italic: true, color: MUTED,
+  });
+  if (notes) sl.addNotes(notes);
+  return sl;
+}
+
+const SRC = "Source: figures as supplied. cl = credit line, os = outstanding. ";
+const DATES = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
+
+/* --- slide 5: customer base -------------------------------------------- */
+{
+  const cb = tsv("cust_base.tsv").map((r) => ({
+    base: r.cust_base, cl: num(r.cl), os: num(r.os), cnt: num(r.cust_cnt),
+  }));
+  const membership = {
+    Null: "None", A1: "AIS only", A1_o: "AIS + OR", J: "AIS + KTB",
+    J_O: "AIS + KTB + OR", K1: "KTB only", K1_O: "KTB + OR", O1: "OR only",
+  };
+  const T = cb.reduce((a, r) => ({ cl: a.cl + r.cl, os: a.os + r.os, cnt: a.cnt + r.cnt }), { cl: 0, os: 0, cnt: 0 });
+  const util = cb.map((r) => (r.os / r.cl) * 100);
+  tableSlide({
+    kicker: "Customer base · credit line and outstanding",
+    title: "Two-thirds of the book is dual AIS–KTB",
+    subtitle: `${M(T.cl)} of credit line against ${M(T.os)} outstanding — ${pct(T.os, T.cl)} utilised, and strikingly even across every segment (${Math.min(...util).toFixed(1)}–${Math.max(...util).toFixed(1)}%).`,
+    headers: ["cust_base", "Consortium membership", "Credit line", "Outstanding", "Util.", "Customers", "% of book", "CL / customer"],
+    colW: [1.1, 2.05, 1.9, 1.9, 1.0, 1.35, 1.0, 1.8],
+    numericFrom: 2,
+    body: cb.map((r) => [
+      r.base, membership[r.base], fmt(r.cl), fmt(r.os), pct(r.os, r.cl),
+      fmt(r.cnt), pct(r.cnt, T.cnt), fmt(Math.round(r.cl / r.cnt)),
+    ]),
+    total: ["Total", "", fmt(T.cl), fmt(T.os), pct(T.os, T.cl), fmt(T.cnt), "100.0%", fmt(Math.round(T.cl / T.cnt))],
+    footnote:
+      SRC +
+      "Consortium membership is inferred from the segment codes, not stated in the source: the groupings reproduce the deck's AIS 70,100, KTB 83,362, OR 53,712 and 'not in any' 794 exactly. " +
+      "Customers total 94,371, matching the stated total booked.",
+    notes:
+      "The membership column is an inference that checks out four ways: A1+A1_o+J+J_O = 70,100 (AIS), K1+K1_O+J+J_O = 83,362 (KTB), " +
+      "O1+A1_o+K1_O+J_O = 53,712 (OR), and Null = 794. J and J_O together hold 61,771 customers (65.5%) and 696.5M of credit line (63.8%).",
+  });
+}
+
+/* --- slide 6: cash need x risk level ------------------------------------ */
+{
+  const cr = tsv("cash_risk.tsv");
+  const order = ["Null", "Low", "Mid", "High"];
+  const get = (c, r, lt) => {
+    const row = cr.find((x) => x.cash_need === c && x.risk_level === r && x.loan_type === lt);
+    return { cl: num(row.cl), os: num(row.os) };
+  };
+  const body = [];
+  const T = { dcl: 0, dos: 0, pcl: 0, pos: 0 };
+  order.forEach((c) =>
+    order.forEach((r) => {
+      const d = get(c, r, "DL"), p = get(c, r, "PL");
+      T.dcl += d.cl; T.dos += d.os; T.pcl += p.cl; T.pos += p.os;
+      body.push([c, r, fmt(d.cl), fmt(d.os), pct(d.os, d.cl), fmt(p.cl), fmt(p.os), pct(p.os, p.cl)]);
+    })
+  );
+  const highCl = order.reduce((a, r) => a + get("High", r, "DL").cl + get("High", r, "PL").cl, 0);
+  tableSlide({
+    kicker: "Cash need × risk level · credit line and outstanding",
+    title: `High cash need carries ${pct(highCl, T.dcl + T.pcl)} of the credit line`,
+    subtitle: `DL utilises ${pct(T.dos, T.dcl)} of its ${M(T.dcl)} line against PL's ${pct(T.pos, T.pcl)} of ${M(T.pcl)} — PL draws down far less of what it is granted.`,
+    headers: ["Cash need", "Risk level", "DL credit line", "DL outstanding", "DL util.", "PL credit line", "PL outstanding", "PL util."],
+    colW: [1.3, 1.3, 1.9, 1.9, 0.95, 1.9, 1.9, 0.95],
+    numericFrom: 2,
+    body,
+    total: ["Total", "", fmt(T.dcl), fmt(T.dos), pct(T.dos, T.dcl), fmt(T.pcl), fmt(T.pos), pct(T.pos, T.pcl)],
+    footnote:
+      SRC +
+      "Credit line and outstanding total 1,092,262,000 and 660,543,706, matching the customer-base table exactly. " +
+      "This table has no customer counts in the source, so utilisation is the only derived column.",
+    notes:
+      "The DL/PL utilisation gap is the story: DL draws 61.9% of its line, PL only 55.2%. " +
+      "High cash need holds 691.7M of the 1,092.3M credit line across both loan types.",
+  });
+}
+
+/* --- slides 7-10: the four AIS breakdowns by book date ------------------ */
+function aisTableSlide(file, dimField, dimOrder, dimLabel, kicker, titleFn, subtitleFn, notes) {
+  const ds = tsv(file);
+  const get = (d, k, lt) => {
+    const r = ds.find((x) => x.book_date === d && x[dimField] === k && x.loan_type === lt);
+    return r ? { c: num(r.cust_cnt), cl: num(r.cl), os: num(r.os) } : { c: 0, cl: 0, os: 0 };
+  };
+  const body = [];
+  const T = { dc: 0, dcl: 0, dos: 0, pc: 0, pcl: 0, pos: 0 };
+  const byDim = {};
+  DATES.forEach((d) =>
+    dimOrder.forEach((k) => {
+      const a = get(d, k, "DL"), b = get(d, k, "PL");
+      T.dc += a.c; T.dcl += a.cl; T.dos += a.os;
+      T.pc += b.c; T.pcl += b.cl; T.pos += b.os;
+      byDim[k] = byDim[k] || { c: 0, cl: 0 };
+      byDim[k].c += a.c + b.c;
+      byDim[k].cl += a.cl + b.cl;
+      body.push([d, k, fmt(a.c), fmt(a.cl), fmt(a.os), fmt(b.c), fmt(b.cl), fmt(b.os)]);
+    })
+  );
+  const totCl = T.dcl + T.pcl, totC = T.dc + T.pc;
+  tableSlide({
+    kicker,
+    title: titleFn(byDim, totC, totCl),
+    subtitle: subtitleFn(byDim, totC, totCl),
+    headers: ["Book date", dimLabel, "DL customers", "DL credit line", "DL outstanding", "PL customers", "PL credit line", "PL outstanding"],
+    colW: [1.25, 1.35, 1.35, 1.9, 1.9, 1.35, 1.5, 1.5],
+    numericFrom: 2,
+    body,
+    total: ["Total", "", fmt(T.dc), fmt(T.dcl), fmt(T.dos), fmt(T.pc), fmt(T.pcl), fmt(T.pos)],
+    footnote:
+      SRC +
+      "Customers total 70,100 with 801,481,000 of credit line and 476,272,677 outstanding — identical across all four AIS breakdowns, and 74.3% of the 94,371-customer book.",
+    notes,
+  });
+}
+
+aisTableSlide(
+  "charge.tsv", "charge_type", ["FBB", "Prepaid", "Postpaid"], "Charge type",
+  "Charge type by book date · AIS base",
+  (d, tc, tcl) => `Prepaid leads on customers, postpaid on value`,
+  (d, tc, tcl) =>
+    `Prepaid is ${pct(d.Prepaid.c, tc)} of customers but only ${pct(d.Prepaid.cl, tcl)} of credit line; postpaid is ${pct(d.Postpaid.c, tc)} of customers and ${pct(d.Postpaid.cl, tcl)} of the line.`,
+  "Postpaid customers carry a materially larger line each than prepaid customers, which is why the customer and value rankings invert."
+);
+
+aisTableSlide(
+  "nano.tsv", "nano_f", ["N", "Y"], "Nano flag",
+  "Nano-loan flag by book date · AIS base",
+  (d, tc, tcl) => `Nano flag: ${pct(d.Y.c, tc)} of customers, ${pct(d.Y.cl, tcl)} of line`,
+  (d, tc, tcl) => `Credit line tracks headcount almost exactly, so the flag does not by itself mark a larger-line population.`,
+  "Nano flag Y: 42,806 customers and 503.8M of credit line. Broadly proportional, so the flag does not by itself mark a larger-line population."
+);
+
+aisTableSlide(
+  "true.tsv", "true_f", ["N", "Y"], "TRUE flag",
+  "TRUE ecosystem by book date · AIS base",
+  (d, tc, tcl) => `TRUE customers hold ${pct(d.Y.cl, tcl)} of the line`,
+  (d, tc, tcl) => `They are ${pct(d.Y.c, tc)} of customers, so TRUE membership skews toward the larger lines.`,
+  "TRUE Y: 47,840 customers (68.2%) holding 573.3M of credit line (71.5%) - a few points more than their headcount share."
+);
+
+aisTableSlide(
+  "tenure.tsv", "tenure", ["0-1", "2-4", ">=5"], "Tenure",
+  "Tenure by book date · AIS base",
+  (d, tc, tcl) => `5+ year tenure holds ${pct(d[">=5"].cl, tcl)} of the line`,
+  (d, tc, tcl) =>
+    `They are ${pct(d[">=5"].c, tc)} of customers, while the 0–1 year cohort is ${pct(d["0-1"].c, tc)} of customers and just ${pct(d["0-1"].cl, tcl)} of the line.`,
+  "Long tenure earns a bigger line: 5+ years is 66.2% of customers but 71.0% of credit line, while 0-1 years is 11.0% of customers and only 9.0% of the line."
 );
 
 const out = path.join(__dirname, "Lending_Book_Loan_Summary.pptx");
