@@ -521,7 +521,13 @@ s2b.addText(
   { x: 0.6, y: 1.2, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12.5, color: MUTED }
 );
 
-const valueCats = ["DL · CL", "DL · OS", "PL · CL", "PL · OS"];
+// measure first; reversed because horizontal bars plot the first label at the
+// bottom, so this puts CL · DL on top
+const valuePairs = [
+  { lt: "PL", m: "os" }, { lt: "DL", m: "os" },
+  { lt: "PL", m: "cl" }, { lt: "DL", m: "cl" },
+];
+const valueCats = valuePairs.map((c) => `${c.m.toUpperCase()} · ${c.lt}`);
 const valuePanels = [
   { file: "charge.tsv", dim: "charge_type", order: ["FBB", "Prepaid", "Postpaid"], title: "Charge type · share of value (%)", colors: [R2, R3, R4] },
   { file: "tenure.tsv", dim: "tenure", order: ["0-1", "2-4", ">=5"], title: "Tenure in years · share of value (%)", colors: [R2, R3, R4], rename: { "0-1": "0–1", "2-4": "2–4", ">=5": "5 or more" } },
@@ -540,7 +546,7 @@ valuePanels.forEach((p, i) => {
   const series = p.order.map((k) => ({
     name: (p.rename && p.rename[k]) || k,
     labels: valueCats,
-    values: [share("DL", "cl", k), share("DL", "os", k), share("PL", "cl", k), share("PL", "os", k)],
+    values: valuePairs.map((c) => share(c.lt, c.m, k)),
   }));
 
   const col = i % 2, row = Math.floor(i / 2);
@@ -714,10 +720,12 @@ s2b.addNotes(
   // horizontal bars plot the first label at the bottom, so build bottom-up:
   // newest first, and OS above CL within each date
   const PAIRS = [];
-  ["5-Aug", "4-Aug", "3-Aug", "2-Aug", "1-Aug", "bef 1 Aug"].forEach((d) => {
-    PAIRS.push({ date: d, meas: "os" }, { date: d, meas: "cl" });
+  ["os", "cl"].forEach((m) => {
+    ["5-Aug", "4-Aug", "3-Aug", "2-Aug", "1-Aug", "bef 1 Aug"].forEach((d) => {
+      PAIRS.push({ date: d, meas: m });
+    });
   });
-  const catLabels = PAIRS.map((p) => `${p.date} ${p.meas.toUpperCase()}`);
+  const catLabels = PAIRS.map((p) => `${p.meas.toUpperCase()} ${p.date}`);
 
   sv.addText("AIS BASE INFORMATION  ·  BY BOOK DATE  ·  CREDIT LINE vs OUTSTANDING", {
     x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
@@ -783,7 +791,7 @@ s2b.addNotes(
   });
 
   sv.addText(
-    "Source: figures as supplied, AIS base. CL = credit line, OS = outstanding; each bar is a mix within that date and measure, so every bar reads to 100%. " +
+    "Source: figures as supplied, AIS base. CL = credit line, OS = outstanding; bars are grouped by measure, all six CL cohorts then all six OS. Each bar is a mix within that date and measure, so every bar reads to 100%. " +
       "The OS-above-CL pattern holds in all five August cohorts on charge type and tenure, and in four of five on the nano and TRUE flags — the exceptions are the 708-customer pre-August cohort " +
       "and a 0.2-point wobble on TRUE on 3 Aug. The previous slide shows the same four cuts by customer count.",
     { x: 0.6, y: 6.62, w: 12.1, h: 0.5, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
@@ -806,10 +814,10 @@ s2b.addNotes(
   const LEVELS = ["Null", "Low", "Mid", "High"];
   // bottom-up, so DL - CL ends up on top
   const cats = [
-    { lt: "PL", m: "os" }, { lt: "PL", m: "cl" },
-    { lt: "DL", m: "os" }, { lt: "DL", m: "cl" },
+    { lt: "PL", m: "os" }, { lt: "DL", m: "os" },
+    { lt: "PL", m: "cl" }, { lt: "DL", m: "cl" },
   ];
-  const catLabels = cats.map((c) => `${c.lt} · ${c.m.toUpperCase()}`);
+  const catLabels = cats.map((c) => `${c.m.toUpperCase()} · ${c.lt}`);
   const share = (field, lvl, lt, m) => {
     const rows = cr.filter((r) => r.loan_type === lt);
     const tot = rows.reduce((a, r) => a + num(r[m]), 0);
