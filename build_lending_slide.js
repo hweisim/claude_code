@@ -648,8 +648,8 @@ dateMixes.forEach((p, i) => {
 
 s3.addText(
   "Source: Lending_2026.08.07.pptx, AIS Base Information slides. Volumes are the grand totals per book date; the two mixes combine DL and PL. " +
-    "'bef 1 Aug' holds only 708 customers, so its mix is a small-sample outlier. Charge type and tenure barely move across the August dates " +
-    "(prepaid 46–55%, tenure 5+ years 65–68%) and are shown by loan type on the previous slide.",
+    "'bef 1 Aug' holds only 708 customers, so its mix is a small-sample outlier. " +
+    "Charge type and tenure move far less across the same window and are charted on the next slide.",
   {
     x: 0.6,
     y: 6.66,
@@ -667,6 +667,184 @@ s3.addNotes(
   "2 Aug alone accounts for 33,341 of the 70,100 AIS bookings (47.6%). PL is back-loaded: 4,255 of its 6,340 bookings (67%) land on 5 Aug. " +
     "Nano-loan Y falls from 64.8% on 1 Aug to 55.3% on 5 Aug, a 9.5 point drop, and the PL surge on 5 Aug is part of why - PL runs a lower nano share than DL. " +
     "TRUE Y drifts down more gently, 70.3% to 66.6%. Charge type and tenure are effectively flat across the same window."
+);
+
+/* ================================================================= SLIDE 4
+   Charge type and tenure by book date - the mixes that hold steady       */
+
+const s4 = pres.addSlide();
+s4.background = { color: PAPER };
+
+s4.addText("AIS BASE INFORMATION  ·  BY BOOK DATE", {
+  x: 0.6,
+  y: 0.36,
+  w: 12.1,
+  h: 0.26,
+  margin: 0,
+  fontFace: B,
+  fontSize: 11.5,
+  bold: true,
+  charSpacing: 2.2,
+  color: TEAL,
+});
+s4.addText("Charge type and tenure hold steady", {
+  x: 0.6,
+  y: 0.66,
+  w: 12.1,
+  h: 0.62,
+  margin: 0,
+  valign: "top",
+  fontFace: H,
+  fontSize: 32,
+  bold: true,
+  color: INK,
+});
+s4.addText(
+  "Unlike the nano-loan flag, these two barely move from 1 Aug onward — only the small pre-August cohort looks different.",
+  {
+    x: 0.6,
+    y: 1.2,
+    w: 12.1,
+    h: 0.28,
+    margin: 0,
+    valign: "top",
+    fontFace: B,
+    fontSize: 12.5,
+    color: MUTED,
+  }
+);
+
+const bookDates4 = ["bef 1 Aug", "1-Aug", "2-Aug", "3-Aug", "4-Aug", "5-Aug"];
+const steady = [
+  {
+    title: "Charge type by book date (% of customers)",
+    series: [
+      { name: "FBB", labels: bookDates4, values: [3.8, 6.9, 6.9, 7.6, 6.9, 4.9] },
+      { name: "Prepaid", labels: bookDates4, values: [17.5, 46.4, 49.4, 47.9, 47.9, 55.0] },
+      { name: "Postpaid", labels: bookDates4, values: [78.7, 46.7, 43.8, 44.5, 45.1, 40.1] },
+    ],
+  },
+  {
+    title: "Tenure in years by book date (% of customers)",
+    series: [
+      { name: "0–1", labels: bookDates4, values: [4.4, 11.6, 11.6, 10.9, 10.5, 9.7] },
+      { name: "2–4", labels: bookDates4, values: [14.7, 22.7, 23.3, 23.1, 22.7, 21.9] },
+      { name: "5 or more", labels: bookDates4, values: [80.9, 65.7, 65.1, 66.0, 66.8, 68.4] },
+    ],
+  },
+];
+steady.forEach((p, i) => {
+  const px = 0.6 + i * 6.15;
+  s4.addShape("roundRect", {
+    x: px,
+    y: 1.58,
+    w: 5.95,
+    h: 3.42,
+    rectRadius: 0.09,
+    fill: { color: TINT },
+    line: { type: "none" },
+  });
+  s4.addChart(pres.charts.BAR, p.series, {
+    x: px + 0.12,
+    y: 1.68,
+    w: 5.71,
+    h: 3.22,
+    barDir: "col",
+    barGrouping: "percentStacked",
+    barGapWidthPct: 45,
+    chartColors: [R2, R3, R4],
+    showTitle: true,
+    title: p.title,
+    titleFontFace: B,
+    titleFontSize: 12,
+    titleColor: INK,
+    showValue: true,
+    dataLabelPosition: "ctr",
+    dataLabelFontFace: B,
+    dataLabelFontSize: 9,
+    dataLabelColor: PAPER,
+    dataLabelFormatCode: '0"%"',
+    showLegend: true,
+    legendPos: "b",
+    legendFontFace: B,
+    legendFontSize: 10,
+    legendColor: INK,
+    catAxisLabelFontFace: B,
+    catAxisLabelFontSize: 10,
+    catAxisLabelColor: INK,
+    valAxisHidden: true,
+    valGridLine: { style: "none" },
+    catGridLine: { style: "none" },
+  });
+});
+
+s4.addShape("roundRect", {
+  x: 0.6,
+  y: 5.2,
+  w: 12.1,
+  h: 1.3,
+  rectRadius: 0.09,
+  fill: { color: NAVY },
+  line: { type: "none" },
+});
+s4.addText("HOW MUCH EACH MIX MOVES, 1 AUG TO 5 AUG", {
+  x: 1.0,
+  y: 5.38,
+  w: 11.3,
+  h: 0.26,
+  margin: 0,
+  fontFace: B,
+  fontSize: 10.5,
+  bold: true,
+  charSpacing: 1.8,
+  color: MINT,
+});
+s4.addText(
+  [
+    { text: "Prepaid 46–55% (8.6pt) · Tenure 5+ years 65–68% (3.3pt)", options: { color: MINT, bold: true } },
+    {
+      text: " — against the nano-loan flag's 9.5pt slide on the previous slide. Charge type drifts toward prepaid on 5 Aug, tracking the PL surge; tenure is flat throughout.",
+      options: { color: "C3D0E2" },
+    },
+    {
+      text: "\nThe pre-1-Aug cohort is the exception — 79% postpaid, 81% long-tenured — but holds just 708 of the 70,100 customers.",
+      options: { color: "C3D0E2" },
+    },
+  ],
+  {
+    x: 1.0,
+    y: 5.66,
+    w: 11.3,
+    h: 0.76,
+    margin: 0,
+    valign: "top",
+    lineSpacing: 16,
+    fontFace: B,
+    fontSize: 11,
+  }
+);
+
+s4.addText(
+  "Source: Lending_2026.08.07.pptx, the charge type and tenure AIS Base Information slides, DL and PL combined and aggregated to each book date. " +
+    "Percentages are computed from the deck's own counts; each date column sums to that date's grand total, and the six together sum to 70,100.",
+  {
+    x: 0.6,
+    y: 6.66,
+    w: 12.1,
+    h: 0.56,
+    margin: 0,
+    fontFace: B,
+    fontSize: 9,
+    italic: true,
+    color: MUTED,
+  }
+);
+
+s4.addNotes(
+  "Completes the by-book-date view: charge type and tenure alongside the nano-loan flag and TRUE on slide 3. " +
+    "From 1 Aug onward prepaid runs 46.4, 49.4, 47.9, 47.9, 55.0 and tenure 5+ years runs 65.7, 65.1, 66.0, 66.8, 68.4 - " +
+    "spreads of 8.6 and 3.3 points against 9.5 for the nano-loan flag. The 5 Aug prepaid uptick coincides with the PL surge, " +
+    "and PL runs a higher prepaid share than DL (56.0% vs 48.8%)."
 );
 
 const out = path.join(__dirname, "Lending_Book_Loan_Summary.pptx");
