@@ -331,5 +331,159 @@ s.addNotes(
     "Consortium bases overlap — KTB 88%, AIS 74% and OR 57% sum well past 100% because customers appear in more than one."
 );
 
+/* ================================================================= SLIDE 2
+   AIS base information, plotted the same way as cash need and risk       */
+
+const s2 = pres.addSlide();
+s2.background = { color: PAPER };
+
+s2.addText("AIS BASE INFORMATION  ·  70.1K  ·  DL 63,760 / PL 6,340", {
+  x: 0.6,
+  y: 0.36,
+  w: 12.1,
+  h: 0.26,
+  margin: 0,
+  fontFace: B,
+  fontSize: 11.5,
+  bold: true,
+  charSpacing: 2.2,
+  color: TEAL,
+});
+s2.addText("Long-tenured, prepaid-leaning, mostly TRUE", {
+  x: 0.6,
+  y: 0.66,
+  w: 12.1,
+  h: 0.62,
+  margin: 0,
+  valign: "top",
+  fontFace: H,
+  fontSize: 32,
+  bold: true,
+  color: INK,
+});
+s2.addText(
+  "DL and PL profile almost identically on tenure and TRUE; they part company on charge type and the nano-loan flag.",
+  {
+    x: 0.6,
+    y: 1.2,
+    w: 12.1,
+    h: 0.28,
+    margin: 0,
+    valign: "top",
+    fontFace: B,
+    fontSize: 12.5,
+    color: MUTED,
+  }
+);
+
+const aisCats = ["DL", "PL"];
+const panels = [
+  {
+    title: "Charge type (% of customers)",
+    colors: [R2, R3, R4],
+    series: [
+      { name: "FBB", labels: aisCats, values: [6.5, 6.2] },
+      { name: "Prepaid", labels: aisCats, values: [48.8, 56.0] },
+      { name: "Postpaid", labels: aisCats, values: [44.7, 37.8] },
+    ],
+  },
+  {
+    title: "Tenure in years (% of customers)",
+    colors: [R2, R3, R4],
+    series: [
+      { name: "0–1", labels: aisCats, values: [11.0, 10.8] },
+      { name: "2–4", labels: aisCats, values: [22.7, 23.6] },
+      { name: "5 or more", labels: aisCats, values: [66.3, 65.6] },
+    ],
+  },
+  {
+    title: "Nano-loan flag (% of customers)",
+    colors: [R1, R4],
+    series: [
+      { name: "N", labels: aisCats, values: [38.2, 46.2] },
+      { name: "Y", labels: aisCats, values: [61.8, 53.8] },
+    ],
+  },
+  {
+    title: "TRUE ecosystem (% of customers)",
+    colors: [R1, R4],
+    series: [
+      { name: "N", labels: aisCats, values: [31.5, 34.7] },
+      { name: "Y", labels: aisCats, values: [68.5, 65.3] },
+    ],
+  },
+];
+
+panels.forEach((p, i) => {
+  const col = i % 2;
+  const row = Math.floor(i / 2);
+  const px = 0.6 + col * 6.15;
+  const py = 1.6 + row * 2.6;
+  s2.addShape("roundRect", {
+    x: px,
+    y: py,
+    w: 5.95,
+    h: 2.44,
+    rectRadius: 0.09,
+    fill: { color: TINT },
+    line: { type: "none" },
+  });
+  s2.addChart(pres.charts.BAR, p.series, {
+    x: px + 0.12,
+    y: py + 0.1,
+    w: 5.71,
+    h: 2.24,
+    barDir: "bar",
+    barGrouping: "percentStacked",
+    barGapWidthPct: 45,
+    chartColors: p.colors,
+    showTitle: true,
+    title: p.title,
+    titleFontFace: B,
+    titleFontSize: 12,
+    titleColor: INK,
+    showValue: true,
+    dataLabelPosition: "ctr",
+    dataLabelFontFace: B,
+    dataLabelFontSize: 9.5,
+    dataLabelColor: PAPER,
+    dataLabelFormatCode: '0.0"%"',
+    showLegend: true,
+    legendPos: "b",
+    legendFontFace: B,
+    legendFontSize: 10,
+    legendColor: INK,
+    catAxisLabelFontFace: B,
+    catAxisLabelFontSize: 11,
+    catAxisLabelColor: INK,
+    valAxisHidden: true,
+    valGridLine: { style: "none" },
+    catGridLine: { style: "none" },
+  });
+});
+
+s2.addText(
+  "Source: Lending_2026.08.07.pptx, the four AIS Base Information slides (charge type, nano loan, true, tenure), aggregated across all book dates. " +
+    "Each breakdown sums to 70,100, matching the stated AIS consortium count. Percentages are computed from the deck's own counts and may differ by 1pt from its per-date rounding.",
+  {
+    x: 0.6,
+    y: 6.9,
+    w: 12.1,
+    h: 0.42,
+    margin: 0,
+    fontFace: B,
+    fontSize: 9,
+    italic: true,
+    color: MUTED,
+  }
+);
+
+s2.addNotes(
+  "Charts use the same percent-stacked form as the cash-need and risk chart on slide 1. " +
+    "Biggest DL/PL gaps: nano-loan flag Y is 61.8% for DL against 53.8% for PL, and PL skews further to prepaid (56.0% vs 48.8%) " +
+    "with correspondingly less postpaid (37.8% vs 44.7%). Tenure and TRUE are within ~3 points across the two loan types. " +
+    "Counts behind the percentages - DL 63,760 and PL 6,340, totalling 70,100."
+);
+
 const out = path.join(__dirname, "Lending_Book_Loan_Summary.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
