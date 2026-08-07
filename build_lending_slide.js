@@ -55,6 +55,56 @@ const pct = (a, b) => (b ? (a / b) * 100 : 0).toFixed(1) + "%";
 const M = (v) => Number((v / 1e6).toFixed(1)).toLocaleString("en-US") + "M";
 
 
+/* A panel that stacks a CREDIT LINE chart above an OUTSTANDING chart, each
+   with its own header, so the two measures are labelled rather than merely
+   interleaved. series(measure) returns the series array for that measure. */
+function clOsPanel(sl, cfg) {
+  sl.addShape("roundRect", {
+    x: cfg.x, y: cfg.y, w: cfg.w, h: cfg.h, rectRadius: 0.09,
+    fill: { color: TINT }, line: { type: "none" },
+  });
+  sl.addText(cfg.header, {
+    x: cfg.x + 0.1, y: cfg.y + 0.12, w: cfg.w - 0.2, h: 0.28, margin: 0,
+    align: "center", fontFace: H, fontSize: 12, bold: true, color: INK,
+  });
+  const top = cfg.y + 0.42;
+  const avail = cfg.h - 0.52;
+  const h1 = avail * 0.44, h2 = avail * 0.56;
+  ["cl", "os"].forEach((m, i) => {
+    sl.addChart(pres.charts.BAR, cfg.series(m), {
+      x: cfg.x + 0.09,
+      y: i === 0 ? top : top + h1,
+      w: cfg.w - 0.18,
+      h: i === 0 ? h1 : h2,
+      barDir: "bar",
+      barGrouping: "percentStacked",
+      barGapWidthPct: 35,
+      chartColors: cfg.colors,
+      showTitle: true,
+      title: m === "cl" ? "CREDIT LINE" : "OUTSTANDING",
+      titleFontFace: B, titleFontSize: 10, titleColor: TEAL,
+      showValue: true,
+      dataLabelPosition: "ctr",
+      dataLabelFontFace: B, dataLabelFontSize: cfg.labelFont || 7.5, dataLabelColor: PAPER,
+      dataLabelFormatCode: `[<${cfg.labelMin}]"";0${cfg.decimals ? '.0' : ''}"%"`,
+      showLegend: i === 1,
+      legendPos: "b",
+      legendFontFace: B, legendFontSize: 9, legendColor: INK,
+      catAxisLabelFontFace: B, catAxisLabelFontSize: cfg.catFont || 7.5, catAxisLabelColor: INK,
+      valAxisHidden: true,
+      valGridLine: { style: "none" },
+      catGridLine: { style: "none" },
+    });
+  });
+}
+
+const AIS_DIMS = [
+  { file: "charge.tsv", dim: "charge_type", order: ["FBB", "Prepaid", "Postpaid"], header: "Charge type", colors: [R2, R3, R4], labelMin: 8 },
+  { file: "tenure.tsv", dim: "tenure", order: ["0-1", "2-4", ">=5"], header: "Tenure in years", colors: [R2, R3, R4], rename: { "0-1": "0–1", "2-4": "2–4", ">=5": "5+" }, labelMin: 8 },
+  { file: "nano.tsv", dim: "nano_f", order: ["N", "Y"], header: "Nano-loan flag", colors: [R1, R4], labelMin: 5 },
+  { file: "true.tsv", dim: "true_f", order: ["N", "Y"], header: "TRUE ecosystem", colors: [R1, R4], labelMin: 5 },
+];
+
 const pres = new PptxGenJS();
 pres.layout = "LAYOUT_WIDE";
 pres.author = "Lending";
@@ -504,90 +554,61 @@ s2.addNotes(
 );
 
 /* ================================================================= SLIDE 3
-   Same grid as slide 2, measured by credit line and outstanding          */
+   Same four cuts as slide 2, measured by credit line and outstanding     */
 
-const s2b = pres.addSlide();
-s2b.background = { color: PAPER };
-s2b.addText("AIS BASE INFORMATION  ·  SHARE OF CREDIT LINE AND OUTSTANDING", {
-  x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
-  fontFace: B, fontSize: 11.5, bold: true, charSpacing: 2.2, color: TEAL,
-});
-s2b.addText("Postpaid punches far above its headcount", {
-  x: 0.6, y: 0.66, w: 12.1, h: 0.62, margin: 0, valign: "top",
-  fontFace: H, fontSize: 32, bold: true, color: INK,
-});
-s2b.addText(
-  "Prepaid is 48.8% of DL customers but 30.9% of DL credit line; postpaid runs 44.7% to 61.8%.",
-  { x: 0.6, y: 1.2, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12.5, color: MUTED }
-);
-
-// measure first; reversed because horizontal bars plot the first label at the
-// bottom, so this puts CL · DL on top
-const valuePairs = [
-  { lt: "PL", m: "os" }, { lt: "DL", m: "os" },
-  { lt: "PL", m: "cl" }, { lt: "DL", m: "cl" },
-];
-const valueCats = valuePairs.map((c) => `${c.m.toUpperCase()} · ${c.lt}`);
-const valuePanels = [
-  { file: "charge.tsv", dim: "charge_type", order: ["FBB", "Prepaid", "Postpaid"], title: "Charge type · share of value (%)", colors: [R2, R3, R4] },
-  { file: "tenure.tsv", dim: "tenure", order: ["0-1", "2-4", ">=5"], title: "Tenure in years · share of value (%)", colors: [R2, R3, R4], rename: { "0-1": "0–1", "2-4": "2–4", ">=5": "5 or more" } },
-  { file: "nano.tsv", dim: "nano_f", order: ["N", "Y"], title: "Nano-loan flag · share of value (%)", colors: [R1, R4] },
-  { file: "true.tsv", dim: "true_f", order: ["N", "Y"], title: "TRUE ecosystem · share of value (%)", colors: [R1, R4] },
-];
-
-valuePanels.forEach((p, i) => {
-  const ds = tsv(p.file);
-  // one bar per loan type x measure; each bar is the mix across the dimension
-  const share = (lt, meas, k) => {
-    const tot = ds.filter((r) => r.loan_type === lt).reduce((a, r) => a + num(r[meas]), 0);
-    const part = ds.filter((r) => r.loan_type === lt && r[p.dim] === k).reduce((a, r) => a + num(r[meas]), 0);
-    return Number(((part / tot) * 100).toFixed(1));
-  };
-  const series = p.order.map((k) => ({
-    name: (p.rename && p.rename[k]) || k,
-    labels: valueCats,
-    values: valuePairs.map((c) => share(c.lt, c.m, k)),
-  }));
-
-  const col = i % 2, row = Math.floor(i / 2);
-  const px = 0.6 + col * 6.15, py = 1.6 + row * 2.6;
-  s2b.addShape("roundRect", {
-    x: px, y: py, w: 5.95, h: 2.44, rectRadius: 0.09,
-    fill: { color: TINT }, line: { type: "none" },
+{
+  const sv = pres.addSlide();
+  sv.background = { color: PAPER };
+  sv.addText("AIS BASE INFORMATION  ·  SHARE OF CREDIT LINE AND OUTSTANDING", {
+    x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
+    fontFace: B, fontSize: 11.5, bold: true, charSpacing: 2.2, color: TEAL,
   });
-  s2b.addChart(pres.charts.BAR, series, {
-    x: px + 0.12, y: py + 0.1, w: 5.71, h: 2.24,
-    barDir: "bar",
-    barGrouping: "percentStacked",
-    barGapWidthPct: 40,
-    chartColors: p.colors,
-    showTitle: true,
-    title: p.title,
-    titleFontFace: B, titleFontSize: 12, titleColor: INK,
-    showValue: true,
-    dataLabelPosition: "ctr",
-    dataLabelFontFace: B, dataLabelFontSize: 8.5, dataLabelColor: PAPER,
-    dataLabelFormatCode: '0.0"%"',
-    showLegend: true, legendPos: "b",
-    legendFontFace: B, legendFontSize: 10, legendColor: INK,
-    catAxisLabelFontFace: B, catAxisLabelFontSize: 10, catAxisLabelColor: INK,
-    valAxisHidden: true,
-    valGridLine: { style: "none" },
-    catGridLine: { style: "none" },
+  sv.addText("Postpaid punches far above its headcount", {
+    x: 0.6, y: 0.66, w: 12.1, h: 0.62, margin: 0, valign: "top",
+    fontFace: H, fontSize: 32, bold: true, color: INK,
   });
-});
+  sv.addText(
+    "Prepaid is 48.8% of DL customers but 30.9% of DL credit line; postpaid runs 44.7% to 61.8%.",
+    { x: 0.6, y: 1.18, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12.5, color: MUTED }
+  );
 
-s2b.addText(
-  "Source: figures as supplied, AIS base, aggregated across all book dates. CL = credit line, OS = outstanding. " +
-    "Each bar is a mix within that loan type and measure, so all four bars in a panel read to 100%. Compare against slide 2, which shows the same four splits by customer count.",
-  { x: 0.6, y: 6.9, w: 12.1, h: 0.44, margin: 0, fontFace: B, fontSize: 9, italic: true, color: MUTED }
-);
-s2b.addNotes(
-  "Same four dimensions as slide 2, measured by value instead of headcount. " +
-    "Charge type is the only mix that moves materially: DL prepaid falls from 48.8% of customers to 30.9% of credit line while postpaid rises 44.7% to 61.8% - postpaid customers carry roughly twice the line each. " +
-    "The other three shift only a few points toward the favourable category: tenure 5+ years 66.3% to 71.3% of DL line, nano Y 61.8% to 66.6%, TRUE Y 68.5% to 73.3%. " +
-    "PL is flatter throughout, and its OS mix leans more to prepaid (52.2%) than its CL mix (46.0%)."
-);
+  const LT = ["PL", "DL"]; // reversed - horizontal bars plot the first label at the bottom
+
+  AIS_DIMS.forEach((p, i) => {
+    const ds = tsv(p.file);
+    const share = (lt, meas, k) => {
+      const rows = ds.filter((r) => r.loan_type === lt);
+      const tot = rows.reduce((a, r) => a + num(r[meas]), 0);
+      const part = rows.filter((r) => r[p.dim] === k).reduce((a, r) => a + num(r[meas]), 0);
+      return Number(((part / tot) * 100).toFixed(1));
+    };
+    clOsPanel(sv, {
+      x: 0.6 + i * 3.075, y: 1.56, w: 2.875, h: 4.94,
+      header: p.header,
+      colors: p.colors,
+      labelMin: p.labelMin,
+      catFont: 10,
+      labelFont: 8.5,
+      series: (m) =>
+        p.order.map((k) => ({
+          name: (p.rename && p.rename[k]) || k,
+          labels: LT,
+          values: LT.map((lt) => share(lt, m, k)),
+        })),
+    });
+  });
+
+  sv.addText(
+    "Source: figures as supplied, AIS base, aggregated across all book dates. CL = credit line, OS = outstanding; each bar is a mix within that loan type and measure, so every bar reads to 100%. " +
+      "Segments too narrow to hold a label are left blank. Slide 2 shows the same four splits by customer count.",
+    { x: 0.6, y: 6.62, w: 12.1, h: 0.5, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
+  );
+  sv.addNotes(
+    "Same four dimensions as slide 2, measured by value instead of headcount, with credit line and outstanding split into labelled blocks. " +
+      "Charge type is the only mix that moves materially: DL prepaid falls from 48.8% of customers to 30.9% of credit line while postpaid rises 44.7% to 61.8%. " +
+      "The other three shift only a few points toward the favourable category: tenure 5+ years 66.3% to 71.3% of DL line, nano Y 61.8% to 66.6%, TRUE Y 68.5% to 73.3%."
+  );
+}
 
 /* ================================================================= SLIDE 4
    Book date on customer count - the two earlier slides merged, laid out
@@ -711,21 +732,12 @@ s2b.addNotes(
 }
 
 /* ================================================================= SLIDE 5
-   The four book-date mixes, each measured on credit line AND outstanding */
+   The four book-date mixes, credit line and outstanding side by side     */
 
 {
   const sv = pres.addSlide();
   sv.background = { color: PAPER };
-
-  // horizontal bars plot the first label at the bottom, so build bottom-up:
-  // newest first, and OS above CL within each date
-  const PAIRS = [];
-  ["os", "cl"].forEach((m) => {
-    ["5-Aug", "4-Aug", "3-Aug", "2-Aug", "1-Aug", "bef 1 Aug"].forEach((d) => {
-      PAIRS.push({ date: d, meas: m });
-    });
-  });
-  const catLabels = PAIRS.map((p) => `${p.meas.toUpperCase()} ${p.date}`);
+  const D = ["5-Aug", "4-Aug", "3-Aug", "2-Aug", "1-Aug", "bef 1 Aug"];
 
   sv.addText("AIS BASE INFORMATION  ·  BY BOOK DATE  ·  CREDIT LINE vs OUTSTANDING", {
     x: 0.6, y: 0.36, w: 12.1, h: 0.26, margin: 0,
@@ -740,14 +752,7 @@ s2b.addNotes(
     { x: 0.6, y: 1.18, w: 12.1, h: 0.28, margin: 0, valign: "top", fontFace: B, fontSize: 12, color: MUTED }
   );
 
-  const mixes = [
-    { file: "charge.tsv", dim: "charge_type", order: ["FBB", "Prepaid", "Postpaid"], title: "Charge type", colors: [R2, R3, R4] },
-    { file: "tenure.tsv", dim: "tenure", order: ["0-1", "2-4", ">=5"], title: "Tenure in years", colors: [R2, R3, R4], rename: { "0-1": "0–1", "2-4": "2–4", ">=5": "5+" } },
-    { file: "nano.tsv", dim: "nano_f", order: ["N", "Y"], title: "Nano-loan flag", colors: [R1, R4] },
-    { file: "true.tsv", dim: "true_f", order: ["N", "Y"], title: "TRUE ecosystem", colors: [R1, R4] },
-  ];
-
-  mixes.forEach((p, i) => {
+  AIS_DIMS.forEach((p, i) => {
     const ds = tsv(p.file);
     const share = (date, meas, k) => {
       const rows = ds.filter((r) => r.book_date === date);
@@ -755,69 +760,44 @@ s2b.addNotes(
       const part = rows.filter((r) => r[p.dim] === k).reduce((a, r) => a + num(r[meas]), 0);
       return Number(((part / tot) * 100).toFixed(1));
     };
-    const px = 0.6 + i * 3.075;
-    sv.addShape("roundRect", {
-      x: px, y: 1.56, w: 2.875, h: 4.94, rectRadius: 0.09,
-      fill: { color: TINT }, line: { type: "none" },
+    clOsPanel(sv, {
+      x: 0.6 + i * 3.075, y: 1.56, w: 2.875, h: 4.94,
+      header: p.header,
+      colors: p.colors,
+      labelMin: p.labelMin,
+      catFont: 7.5,
+      series: (m) =>
+        p.order.map((k) => ({
+          name: (p.rename && p.rename[k]) || k,
+          labels: D,
+          values: D.map((d) => share(d, m, k)),
+        })),
     });
-    sv.addChart(
-      pres.charts.BAR,
-      p.order.map((k) => ({
-        name: (p.rename && p.rename[k]) || k,
-        labels: catLabels,
-        values: PAIRS.map((c) => share(c.date, c.meas, k)),
-      })),
-      {
-        x: px + 0.09, y: 1.64, w: 2.695, h: 4.78,
-        barDir: "bar",
-        barGrouping: "percentStacked",
-        barGapWidthPct: 35,
-        chartColors: p.colors,
-        showTitle: true,
-        title: `${p.title} (CL / OS)`,
-        titleFontFace: B, titleFontSize: 11, titleColor: INK,
-        showValue: true,
-        dataLabelPosition: "ctr",
-        dataLabelFontFace: B, dataLabelFontSize: 7.5, dataLabelColor: PAPER,
-        dataLabelFormatCode: '0"%"',
-        showLegend: true, legendPos: "b",
-        legendFontFace: B, legendFontSize: 9, legendColor: INK,
-        catAxisLabelFontFace: B, catAxisLabelFontSize: 7.5, catAxisLabelColor: INK,
-        valAxisHidden: true,
-        valGridLine: { style: "none" },
-        catGridLine: { style: "none" },
-      }
-    );
   });
 
   sv.addText(
-    "Source: figures as supplied, AIS base. CL = credit line, OS = outstanding; bars are grouped by measure, all six CL cohorts then all six OS. Each bar is a mix within that date and measure, so every bar reads to 100%. " +
+    "Source: figures as supplied, AIS base. Each bar is a mix within that date and measure, so every bar reads to 100%; segments too narrow to hold a label are left blank. " +
       "The OS-above-CL pattern holds in all five August cohorts on charge type and tenure, and in four of five on the nano and TRUE flags — the exceptions are the 708-customer pre-August cohort " +
       "and a 0.2-point wobble on TRUE on 3 Aug. The previous slide shows the same four cuts by customer count.",
     { x: 0.6, y: 6.62, w: 12.1, h: 0.5, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
   );
   sv.addNotes(
-    "Pairing CL and OS on the same axis makes the utilisation story readable per segment. " +
+    "Credit line and outstanding are now separate labelled blocks within each dimension panel. " +
       "In every August cohort the prepaid share of outstanding exceeds its share of credit line - by 1.6pt on 1 Aug widening to 6.0pt on 5 Aug - " +
       "and the same direction holds for 0-1 year tenure, no-nano and non-TRUE. " +
-      "Read plainly: the segments granted smaller lines draw a higher fraction of them, so outstanding is tilted toward the weaker end of every cut."
+      "The segments granted smaller lines draw a higher fraction of them, so outstanding is tilted toward the weaker end of every cut."
   );
 }
 
 /* ================================================================= SLIDE 6
-   Slide 1's cash-need / risk mix chart, measured on credit line and OS  */
+   Slide 1's cash-need / risk mix, on credit line and outstanding         */
 
 {
   const sv = pres.addSlide();
   sv.background = { color: PAPER };
   const cr = tsv("cash_risk.tsv");
   const LEVELS = ["Null", "Low", "Mid", "High"];
-  // bottom-up, so DL - CL ends up on top
-  const cats = [
-    { lt: "PL", m: "os" }, { lt: "DL", m: "os" },
-    { lt: "PL", m: "cl" }, { lt: "DL", m: "cl" },
-  ];
-  const catLabels = cats.map((c) => `${c.m.toUpperCase()} · ${c.lt}`);
+  const LT = ["PL", "DL"]; // reversed - first label plots at the bottom
   const share = (field, lvl, lt, m) => {
     const rows = cr.filter((r) => r.loan_type === lt);
     const tot = rows.reduce((a, r) => a + num(r[m]), 0);
@@ -840,55 +820,36 @@ s2b.addNotes(
   );
 
   [
-    // labelMin hides labels too narrow to render inside their segment
-    { field: "cash_need", title: "Cash need · % of CL / OS", labelMin: 3 },
-    { field: "risk_level", title: "Risk level · % of CL / OS", labelMin: 6 },
+    { field: "cash_need", header: "Cash need", labelMin: 3 },
+    { field: "risk_level", header: "Risk level", labelMin: 6 },
   ].forEach((p, i) => {
-    const px = 0.6 + i * 6.15;
-    sv.addShape("roundRect", {
-      x: px, y: 1.58, w: 5.95, h: 4.7, rectRadius: 0.09,
-      fill: { color: TINT }, line: { type: "none" },
+    clOsPanel(sv, {
+      x: 0.6 + i * 6.15, y: 1.58, w: 5.95, h: 4.7,
+      header: p.header,
+      colors: [R1, R2, R3, R4],
+      labelMin: p.labelMin,
+      decimals: true,
+      labelFont: 9.5,
+      catFont: 11,
+      series: (m) =>
+        LEVELS.map((lvl) => ({
+          name: lvl,
+          labels: LT,
+          values: LT.map((lt) => share(p.field, lvl, lt, m)),
+        })),
     });
-    sv.addChart(
-      pres.charts.BAR,
-      LEVELS.map((lvl) => ({
-        name: lvl,
-        labels: catLabels,
-        values: cats.map((c) => share(p.field, lvl, c.lt, c.m)),
-      })),
-      {
-        x: px + 0.12, y: 1.68, w: 5.71, h: 4.5,
-        barDir: "bar",
-        barGrouping: "percentStacked",
-        barGapWidthPct: 90,
-        chartColors: [R1, R2, R3, R4],
-        showTitle: true,
-        title: p.title,
-        titleFontFace: B, titleFontSize: 12, titleColor: INK,
-        showValue: true,
-        dataLabelPosition: "ctr",
-        dataLabelFontFace: B, dataLabelFontSize: 9.5, dataLabelColor: PAPER,
-        dataLabelFormatCode: `[<${p.labelMin}]"";0.0"%"`,
-        showLegend: true, legendPos: "b",
-        legendFontFace: B, legendFontSize: 10, legendColor: INK,
-        catAxisLabelFontFace: B, catAxisLabelFontSize: 11, catAxisLabelColor: INK,
-        valAxisHidden: true,
-        valGridLine: { style: "none" },
-        catGridLine: { style: "none" },
-      }
-    );
   });
 
   sv.addText(
     "Source: figures as supplied. CL = credit line, OS = outstanding; each bar is a mix within that loan type and measure, so every bar reads to 100%. " +
-      "Slide 1 shows the same two cuts by customer count.",
+      "Segments too narrow to hold a label are left blank. Slide 1 shows the same two cuts by customer count.",
     { x: 0.6, y: 6.44, w: 12.1, h: 0.44, margin: 0, fontFace: B, fontSize: 9, italic: true, color: MUTED }
   );
   sv.addNotes(
-    "Same chart form as slide 1, on value instead of headcount, with CL and OS paired. " +
+    "Same chart form as slide 1, on value instead of headcount, with credit line and outstanding as labelled blocks. " +
       "Risk: High rises from 36.3% of DL credit line to 39.1% of outstanding, and 31.7% to 36.9% on PL; Low falls 35.8% to 33.1% and 39.9% to 34.3%. " +
       "Cash need moves less - High 67.8% to 68.6% on DL, 52.2% to 55.7% on PL. " +
-      "This is the same direction as the book-date cuts on the previous slide: the weaker segment of every dimension draws a higher fraction of its line."
+      "Same direction as the book-date cuts: the weaker segment of every dimension draws a higher fraction of its line."
   );
 }
 
