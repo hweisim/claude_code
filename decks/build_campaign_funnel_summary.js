@@ -493,7 +493,174 @@ function card(slide, o) {
 }
 
 // ==========================================================
-// SLIDE 8 — takeaways
+// SLIDE 8 — campaign performance table
+// ==========================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: WHITE };
+  titleBlock(s, "CAMPAIGN PERFORMANCE", "Eight campaigns, two very different engines",
+    "CLICX SaveMore, live 17 Aug 2026 — banner placements run to 30 Sep, push sends to 31 Aug.", false);
+
+  const kpis = [
+    { n: "8", l: "campaigns live", sub: "7 delivering" },
+    { n: "138,637", l: "views", sub: "99.9% from banner" },
+    { n: "11,278", l: "clicks", sub: "99.3% from banner" },
+    { n: "11,485", l: "conversions", sub: "definition unconfirmed" },
+  ];
+  kpis.forEach((k, i) => {
+    const x = 0.6 + i * 3.08;
+    card(s, { x, y: 1.9, w: 2.86, h: 1.05, fill: TINT, line: "DDE9E9" });
+    s.addText(k.n, {
+      x: x + 0.26, y: 1.98, w: 2.34, h: 0.5, margin: 0, valign: "middle",
+      fontFace: HEAD, fontSize: 24, bold: true, color: i === 0 ? INK : TEAL,
+    });
+    s.addText([
+      { text: k.l, options: { fontFace: SANS, fontSize: 11.5, bold: true, color: INK } },
+      { text: "   " + k.sub, options: { fontFace: SANS, fontSize: 10, color: MUTED } },
+    ], { x: x + 0.26, y: 2.48, w: 2.34, h: 0.3, margin: 0 });
+  });
+
+  const hdr = ["Campaign", "Leads", "Views", "Clicks", "CTR", "Conversions"];
+  const body = [
+    ["Banner — Home",           "1,891,142", "127,981", "10,766", "8.4%",  "11,183"],
+    ["Banner — Living Room",    "1,891,142", "10,552",  "430",    "4.1%",  "223"],
+    ["Banner — Pocket Landing", "1,891,142", "0",       "0",      "—",     "0"],
+    ["Push — ID89",             "11,499",    "28",      "21",     "75.0%", "21"],
+    ["Push — ID23",             "11,339",    "26",      "19",     "73.1%", "21"],
+    ["Push — ID01",             "11,469",    "19",      "16",     "84.2%", "12"],
+    ["Push — ID45",             "11,481",    "16",      "14",     "87.5%", "15"],
+    ["Push — ID67",             "11,367",    "15",      "12",     "80.0%", "10"],
+  ];
+  const subs = [
+    ["All banner (3 placements)", "1,891,142*", "138,533", "11,196", "8.1%",  "11,406"],
+    ["All push (5 sends)",        "57,155",     "104",     "82",     "78.8%", "79"],
+  ];
+
+  const rows = [];
+  rows.push(hdr.map((h, j) => ({
+    text: h,
+    options: { bold: true, color: WHITE, fill: { color: INK }, align: j === 0 ? "left" : "right", fontSize: 11 },
+  })));
+  body.forEach((r, i) => {
+    rows.push(r.map((cell, j) => ({
+      text: cell,
+      options: {
+        color: cell === "0" || cell === "—" ? MUTED : BODY,
+        fill: { color: i % 2 ? "F7FAFA" : WHITE },
+        align: j === 0 ? "left" : "right",
+        bold: j === 0,
+        fontSize: 10.5,
+      },
+    })));
+  });
+  subs.forEach((r) => {
+    rows.push(r.map((cell, j) => ({
+      text: cell,
+      options: { color: INK, fill: { color: "E3EEEE" }, align: j === 0 ? "left" : "right", bold: true, fontSize: 10.5 },
+    })));
+  });
+
+  s.addTable(rows, {
+    x: 0.6, y: 3.15, w: 12.1,
+    colW: [3.4, 1.9, 1.8, 1.6, 1.2, 2.2],
+    rowH: 0.285, valign: "middle",
+    fontFace: SANS,
+    border: { type: "solid", color: "DDE9E9", pt: 1 },
+    margin: [0.04, 0.09, 0.04, 0.09],
+  });
+
+  s.addText("*The three banner placements share one audience pool of 1,891,142, so their leads are not additive. Pocket Landing has recorded no delivery at all. No applications, approvals or bookings have been recorded on any campaign yet.", {
+    x: 0.6, y: 6.58, w: 12.1, h: 0.5, margin: 0,
+    fontFace: SANS, fontSize: 10.5, color: MUTED, lineSpacing: 14,
+  });
+
+  s.addNotes("Banner Home is carrying the campaign: 127,981 of 138,637 views and 10,766 of 11,278 clicks. Living Room is a distant second and Pocket Landing has delivered nothing. The five push sends are near-identical cells of ~11.4k leads each but have produced only 104 views between them.");
+}
+
+// ==========================================================
+// SLIDE 9 — lead to conversion funnel by channel
+// ==========================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: WHITE };
+  titleBlock(s, "LEAD TO CONVERSION", "Lead → View → Click → Conversion",
+    "Same four stages, two channels that fail and succeed at opposite ends of the funnel.", false);
+
+  const cols = [
+    { x: 0.6, w: 6.0, name: "Banner", sub: "3 placements, one shared pool", c: TEAL,
+      steps: [
+        ["Leads assigned", "1,891,142", "shared pool"],
+        ["Views",          "138,533",   "7.3% of leads"],
+        ["Clicks",         "11,196",    "8.1% of views"],
+        ["Conversions",    "11,406",    "101.9% of clicks"],
+      ] },
+    { x: 6.9, w: 5.8, name: "Push notification", sub: "5 sends, ~11.4k leads each", c: MINT,
+      steps: [
+        ["Leads assigned", "57,155", "5 cells combined"],
+        ["Views",          "104",    "0.2% of leads"],
+        ["Clicks",         "82",     "78.8% of views"],
+        ["Conversions",    "79",     "96.3% of clicks"],
+      ] },
+  ];
+  cols.forEach((col) => {
+    s.addShape(pres.ShapeType.ellipse, { x: col.x, y: 1.98, w: 0.24, h: 0.24, fill: { color: col.c }, line: { color: col.c } });
+    s.addText(col.name, {
+      x: col.x + 0.36, y: 1.92, w: 3.0, h: 0.36, margin: 0, valign: "middle",
+      fontFace: SANS, fontSize: 15, bold: true, color: INK,
+    });
+    s.addText(col.sub, {
+      x: col.x + col.w - 2.6, y: 1.92, w: 2.6, h: 0.36, margin: 0, valign: "middle", align: "right",
+      fontFace: SANS, fontSize: 11, color: MUTED,
+    });
+    col.steps.forEach((st, i) => {
+      const y = 2.42 + i * 0.74;
+      const last = i === col.steps.length - 1;
+      card(s, { x: col.x, y, w: col.w, h: 0.64, fill: i === 0 ? "E3EEEE" : TINT, line: "DDE9E9", noShadow: true });
+      s.addText(st[0], {
+        x: col.x + 0.28, y, w: 1.85, h: 0.64, margin: 0, valign: "middle",
+        fontFace: SANS, fontSize: 11.5, color: BODY,
+      });
+      s.addText(st[1], {
+        x: col.x + 2.1, y, w: 1.85, h: 0.64, margin: 0, valign: "middle", align: "right",
+        fontFace: HEAD, fontSize: 19, bold: true, color: i === 0 ? MUTED : INK,
+      });
+      s.addText(st[2], {
+        x: col.x + 4.05, y, w: col.w - 4.33, h: 0.64, margin: 0, valign: "middle", align: "right",
+        fontFace: SANS, fontSize: 11, bold: !last && i > 0, color: last ? "B4552F" : (i === 0 ? MUTED : col.c),
+      });
+    });
+  });
+
+  card(s, { x: 0.6, y: 5.5, w: 6.0, h: 1.15, fill: INK, line: INK });
+  s.addText("Only push tracks the deep funnel", {
+    x: 0.92, y: 5.66, w: 5.4, h: 0.28, margin: 0,
+    fontFace: SANS, fontSize: 12.5, bold: true, color: SEAFOAM,
+  });
+  s.addText("82 clicks → 51 detail-page views (62.2%) → 29 through the door (56.9%). The banner placements record none of these events, so nothing below the click can be compared.", {
+    x: 0.92, y: 5.96, w: 5.4, h: 0.6, margin: 0,
+    fontFace: SANS, fontSize: 11, color: ICE, lineSpacing: 14,
+  });
+
+  card(s, { x: 6.9, y: 5.5, w: 5.8, h: 1.15, fill: "FBF0EA", line: "F0D9CB" });
+  s.addText("Conversion needs a definition", {
+    x: 7.22, y: 5.66, w: 5.2, h: 0.28, margin: 0,
+    fontFace: SANS, fontSize: 12.5, bold: true, color: "B4552F",
+  });
+  s.addText("It exceeds clicks on Home (103.9%) and on three of five push sends, but reaches only 51.9% on Living Room. Settle what it counts before the number is reported anywhere.", {
+    x: 7.22, y: 5.96, w: 5.2, h: 0.6, margin: 0,
+    fontFace: SANS, fontSize: 11, color: "6B4636", lineSpacing: 14,
+  });
+
+  s.addText("Campaign-system event counts. These are a different unit from the customer-level pivot earlier in this deck, which counts unique customers — the two sets of figures should not be added together or reconciled line for line.", {
+    x: 0.6, y: 6.78, w: 12.1, h: 0.42, margin: 0,
+    fontFace: SANS, fontSize: 10.5, color: MUTED, lineSpacing: 14,
+  });
+
+  s.addNotes("Banner loses people at the click (8.1% of views) but reaches 7.3% of its pool. Push is the mirror image: 78.8% click rate but only 0.2% of assigned leads ever saw it. Two flags: the deep funnel is instrumented on push only, and the conversion metric is inconsistent across placements.");
+}
+
+// ==========================================================
+// SLIDE 10 — takeaways
 // ==========================================================
 {
   const s = pres.addSlide();
