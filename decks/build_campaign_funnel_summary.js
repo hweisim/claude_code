@@ -333,7 +333,167 @@ function card(slide, o) {
 }
 
 // ==========================================================
-// SLIDE 6 — takeaways
+// SLIDE 6 — channel mix: banner vs push
+// ==========================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: WHITE };
+  titleBlock(s, "CHANNEL MIX", "Two channels, opposite profiles",
+    "Banner carried the reach. Push notification carried the conversion.", false);
+
+  const chans = [
+    { name: "Banner", c: TEAL,
+      stats: [["11,183", "viewers"], ["4,490", "clicks"], ["40.2%", "click rate"]],
+      note: "Reached 83.9% of the base and delivered 98.7% of every click." },
+    { name: "Push notification", c: MINT,
+      stats: [["78", "viewers"], ["68", "clicks"], ["87.2%", "click rate"]],
+      note: "Reached 0.6% of the base — but almost everyone who got it clicked." },
+  ];
+  chans.forEach((ch, i) => {
+    const x = 0.6 + i * 6.2;
+    card(s, { x, y: 1.9, w: 5.9, h: 2.2, fill: TINT, line: "DDE9E9" });
+    s.addShape(pres.ShapeType.ellipse, { x: x + 0.32, y: 2.2, w: 0.26, h: 0.26, fill: { color: ch.c }, line: { color: ch.c } });
+    s.addText(ch.name, {
+      x: x + 0.68, y: 2.14, w: 4.9, h: 0.38, margin: 0, valign: "middle",
+      fontFace: SANS, fontSize: 15, bold: true, color: INK,
+    });
+    ch.stats.forEach((st, j) => {
+      const sx = x + 0.32 + j * 1.85;
+      s.addText(st[0], {
+        x: sx, y: 2.62, w: 1.8, h: 0.6, margin: 0, valign: "middle",
+        fontFace: HEAD, fontSize: 26, bold: true, color: j === 2 ? ch.c : INK,
+      });
+      s.addText(st[1], {
+        x: sx, y: 3.2, w: 1.8, h: 0.28, margin: 0,
+        fontFace: SANS, fontSize: 11, color: MUTED,
+      });
+    });
+    s.addText(ch.note, {
+      x: x + 0.32, y: 3.56, w: 5.26, h: 0.44, margin: 0,
+      fontFace: SANS, fontSize: 11.5, color: BODY,
+    });
+  });
+
+  s.addChart(pres.ChartType.bar, [{
+    name: "Click rate",
+    labels: ["Banner", "Push notification", "All channels"],
+    values: [40.2, 87.2, 40.7],
+  }], {
+    x: 0.6, y: 4.3, w: 5.9, h: 2.3,
+    barDir: "col", barGapWidthPct: 70,
+    chartColors: [TEAL, MINT, SLATE],
+    showValue: true, dataLabelPosition: "outEnd", dataLabelColor: BODY,
+    dataLabelFontFace: SANS, dataLabelFontSize: 12, dataLabelFontBold: true,
+    dataLabelFormatCode: '0.0"%"',
+    showLegend: false, showTitle: true, title: "Click rate among those reached",
+    titleColor: INK, titleFontFace: SANS, titleFontSize: 12.5,
+    catAxisLabelColor: INK, catAxisLabelFontFace: SANS, catAxisLabelFontSize: 11.5,
+    catAxisLineShow: false, catGridLine: { style: "none" },
+    valAxisHidden: true, valGridLine: { style: "none" }, valAxisMaxVal: 105,
+  });
+
+  card(s, { x: 6.8, y: 4.3, w: 5.9, h: 2.3, fill: INK, line: INK });
+  s.addText("Scale is the gap, not quality", {
+    x: 7.15, y: 4.56, w: 5.2, h: 0.32, margin: 0,
+    fontFace: SANS, fontSize: 13, bold: true, color: SEAFOAM,
+  });
+  s.addText([
+    { text: "143 : 1", options: { fontFace: HEAD, fontSize: 32, bold: true, color: WHITE, breakLine: true } },
+    { text: "banner viewers for every push recipient — while push converts at 2.2x the banner's rate.", options: { fontFace: SANS, fontSize: 12.5, color: ICE } },
+  ], { x: 7.15, y: 4.94, w: 5.2, h: 1.1, margin: 0, lineSpacing: 17 });
+  s.addText("The overall 40.7% click rate is, in practice, the banner's number.", {
+    x: 7.15, y: 6.06, w: 5.2, h: 0.3, margin: 0,
+    fontFace: SANS, fontSize: 11.5, italic: true, color: "8FB4BA",
+  });
+
+  s.addText("77 customers saw both channels and 11 clicked both, so channel figures sum to more than the 11,184 total viewers and 4,547 total clicks.", {
+    x: 0.6, y: 6.72, w: 12.1, h: 0.34, margin: 0,
+    fontFace: SANS, fontSize: 10.5, color: MUTED,
+  });
+
+  s.addNotes("Banner: 11,183 viewers, 4,490 clicks, 40.2%. Push: 78 viewers, 68 clicks, 87.2%. Overlap is 77 viewers / 11 clickers, so the two channels do not sum to the totals. Push is 0.6% of the base but converts 2.2x better.");
+}
+
+// ==========================================================
+// SLIDE 7 — push in detail: overlap and incrementality
+// ==========================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: WHITE };
+  titleBlock(s, "PUSH IN DETAIL", "Push rescued the clicks the banner lost",
+    "Push went only to Existing with Save Max — 78 of that segment's 6,765 customers.", false);
+
+  const flow = [
+    { n: "6,765", l: "Save Max base",     c: INK   },
+    { n: "5,925", l: "saw the banner",    c: TEAL  },
+    { n: "78",    l: "also got push",     c: SEAFOAM },
+    { n: "68",    l: "clicked the push",  c: MINT  },
+  ];
+  flow.forEach((f, i) => {
+    const x = 0.6 + i * 3.15;
+    s.addShape(pres.ShapeType.roundRect, {
+      x, y: 1.95, w: 2.65, h: 1.15, rectRadius: 0.09,
+      fill: { color: f.c }, line: { color: f.c },
+    });
+    s.addText(f.n, {
+      x: x + 0.2, y: 2.06, w: 2.25, h: 0.52, margin: 0, valign: "middle",
+      fontFace: HEAD, fontSize: 25, bold: true, color: i < 2 ? WHITE : INK,
+    });
+    s.addText(f.l, {
+      x: x + 0.2, y: 2.56, w: 2.25, h: 0.32, margin: 0,
+      fontFace: SANS, fontSize: 11.5, color: i < 2 ? ICE : "0A3B42",
+    });
+    if (i < 3) {
+      s.addText("→", {
+        x: x + 2.65, y: 1.95, w: 0.5, h: 1.15, margin: 0, align: "center", valign: "middle",
+        fontFace: SANS, fontSize: 20, bold: true, color: SLATE,
+      });
+    }
+  });
+
+  const big = [
+    { k: "89.1%", h: "of eligible recipients were rescued",
+      d: "64 push recipients had already seen the banner and not clicked it. 57 of them clicked the push — clicks the banner had failed to convert." },
+    { k: "2.8x", h: "the response, same customers",
+      d: "Within Existing with Save Max: 30.9% click rate on banner, 87.2% on push. The audience is identical, so channel explains the gap." },
+  ];
+  big.forEach((b, i) => {
+    const x = 0.6 + i * 6.2;
+    card(s, { x, y: 3.35, w: 5.9, h: 1.9, fill: TINT, line: "DDE9E9" });
+    s.addText(b.k, {
+      x: x + 0.32, y: 3.55, w: 1.75, h: 0.62, margin: 0, valign: "middle",
+      fontFace: HEAD, fontSize: 30, bold: true, color: TEAL,
+    });
+    s.addText(b.h, {
+      x: x + 2.05, y: 3.55, w: 3.53, h: 0.62, margin: 0, valign: "middle",
+      fontFace: SANS, fontSize: 12.5, bold: true, color: INK,
+    });
+    s.addText(b.d, {
+      x: x + 0.32, y: 4.25, w: 5.26, h: 0.85, margin: 0,
+      fontFace: SANS, fontSize: 11.5, color: BODY, lineSpacing: 15,
+    });
+  });
+
+  card(s, { x: 0.6, y: 5.45, w: 12.1, h: 0.95, fill: INK, line: INK });
+  s.addText([
+    { text: "Banner only:  ", options: { fontFace: SANS, fontSize: 13, color: ICE } },
+    { text: "40.3% clicked", options: { fontFace: SANS, fontSize: 13, bold: true, color: WHITE } },
+    { text: "  (11,106 viewers)          ", options: { fontFace: SANS, fontSize: 12, color: "8FB4BA" } },
+    { text: "Saw both channels:  ", options: { fontFace: SANS, fontSize: 13, color: ICE } },
+    { text: "90.9% clicked", options: { fontFace: SANS, fontSize: 13, bold: true, color: MINT } },
+    { text: "  (77 viewers)", options: { fontFace: SANS, fontSize: 12, color: "8FB4BA" } },
+  ], { x: 1.0, y: 5.45, w: 11.3, h: 0.95, margin: 0, valign: "middle" });
+
+  s.addText("Directional only: push reached 78 people, recipients were not randomly selected and there was no holdout, so part of the gap may be targeting rather than channel.", {
+    x: 0.6, y: 6.6, w: 12.1, h: 0.4, margin: 0,
+    fontFace: SANS, fontSize: 10.5, italic: true, color: MUTED,
+  });
+
+  s.addNotes("64 push recipients had seen the banner without clicking; 57 clicked the push (89.1%). Within Save Max, push converts at 87.2% vs 30.9% on banner. Dual-channel viewers click at 90.9% vs 40.3% for banner-only. Caveat: n=78, non-random selection, no holdout.");
+}
+
+// ==========================================================
+// SLIDE 8 — takeaways
 // ==========================================================
 {
   const s = pres.addSlide();
@@ -342,13 +502,13 @@ function card(slide, o) {
 
   const acts = [
     { k: "01", h: "Close the reach gap on New",
-      d: "1,159 of 1,440 new customers never saw the campaign. They click at 45.6% when they do — this is the cheapest incremental volume available.",
+      d: "1,159 of 1,440 never saw the campaign, and none received a push. They click at 45.6% when reached — the cheapest incremental volume available.",
       c: MINT },
-    { k: "02", h: "Fix the creative for Save Max holders",
-      d: "4,040 saw it and did nothing. A 10pt lift in their 31.8% click rate is roughly 590 extra clicks — more than New can deliver in total.",
+    { k: "02", h: "Scale the push test on Save Max",
+      d: "4,040 saw the banner and did nothing. Push already converts this exact segment at 87.2% versus 30.9% — but only 78 have ever received one.",
       c: SEAFOAM },
     { k: "03", h: "Protect what works for Existing",
-      d: "97.1% reach and a 50.9% click rate already. Treat this segment as the benchmark and the control, not a target for further push.",
+      d: "97.1% reach and a 50.9% click rate on banner alone, with no push at all. Treat it as the benchmark and the holdout, not a target for more spend.",
       c: ICE },
   ];
   acts.forEach((a, i) => {
@@ -373,7 +533,7 @@ function card(slide, o) {
     x: 0.6, y: 5.9, w: 12.1, h: 0.82, rectRadius: 0.10,
     fill: { color: "0F343E" }, line: { color: "1E4A56" },
   });
-  s.addText("The binding constraint is conversion, not coverage: 6,637 reached non-clickers versus 2,148 never reached.", {
+  s.addText("Conversion is the constraint, not coverage — and the best channel has reached only 78 people.", {
     x: 1.0, y: 5.9, w: 11.3, h: 0.82, margin: 0, valign: "middle",
     fontFace: SANS, fontSize: 13, bold: true, color: WHITE,
   });
