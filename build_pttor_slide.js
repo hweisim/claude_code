@@ -72,8 +72,8 @@ s.addText(
 const tiles = [
   [(base / 1e6).toFixed(1) + "M", "total base", "customers", TEAL],
   [M(mtu), "transacting users", `monthly · ${p1(mtu, base)} of base`, TEAL],
-  [M(cntT), "transactions", `avg ticket ${(amtT / cntT).toFixed(0)}`, TEAL],
-  [Bn(amtT), "total value", `Oil ${p1(amtO, amtT)} of it`, AMBER],
+  [M(cntT), "transaction count", `avg ticket ${(amtT / cntT).toFixed(0)}`, TEAL],
+  [Bn(amtT), "transaction amount", `Oil ${p1(amtO, amtT)} of it`, AMBER],
 ];
 tiles.forEach(([v, l, sub, c], i) => {
   const x = 0.6 + i * 3.1;
@@ -125,12 +125,19 @@ s.addShape("roundRect", {
   x: 6.75, y: 2.86, w: 5.95, h: 2.44, rectRadius: 0.09,
   fill: { color: TINT }, line: { type: "none" },
 });
-const chartCats = [`Value  ${Bn(amtT)}`, `Transactions  ${M(cntT)}`];
+// A 100% stacked chart normalises each category on its own, so each row can be
+// pre-scaled to its natural unit: counts in millions, amounts in billions. That
+// lets the data labels carry absolute figures while the split sits on the axis.
+const pc = (a, b) => Math.round((a / b) * 100) + "%";
+const chartCats = [
+  `Transaction amount (B)   ${pc(amtA, amtT)} / ${pc(amtO, amtT)}`,
+  `Transaction count (M)   ${pc(cntA, cntT)} / ${pc(cntO, cntT)}`,
+];
 s.addChart(
   pres.charts.BAR,
   [
-    { name: "Amazon", labels: chartCats, values: [Number(p1(amtA, amtT).replace("%", "")), Number(p1(cntA, cntT).replace("%", ""))] },
-    { name: "Oil", labels: chartCats, values: [Number(p1(amtO, amtT).replace("%", "")), Number(p1(cntO, cntT).replace("%", ""))] },
+    { name: "Amazon", labels: chartCats, values: [amtA / 1e9, cntA / 1e6] },
+    { name: "Oil", labels: chartCats, values: [amtO / 1e9, cntO / 1e6] },
   ],
   {
     x: 6.88, y: 2.96, w: 5.72, h: 2.24,
@@ -139,15 +146,15 @@ s.addChart(
     barGapWidthPct: 80,
     chartColors: [R2, R4],
     showTitle: true,
-    title: "Share of transactions and value",
+    title: "Transaction count and amount",
     titleFontFace: B, titleFontSize: 12, titleColor: INK,
     showValue: true,
     dataLabelPosition: "ctr",
     dataLabelFontFace: B, dataLabelFontSize: 10, dataLabelColor: PAPER,
-    dataLabelFormatCode: '0.0"%"',
+    dataLabelFormatCode: '#,##0.00',
     showLegend: true, legendPos: "b",
     legendFontFace: B, legendFontSize: 10, legendColor: INK,
-    catAxisLabelFontFace: B, catAxisLabelFontSize: 10.5, catAxisLabelColor: INK,
+    catAxisLabelFontFace: B, catAxisLabelFontSize: 9.5, catAxisLabelColor: INK,
     valAxisHidden: true,
     valGridLine: { style: "none" },
     catGridLine: { style: "none" },
@@ -184,7 +191,7 @@ s.addText(
 s.addText(
   "Source: figures as supplied, PTT OR, data as of Apr 2026; currency not stated. 'mtu amazon' and 'mtu oil' are read as single-brand users and 'mtu both' as the overlap — on that reading the three sum to " +
     `${n0(oilOnly + both + amzOnly)} against the stated ${n0(mtu)}, a gap of ${n0(oilOnly + both + amzOnly - mtu)} worth confirming. ` +
-    "Per-user figures divide each brand's transactions by its total users, single-brand plus both. All percentages are computed from the supplied counts.",
+    "Bar labels are absolute figures in the unit named on each row — counts in millions, amounts in billions — and the pair beside each row label is the Amazon / Oil split. " + "Per-user figures divide each brand's transactions by its total users, single-brand plus both. All percentages are computed from the supplied counts.",
   { x: 0.6, y: 6.88, w: 12.1, h: 0.5, margin: 0, fontFace: B, fontSize: 8.5, italic: true, color: MUTED }
 );
 
