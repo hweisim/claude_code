@@ -1,0 +1,10 @@
+metric	value
+base	98500000
+mtu_all	5785346
+mtu_both	1896176
+mtu_amazon	1073266
+mtu_oil	2818112
+txn_cnt_amz	20880784
+txn_amt_amz	1588913800
+txn_cnt_oil	19900648
+txn_amt_oil	17257591300
