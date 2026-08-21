@@ -202,5 +202,90 @@ const ramp = { High: R4, Mid: R3, Low: R2, Null: R1 };
   );
 }
 
+/* ================================================= PAGE 3 - demand estimate */
+{
+  // Observed transitions 202504 -> 202604. The 202604 N generation did not exist
+  // a year earlier, so every N holder is a buyer; N-1 holders either kept the
+  // device they already had (N Unchanged) or acquired it during the year.
+  const traceN  = sum((r) => r.nToN + r.n1ToN);       // moved onto the new N
+  const traceN1 = sum((r) => r.nUnch + r.n1ToN1);     // kept 202504-N, or moved to the new N-1
+  const inflowN = flagN - traceN, inflowN1 = flagN1 - traceN1;
+  const inflow = inflowN + inflowN1;
+  const boughtLast = flagN + sum((r) => r.n1ToN1) + inflowN1;
+
+  const nonflagPrev = base - fBaseT, nonflagNow = base - flag;
+  const rNN  = sum((r) => r.nToN)   / sum((r) => r.nUnch + r.nToN);
+  const rN1N = sum((r) => r.n1ToN)  / sum((r) => r.n1Unch + r.n1ToN + r.n1ToN1);
+  const rN1N1= sum((r) => r.n1ToN1) / sum((r) => r.n1Unch + r.n1ToN + r.n1ToN1);
+  const rInflow = inflow / nonflagPrev;
+
+  const repN = flagN * rNN + flagN1 * rN1N, repN1 = flagN1 * rN1N1;
+  const infT = nonflagNow * rInflow;
+  const infN = infT * (inflowN / inflow), infN1 = infT - infN;
+  const estN = repN + infN, estN1 = repN1 + infN1, est = estN + estN1;
+  const cons = flag * 0.13 + nonflagNow * 0.042;
+  const opti = flag * 0.17 + nonflagNow * 0.052;
+
+  const s3 = pres.addSlide();
+  s3.background = { color: PAPER };
+  head(s3,
+    `AIS Mobile Flagship Demand : ~${K(est)} buyers in the coming year`,
+    "*For the coming year (202604 → 202704), modelled on the observed 202504 → 202604 transitions; assumes a comparable flagship launch.",
+    `Bought in the past year ${K(boughtLast)}   ·   Estimated for the coming year ${K(est)}   ·   Range ${K(cons)} – ${K(opti)}`,
+    "Four in five buyers come from outside today's flagship base — demand is inflow-driven, not owners cycling."
+  );
+
+  tiles(s3, [
+    [K(boughtLast), "bought in the past year", "observed 202504 → 202604", TEAL],
+    [K(est), "estimated, coming year", "base case", TEAL],
+    [K(estN), "expected to buy N", `${K(estN1)} to buy N-1`, TEAL],
+    [pct(infT, est), "from outside the base", `${K(infT)} of ${K(est)}`, RED],
+  ]);
+
+  barCard(s3, 0.58, 4.63, "How the estimate builds", `${K(est)} buyers, by source and device`,
+    [
+      ["Inflow → N", infN, `${K(infN)} · ${pct(infN, est)}`, R4],
+      ["Inflow → N-1", infN1, `${K(infN1)} · ${pct(infN1, est)}`, R3],
+      ["Existing → N", repN, `${K(repN)} · ${pct(repN, est)}`, R2],
+      ["Existing → N-1", repN1, `${K(repN1)} · ${pct(repN1, est)}`, R1],
+    ],
+    { labelW: 1.45, valueW: 1.55, pitch: 0.44,
+      foot: `Inflow applies the observed ${(rInflow * 100).toFixed(2)}% acquisition rate to the ${K(nonflagNow)} non-flagship base; replacement applies the observed upgrade rates to today's ${K(flag)} flagship holders.` });
+
+  const bands = ["Low", "Mid", "High", "Null"].map((l) => {
+    const sel = (r) => r.risk === l;
+    const n = sum((r) => r.n, sel), n1 = sum((r) => r.n1, sel);
+    const fbl = sum(fbase, sel), nfl = sum((r) => r.all, sel) - fbl;
+    const inf = Math.max((n - sum((r) => r.nToN + r.n1ToN, sel)) + (n1 - sum((r) => r.nUnch + r.n1ToN1, sel)), 0);
+    const rate = nfl ? inf / nfl : 0;
+    return [l, n * rNN + n1 * rN1N + n1 * rN1N1 + (sum((r) => r.all, sel) - (n + n1)) * rate];
+  });
+  const bandTot = bands.reduce((a, b) => a + b[1], 0);
+  const financeable = bands.filter((b) => b[0] === "Low" || b[0] === "Mid").reduce((a, b) => a + b[1], 0);
+  barCard(s3, 5.46, 3.60, "Estimated buyers by risk band", "Using band-specific acquisition rates",
+    bands.slice().sort((a, b) => b[1] - a[1]).map(([l, v]) => [l, v, `${K(v)}`, ramp[l]]),
+    { valueW: 0.95, pitch: 0.44,
+      foot: `Low and Mid risk together are ${K(financeable)} — ${pct(financeable, bandTot)} of expected buyers.` });
+
+  barCard(s3, 9.31, 3.60, "Sensitivity", "Total buyers under three rate assumptions",
+    [
+      ["Optimistic", opti, K(opti), R4],
+      ["Base", est, K(est), R3],
+      ["Conservative", cons, K(cons), R2],
+    ],
+    { labelW: 1.25, valueW: 0.95, pitch: 0.44,
+      foot: "Conservative: 13% upgrade of the flagship base, 4.2% inflow. Optimistic: 17% and 5.2%." });
+
+  s3.addNotes(
+    `Method. The 202604 N generation did not exist at 202504, so all ${flagN.toLocaleString()} N holders bought within the year; ` +
+      `N-1 buyers are the ${sum((r) => r.n1ToN1).toLocaleString()} who moved N-1 to N-1 plus ${inflowN1.toLocaleString()} who acquired it from outside the flagship base. ` +
+      `That gives ${boughtLast.toLocaleString()} purchases observed in the year. ` +
+      `Only ${(flag - traceN - traceN1).toLocaleString()} of the 202604 flagship pool is traceable through the five transition states, so ${inflow.toLocaleString()} arrived from outside - ` +
+      `an acquisition rate of ${(rInflow * 100).toFixed(2)}% on the ${nonflagPrev.toLocaleString()} non-flagship base. ` +
+      "Forecast applies those rates to the 202604 position. Caveats: one year of transitions only, no seasonality, and the estimate assumes a comparable flagship launch in the coming year. " +
+      "The inflow term carries about 80% of the volume, so the estimate is far more sensitive to the acquisition rate than to the upgrade rate."
+  );
+}
+
 const out = path.join(__dirname, "AIS_Mobile_Summary.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
