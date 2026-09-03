@@ -405,5 +405,67 @@ function matrix(s, x, y, w, key, fmt) {
     "The balance>0 grid fills the TBD left open in the source deck.");
 }
 
+/* ============================================================== SLIDE 7 */
+{
+  const s = pres.addSlide(); s.background = { color: PAPER };
+  const B = "all_bal_balance", C = "all_bal_count";
+  const balTot = gTot(B), balCust = gTot(C);
+  const rsBal = gHiRS(B), rsCust = gHiRS(C);
+  const stickyBal = M[B].filter((r) => r.s === "High" || r.s === "Very High")
+    .reduce((a, r) => a + r.v.reduce((x, y) => x + y, 0), 0);
+  const rsSticky = M[B].filter((r) => r.s === "High" || r.s === "Very High")
+    .reduce((a, r) => a + r.v[3] + r.v[4], 0);
+  const fragile = rsBal - rsSticky;
+  const rowTot = (mx, name) => M[mx].find((r) => r.s === name).v.reduce((a, b) => a + b, 0);
+  const bn = (v) => "THB " + (v / 1e9).toFixed(2) + "bn";
+
+  head(s, `Funded balance : ${bn(balTot)} — ${pc(rsBal, balTot)} of it is rate-sensitive`,
+    "*Customers with balance > 0. Only 4 customers score Medium rate sensitivity, so that band is effectively empty — the score is close to binary.",
+    `Total ${bn(balTot)}   ·   Rate-sensitive ${bn(rsBal)} (${pc(rsBal, balTot)})   ·   Save Max ${bn(smBal)} — ${pc(smBal, balTot)} of the book`,
+    "Seven baht in ten across the deposit book is rate-sensitive — the exposure runs far wider than Save Max.");
+
+  tiles(s, [
+    [bn(balTot), "total deposit balance", `${k(balCust)} funded customers`, TEAL],
+    [bn(rsBal), "rate-sensitive balance", `${pc(rsBal, balTot)} of the book · RS ≥ 60`, RED],
+    [pc(stickyBal, balTot), "of balance in sticky tiers", "High + Very High stickiness", TEAL],
+    [`THB ${Math.round(fragile / 1e6)}m`, "fragile subset", "stickiness < 60 and RS ≥ 60", RED],
+  ], 1.80);
+
+  card(s, 0.58, 3.06, 7.35, 2.54);
+  cardHead(s, 0.58, 3.06, 7.35, "Balance (THB m)", "Rows: stickiness · columns: rate sensitivity");
+  matrix(s, 0.82, 3.72, 6.87, B, (v) => (v / 1e6).toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
+
+  card(s, 8.18, 3.06, 4.73, 2.54);
+  cardHead(s, 8.18, 3.06, 4.73, "Average balance per customer", "Funded customers, by stickiness tier");
+  const tiers = ["Very High", "High", "Medium", "Low", "Very Low"];
+  const avgs = tiers.map((t) => [t, rowTot(B, t) / rowTot(C, t)]);
+  const maxAvg = Math.max(...avgs.map((a) => a[1]));
+  const tierCol = { "Very High": R4, High: R3, Medium: R2, Low: AMBER, "Very Low": R1 };
+  avgs.forEach(([t, v], i) => {
+    const y = 3.80 + i * 0.34;
+    s.addText(t, { x: 8.46, y, w: 1.15, h: 0.28, margin: 0, valign: "middle", fontFace: F, fontSize: 10.5, bold: true, color: INK });
+    s.addShape("roundRect", { x: 9.68, y: y + 0.05, w: Math.max((v / maxAvg) * 1.55, 0.04), h: 0.18, rectRadius: 0.03, fill: { color: tierCol[t] }, line: { type: "none" } });
+    s.addText("THB " + Math.round(v).toLocaleString("en-US"), {
+      x: 11.32, y, w: 1.31, h: 0.28, margin: 0, align: "right", valign: "middle",
+      fontFace: F, fontSize: 10.5, bold: true, color: INK,
+    });
+  });
+  s.addText("Very High stickiness holds ~346× the balance of Very Low.", {
+    x: 8.46, y: 5.56, w: 4.17, h: 0.3, margin: 0, fontFace: F, fontSize: 9, italic: true, color: MUTED,
+  });
+
+  card(s, 0.58, 5.78, 12.33, 0.86, WARM);
+  s.addText([
+    { text: `${pc(rsSticky, rsBal)} of the rate-sensitive balance sits with High / Very High stickiness customers`, options: { bold: true, color: RED } },
+    { text: `  —  the same pattern as Save Max, at eight times the size. The genuinely fragile slice is THB ${Math.round(fragile / 1e6)}m: customers who are neither sticky nor indifferent to price.`, options: { color: INK } },
+  ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+  s.addNotes(`Total funded balance THB ${balTot.toLocaleString()} across ${balCust.toLocaleString()} customers, average THB ${Math.round(balTot / balCust).toLocaleString()}. ` +
+    `Rate-sensitive balance THB ${rsBal.toLocaleString()} (${pc(rsBal, balTot)}) held by only ${rsCust.toLocaleString()} customers (${pc(rsCust, balCust)} of the funded base). ` +
+    `Save Max is THB ${smBal.toLocaleString()}, just ${pc(smBal, balTot)} of the book, so rate-sensitivity exposure extends well beyond the maturing product. ` +
+    `Balance concentrates hard: High and Very High stickiness hold ${pc(stickyBal, balTot)} of balance on ${pc(rowTot(C, "High") + rowTot(C, "Very High"), balCust)} of funded customers. ` +
+    "Only 4 customers land in the Medium rate-sensitivity band, so the score is effectively binary - worth revisiting when the cut-offs are recalibrated after maturity.");
+}
+
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
