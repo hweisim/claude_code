@@ -14,3 +14,8 @@ all_count	High	75965	10897	2	2788	15372
 all_count	Medium	94354	6137	0	49	306
 all_count	Low	37300	2433	0	1	12
 all_count	Very Low	1081554	1564	0	0	2
+all_bal_count	Very High	38080	9260	2	2340	4101
+all_bal_count	High	72946	10897	2	2788	15372
+all_bal_count	Medium	89934	6137	0	49	306
+all_bal_count	Low	28146	2433	0	1	12
+all_bal_count	Very Low	35737	1564	0	0	2

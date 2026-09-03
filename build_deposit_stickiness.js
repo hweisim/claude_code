@@ -104,31 +104,31 @@ function blend(hex, t) {
   const c = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
   return c.map((v) => Math.round(255 + (v - 255) * t).toString(16).padStart(2, "0")).join("").toUpperCase();
 }
-/* 5x5 stickiness x rate-sensitivity heat matrix as a native table */
+/* 5x5 stickiness x rate-sensitivity matrix as a native table. The High and
+   Very High rate-sensitivity columns are the at-risk block, tinted in the same
+   red as the at-risk summary figure; nothing else is colour-coded. */
+const AT_RISK_TINT = blend(RED, 0.13);
 function matrix(s, x, y, w, key, fmt) {
-  const data = M[key];
-  const max = Math.max(...data.flatMap((r) => r.v));
   const labelW = w * 0.22, cellW = (w - labelW) / 5;
+  const atRisk = (i) => i >= 3;
   const hdr = [
     { text: "Stickiness", options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "left" } },
-    ...RS.map((n, i) => ({
+    ...RS.map((n) => ({
       text: n,
-      options: { fill: { color: i >= 3 ? AMBER : TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "center" },
+      options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "center" },
     })),
   ];
-  const body = data.map((r) => [
+  const body = M[key].map((r) => [
     { text: r.s, options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 9.5, align: "left" } },
-    ...r.v.map((v) => {
-      const t = max ? Math.sqrt(v / max) : 0;
-      return {
-        text: fmt(v),
-        options: {
-          fill: { color: blend(R4, t) },
-          color: t > 0.55 ? PAPER : INK,
-          fontFace: F, fontSize: 9.5, align: "right",
-        },
-      };
-    }),
+    ...r.v.map((v, i) => ({
+      text: fmt(v),
+      options: {
+        fill: { color: atRisk(i) ? AT_RISK_TINT : PAPER },
+        color: atRisk(i) ? RED : INK,
+        bold: atRisk(i),
+        fontFace: F, fontSize: 9.5, align: "right",
+      },
+    })),
   ]);
   s.addTable([hdr, ...body], {
     x, y, w, colW: [labelW, ...Array(5).fill(cellW)], rowH: 0.3,
@@ -364,28 +364,45 @@ function matrix(s, x, y, w, key, fmt) {
 /* ============================================================== SLIDE 6 */
 {
   const s = pres.addSlide(); s.background = { color: PAPER };
-  head(s, `All customers : ${(allCust / 1e6).toFixed(2)}m — a very different shape`,
+  const balCust = gTot("all_bal_count");
+  const balLowStick = M.all_bal_count.filter((r) => r.s === "Low" || r.s === "Very Low")
+    .reduce((a, r) => a + r.v.reduce((x, y) => x + y, 0), 0);
+  const balHiRS = gHiRS("all_bal_count");
+  const vlAll = M.all_count.find((r) => r.s === "Very Low").v.reduce((a, b) => a + b, 0);
+  const vlBal = M.all_bal_count.find((r) => r.s === "Very Low").v.reduce((a, b) => a + b, 0);
+  const vhAll = M.all_count.find((r) => r.s === "Very High").v.reduce((a, b) => a + b, 0);
+  const vhBal = M.all_bal_count.find((r) => r.s === "Very High").v.reduce((a, b) => a + b, 0);
+
+  head(s, `All customers : ${(allCust / 1e6).toFixed(2)}m — only ${k(balCust)} hold a balance`,
     "*Full customer base · distinct ccd_id by deposit stickiness × rate sensitivity.",
-    `Total customers ${(allCust / 1e6).toFixed(2)}m   ·   Low stickiness ${(allLowStick / 1e6).toFixed(2)}m   ·   High rate sensitivity ${k(allHiRS)}`,
-    "The full base is dominated by Very Low stickiness; the funded Save Max cohort concentrates in High and Very High.");
+    `Total ${(allCust / 1e6).toFixed(2)}m   ·   With balance > 0  ${k(balCust)} (${pc(balCust, allCust)})   ·   High rate sensitivity ${k(allHiRS)}`,
+    `The funded base is far stickier than the account base — low stickiness falls from ${pc(allLowStick, allCust)} to ${pc(balLowStick, balCust)} once you require a balance.`);
 
   tiles(s, [
     [`${(allCust / 1e6).toFixed(2)}m`, "total customers", "distinct ccd_id", TEAL],
-    ["TBD", "customers with balance", "populate from current_bal_amt > 0", AMBER],
-    [`${(allLowStick / 1e6).toFixed(2)}m`, "low deposit stickiness", `${pc(allLowStick, allCust)} of the base`, RED],
-    [k(allHiRS), "high rate sensitivity", `${(allHiRS / allCust * 100).toFixed(1)}% of the base`, TEAL],
+    [k(balCust), "customers with balance", `${pc(balCust, allCust)} of the base`, TEAL],
+    [pc(balLowStick, balCust), "low stickiness, funded", `against ${pc(allLowStick, allCust)} of the full base`, AMBER],
+    [k(balHiRS), "high rate sensitivity", "every one of them holds a balance", RED],
   ], 1.80);
 
-  card(s, 0.58, 3.06, 12.33, 2.54);
-  cardHead(s, 0.58, 3.06, 12.33, "All-customer count", "Rows: stickiness · columns: rate sensitivity · distinct ccd_id");
-  matrix(s, 0.82, 3.72, 11.85, "all_count", (v) => v.toLocaleString("en-US"));
+  card(s, 0.58, 3.06, 6.04, 2.54);
+  cardHead(s, 0.58, 3.06, 6.04, `All customers  ${(allCust / 1e6).toFixed(2)}m`, "Rows: stickiness · columns: rate sensitivity");
+  matrix(s, 0.82, 3.72, 5.56, "all_count", (v) => v.toLocaleString("en-US"));
+
+  card(s, 6.87, 3.06, 6.04, 2.54);
+  cardHead(s, 6.87, 3.06, 6.04, `Customers with balance > 0  ${k(balCust)}`, "Rows: stickiness · columns: rate sensitivity");
+  matrix(s, 7.11, 3.72, 5.56, "all_bal_count", (v) => v.toLocaleString("en-US"));
 
   card(s, 0.58, 5.78, 12.33, 0.86, "E8F6F3");
   s.addText([
-    { text: "Use the Save Max cohort for maturity and runoff risk; use the all-customer view for activation and funding strategy", options: { bold: true, color: TITLE_TEAL } },
-    { text: `  —  ${pc(allLowStick, allCust)} of the base scores Low or Very Low stickiness, but only ${k(allHiRS)} customers are highly rate-sensitive, so the broad opportunity is engagement rather than repricing.`, options: { color: INK } },
+    { text: `Very Low stickiness is largely an unfunded population — only ${pc(vlBal, vlAll)} of them hold a balance, against ${pc(vhBal, vhAll)} of Very High`, options: { bold: true, color: TITLE_TEAL } },
+    { text: "  —  so use the funded view for maturity and runoff risk, and the full base for activation and funding strategy.", options: { color: INK } },
   ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
-  s.addNotes(`Full base ${allCust.toLocaleString()} customers. Low + Very Low stickiness ${allLowStick.toLocaleString()}. High + Very High rate sensitivity ${allHiRS.toLocaleString()}. "Customers with balance > 0" is still TBD in the source and needs populating from current_bal_amt > 0.`);
+  s.addNotes(`Full base ${allCust.toLocaleString()}; ${balCust.toLocaleString()} hold a balance (${pc(balCust, allCust)}). ` +
+    `Low + Very Low stickiness is ${allLowStick.toLocaleString()} of the full base (${pc(allLowStick, allCust)}) but only ${balLowStick.toLocaleString()} of the funded base (${pc(balLowStick, balCust)}). ` +
+    `Funded share by tier: Very High ${pc(vhBal, vhAll)}, Very Low ${pc(vlBal, vlAll)}. ` +
+    `High + Very High rate sensitivity is ${allHiRS.toLocaleString()} in both grids - every rate-sensitive customer holds a balance, which follows from the score being computed off balance placement. ` +
+    "The balance>0 grid fills the TBD left open in the source deck.");
 }
 
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
