@@ -331,6 +331,108 @@ function matrix(s, x, y, w, key, fmt) {
 }
 
 /* ============================================================== SLIDE 5 */
+/* Two worked examples. Every score below is computed from the pocket
+   balances shown, using the two formulas on the previous slide, so the
+   examples stay internally consistent if the inputs are edited. */
+{
+  const s = pres.addSlide(); s.background = { color: PAPER };
+  const CAP_MAX = 20e3, CAP_MORE = 1e6;
+  const bandCol = (v) => (v >= 80 ? R4 : v >= 60 ? R3 : v >= 40 ? R2 : v >= 20 ? AMBER : R1);
+  const bandName = (v) => (v >= 80 ? "Very High" : v >= 60 ? "High" : v >= 40 ? "Medium" : v >= 20 ? "Low" : "Very Low");
+  const chip = (s2, x, y, w, h, text, fill, size) => {
+    s2.addShape("roundRect", { x, y, w, h, rectRadius: 0.05, fill: { color: fill }, line: { type: "none" } });
+    s2.addText(text, { x, y, w, h, margin: 0, align: "center", valign: "middle", fontFace: F, fontSize: size, bold: true, color: PAPER });
+  };
+  const thb = (v) => "THB " + (v >= 1e6 ? (v / 1e6).toFixed(1) + "m" : Math.round(v / 1e3) + "k");
+
+  head(s, "Two customers, equally sticky today — very different repricing risk",
+    "*Illustrative examples. Stickiness measures observed retention behaviour; rate sensitivity measures how balances sit around the promotional caps.",
+    null,
+    "Both examples score Very High stickiness — they differ only in where balance sits relative to the caps.");
+
+  [
+    {
+      x: 0.58, title: "Example 1 · Sticky but rate-sensitive", flag: "Maturity risk", flagCol: AMBER,
+      sub: "Balances sit exactly at the promotional caps.",
+      pockets: [["Main Pocket", 50e3, INK], ["Save Max", 20e3, AMBER], ["Save More", 1.0e6, AMBER]],
+      comp: [95, 100, 75, 50], nearCap: 2,
+      fill: WARM,
+      layman: "Layman view: the money has stayed so far, but the customer behaves like a rate optimiser — retest retention when the promo rate reprices.",
+    },
+    {
+      x: 6.87, title: "Example 2 · Core sticky depositor", flag: "Lower risk", flagCol: R3,
+      sub: "Holds meaningful balance above both promotional caps.",
+      pockets: [["Main Pocket", 300e3, INK], ["Save Max", 100e3, R3], ["Save More", 1.5e6, R3]],
+      comp: [90, 95, 100, 75], nearCap: 0,
+      fill: "E8F6F3",
+      layman: "Layman view: the money stays and the customer holds well above the high-rate limits — a sign of structural, not promo-driven, deposits.",
+    },
+  ].forEach((e) => {
+    const X = e.x, IN = X + 0.28, IW = 5.48;
+    card(s, X, 1.80, 6.04, 4.56);
+    s.addText(e.title, { x: IN, y: 1.92, w: 4.05, h: 0.30, margin: 0, valign: "middle", fontFace: FH, fontSize: 14, bold: true, color: INK });
+    chip(s, X + 4.41, 1.90, 1.35, 0.34, e.flag, e.flagCol, 9.5);
+    s.addText(e.sub, { x: IN, y: 2.24, w: IW, h: 0.24, margin: 0, fontFace: F, fontSize: 9.5, color: MUTED });
+
+    /* pocket balances */
+    const tw = (IW - 0.32) / 3;
+    e.pockets.forEach(([lab, v, col], i) => {
+      const tx = IN + i * (tw + 0.16);
+      card(s, tx, 2.48, tw, 0.66, PAPER);
+      s.addText(lab, { x: tx + 0.16, y: 2.55, w: tw - 0.32, h: 0.20, margin: 0, fontFace: F, fontSize: 9, bold: true, color: MUTED });
+      s.addText(thb(v), { x: tx + 0.16, y: 2.75, w: tw - 0.32, h: 0.32, margin: 0, valign: "middle", fontFace: F, fontSize: 15, bold: true, color: col });
+    });
+
+    /* the four stickiness components */
+    s.addText("Deposit stickiness components", { x: IN, y: 3.24, w: IW, h: 0.26, margin: 0, fontFace: F, fontSize: 11, bold: true, color: TITLE_TEAL });
+    const COMP = [
+      ["Balance persistence", "latest ÷ prior avg. balance", 0.40],
+      ["Funding continuity", "% eligible days funded", 0.25],
+      ["Recurring inflow", "% months with inflow", 0.20],
+      ["Daily engagement", "active days vs target", 0.15],
+    ];
+    COMP.forEach(([name, desc, w], i) => {
+      const y = 3.52 + i * 0.32, v = e.comp[i];
+      s.addText(name, { x: IN, y, w: 1.70, h: 0.28, margin: 0, valign: "middle", fontFace: F, fontSize: 10, bold: true, color: INK });
+      s.addText(`${desc}   ·   ${Math.round(w * 100)}%`, { x: X + 2.02, y, w: 2.90, h: 0.28, margin: 0, valign: "middle", fontFace: F, fontSize: 9, color: MUTED });
+      chip(s, X + 4.96, y + 0.01, 0.80, 0.26, String(v), bandCol(v), 9.5);
+    });
+
+    s.addShape("rect", { x: IN, y: 4.86, w: IW, h: 0.012, fill: { color: RULE }, line: { type: "none" } });
+
+    /* the two scores, computed from the inputs above */
+    const st = COMP.reduce((a, c, i) => a + c[2] * e.comp[i], 0);
+    const promoBal = e.pockets[1][1] + e.pockets[2][1];
+    const aboveCap = Math.max(e.pockets[1][1] - CAP_MAX, 0) + Math.max(e.pockets[2][1] - CAP_MORE, 0);
+    const aboveRatio = aboveCap / promoBal;
+    const rs = 0.7 * (e.nearCap / 2) * 100 + 0.3 * (1 - aboveRatio) * 100;
+    [
+      ["Stickiness score", "40/25/20/15 weighted", st, bandCol(st)],
+      ["Rate sensitivity", `${e.nearCap}/2 near cap  ·  ${(aboveRatio * 100).toFixed(0)}% above cap`, rs, rs >= 60 ? RED : R3],
+    ].forEach(([lab, detail, v, col], i) => {
+      const y = 4.98 + i * 0.36;
+      s.addText(lab, { x: IN, y, w: 1.70, h: 0.30, margin: 0, valign: "middle", fontFace: F, fontSize: 10.5, bold: true, color: INK });
+      s.addText(detail, { x: X + 2.02, y, w: 2.14, h: 0.30, margin: 0, valign: "middle", fontFace: F, fontSize: 9, color: MUTED });
+      chip(s, X + 4.22, y + 0.01, 1.54, 0.28, `${Math.round(v)}  ·  ${bandName(v)}`, col, 9.5);
+    });
+
+    card(s, IN, 5.74, IW, 0.56, e.fill);
+    s.addText(e.layman, { x: IN + 0.16, y: 5.74, w: IW - 0.32, h: 0.56, margin: 0, valign: "middle", fontFace: F, fontSize: 9.5, color: INK });
+  });
+
+  card(s, 0.58, 6.50, 12.33, 0.58, "E8F6F3");
+  s.addText([
+    { text: "Stickiness and rate sensitivity answer different questions", options: { bold: true, color: TITLE_TEAL } },
+    { text: "  —  both examples score Very High stickiness, but only Example 2 keeps material balance above the caps. A customer can look sticky today and still be exposed when the promotion reprices.", options: { color: INK } },
+  ], { x: 0.88, y: 6.50, w: 11.73, h: 0.58, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+  s.addNotes("Worked examples, illustrative. Example 1 parks exactly at both caps: 20k in Save Max and 1.0m in Save More, so cap precision is 2/2 and nothing sits above the caps - rate sensitivity 100, Very High. " +
+    "Example 2 holds 100k in Save Max and 1.5m in Save More, so neither pocket is near its cap and 580k of the 1.6m promotional balance is above cap (36%) - rate sensitivity 19, Very Low. " +
+    "Stickiness scores 86 and 91 respectively, both Very High, so the stickiness score alone would not separate these two customers. " +
+    "This is the argument for keeping rate sensitivity as a second, independent lens rather than folding it into the stickiness score.");
+}
+
+/* ============================================================== SLIDE 6 */
 {
   const s = pres.addSlide(); s.background = { color: PAPER };
   head(s, `Save Max : ${k(smCust)} customers, THB ${m(smBal)} — THB ${m(smAtRisk)} rate-sensitive`,
@@ -361,7 +463,7 @@ function matrix(s, x, y, w, key, fmt) {
   s.addNotes(`Cohort totals: ${smCust.toLocaleString()} customers and THB ${smBal.toLocaleString()} of balance; ${smAtRisk.toLocaleString()} at risk. Amber column headers mark the High and Very High rate-sensitivity segments. Balance matrix is shown in THB millions.`);
 }
 
-/* ============================================================== SLIDE 6 */
+/* ============================================================== SLIDE 7 */
 {
   const s = pres.addSlide(); s.background = { color: PAPER };
   const balCust = gTot("all_bal_count");
@@ -405,7 +507,7 @@ function matrix(s, x, y, w, key, fmt) {
     "The balance>0 grid fills the TBD left open in the source deck.");
 }
 
-/* ============================================================== SLIDE 7 */
+/* ============================================================== SLIDE 8 */
 {
   const s = pres.addSlide(); s.background = { color: PAPER };
   const B = "all_bal_balance", C = "all_bal_count";
@@ -467,7 +569,7 @@ function matrix(s, x, y, w, key, fmt) {
     "Only 4 customers land in the Medium rate-sensitivity band, so the score is effectively binary - worth revisiting when the cut-offs are recalibrated after maturity.");
 }
 
-/* ============================================================== SLIDE 8 */
+/* ============================================================== SLIDE 9 */
 {
   const s = pres.addSlide(); s.background = { color: PAPER };
   const B = "all_bal_balance", C = "all_bal_count";
