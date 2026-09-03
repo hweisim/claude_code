@@ -467,5 +467,84 @@ function matrix(s, x, y, w, key, fmt) {
     "Only 4 customers land in the Medium rate-sensitivity band, so the score is effectively binary - worth revisiting when the cut-offs are recalibrated after maturity.");
 }
 
+/* ============================================================== SLIDE 8 */
+{
+  const s = pres.addSlide(); s.background = { color: PAPER };
+  const B = "all_bal_balance", C = "all_bal_count";
+  const sum = (a) => a.reduce((x, y) => x + y, 0);
+  const low = (mx) => M[mx].filter((r) => r.s === "Low" || r.s === "Very Low").reduce((a, r) => a + sum(r.v), 0);
+  const sub60 = (mx) => M[mx].filter((r) => ["Medium", "Low", "Very Low"].includes(r.s)).reduce((a, r) => a + sum(r.v), 0);
+  const sub60Hi = (mx) => M[mx].filter((r) => ["Medium", "Low", "Very Low"].includes(r.s)).reduce((a, r) => a + r.v[3] + r.v[4], 0);
+
+  const cTot = gTot(C), bTot = gTot(B);
+  const lowC = low(C), lowB = low(B);
+  const rsC = gHiRS(C), rsB = gHiRS(B);
+  const fragC = sub60Hi(C), fragB = sub60Hi(B);
+  const rsSticky = rsB - fragB;
+  const bn = (v) => "THB " + (v / 1e9).toFixed(2) + "bn";
+  const p1 = (a, b) => ((a / b) * 100).toFixed(1) + "%";
+
+  head(s, "Two risk lenses : low stickiness and high rate sensitivity",
+    "*Funded base only (balance > 0). Low stickiness = score < 40 (Low + Very Low bands) · high rate sensitivity = score ≥ 60 (High + Very High bands).",
+    `Funded ${k(cTot)} · ${bn(bTot)}   ·   Low stickiness ${k(lowC)} → THB ${mm(lowB)}   ·   High rate sensitivity ${k(rsC)} → ${bn(rsB)}`,
+    "Low-stickiness customers are numerous but barely funded; rate-sensitive customers are few but hold seven baht in ten.");
+
+  tiles(s, [
+    [k(lowC), "low-stickiness customers", `${p1(lowC, cTot)} of the funded base`, AMBER],
+    [`THB ${mm(lowB)}`, "balance they hold", `${p1(lowB, bTot)} of the deposit book`, AMBER],
+    [k(rsC), "rate-sensitive customers", `${p1(rsC, cTot)} of the funded base · RS ≥ 60`, RED],
+    [bn(rsB), "balance at risk", `${pc(rsB, bTot)} of the deposit book`, RED],
+  ], 1.80);
+
+  /* left: share of customers vs share of balance, for each lens ---------- */
+  card(s, 0.58, 3.06, 7.35, 2.54);
+  cardHead(s, 0.58, 3.06, 7.35, "Share of customers against share of balance",
+    "Each bar is a percentage of the funded base · full track = 100%");
+  const TRACK_X = 2.92, TRACK_W = 3.45, VAL_X = 6.48;
+  const drawBar = (y, label, share, col) => {
+    s.addText(label, { x: 0.86, y, w: 2.0, h: 0.28, margin: 0, valign: "middle", fontFace: F, fontSize: 10, color: INK });
+    s.addShape("roundRect", { x: TRACK_X, y: y + 0.04, w: TRACK_W, h: 0.20, rectRadius: 0.03, fill: { color: "E4E9F0" }, line: { type: "none" } });
+    s.addShape("roundRect", { x: TRACK_X, y: y + 0.04, w: Math.max(TRACK_W * share, 0.05), h: 0.20, rectRadius: 0.03, fill: { color: col }, line: { type: "none" } });
+    s.addText((share * 100).toFixed(1) + "%", {
+      x: VAL_X, y, w: 1.19, h: 0.28, margin: 0, align: "right", valign: "middle",
+      fontFace: F, fontSize: 10.5, bold: true, color: col,
+    });
+  };
+  [
+    ["Low stickiness  ·  score < 40", AMBER, [["Share of customers", lowC / cTot], ["Share of balance", lowB / bTot]]],
+    ["High rate sensitivity  ·  score ≥ 60", RED, [["Share of customers", rsC / cTot], ["Share of balance", rsB / bTot]]],
+  ].forEach(([grp, col, bars], gi) => {
+    const gy = 3.72 + gi * 0.94;
+    s.addText(grp, { x: 0.86, y: gy, w: 6.8, h: 0.24, margin: 0, fontFace: F, fontSize: 10.5, bold: true, color: col });
+    bars.forEach(([lab, share], i) => drawBar(gy + 0.26 + i * 0.32, lab, share, col));
+  });
+
+  /* right: the overlap of the two lenses --------------------------------- */
+  card(s, 8.18, 3.06, 4.73, 2.54);
+  cardHead(s, 8.18, 3.06, 4.73, "Where the two lenses overlap", "Stickiness < 60 and rate sensitivity ≥ 60");
+  [[fragC.toLocaleString("en-US"), "customers"], [`THB ${Math.round(fragB / 1e6)}m`, "balance at risk"]].forEach(([v, l], i) => {
+    const y = 3.76 + i * 0.50;
+    s.addText(v, { x: 8.46, y, w: 2.20, h: 0.44, margin: 0, valign: "middle", fontFace: F, fontSize: 22, bold: true, color: RED });
+    s.addText(l, { x: 10.72, y, w: 1.91, h: 0.44, margin: 0, valign: "middle", fontFace: F, fontSize: 11, color: INK });
+  });
+  card(s, 8.46, 4.80, 4.17, 0.72, WARM);
+  s.addText(`The other ${pc(rsSticky, rsB)} of rate-sensitive balance — ${bn(rsSticky)} — sits with High / Very High stickiness customers.`, {
+    x: 8.62, y: 4.80, w: 3.85, h: 0.72, margin: 0, valign: "middle", fontFace: F, fontSize: 9.5, color: INK,
+  });
+
+  card(s, 0.58, 5.78, 12.33, 0.86, WARM);
+  s.addText([
+    { text: "The balance at risk is not with the disengaged — it is with the rate-optimisers", options: { bold: true, color: RED } },
+    { text: `  —  ${k(lowC)} low-stickiness customers hold only THB ${mm(lowB)}, while ${k(rsC)} rate-sensitive customers hold ${bn(rsB)}. Retention spend belongs with the second group; activation and funding with the first.`, options: { color: INK } },
+  ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+  s.addNotes(`Funded base ${cTot.toLocaleString()} customers holding THB ${bTot.toLocaleString()}. ` +
+    `Low stickiness (Low + Very Low) is ${lowC.toLocaleString()} customers, ${p1(lowC, cTot)} of the funded base, but only THB ${Math.round(lowB).toLocaleString()} - ${p1(lowB, bTot)} of the book. ` +
+    `High rate sensitivity (High + Very High) is ${rsC.toLocaleString()} customers, ${p1(rsC, cTot)}, holding THB ${Math.round(rsB).toLocaleString()} - ${pc(rsB, bTot)} of the book. ` +
+    `Widening the stickiness lens to score < 60 adds the Medium band: ${sub60(C).toLocaleString()} customers (${p1(sub60(C), cTot)}) and THB ${Math.round(sub60(B)).toLocaleString()} (${p1(sub60(B), bTot)}). ` +
+    `The overlap of the two lenses - stickiness < 60 and rate sensitivity >= 60 - is ${fragC.toLocaleString()} customers and THB ${Math.round(fragB).toLocaleString()}, the priority watchlist. ` +
+    `The remaining ${pc(rsSticky, rsB)} of rate-sensitive balance sits with customers who currently score High or Very High stickiness, which is exactly the stickiness maturity will test.`);
+}
+
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
