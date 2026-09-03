@@ -7,11 +7,7 @@
 
 const path = require("path");
 const fs = require("fs");
-const PptxGenJS = require(path.join(
-  "/tmp/claude-0/-home-user-claude-code/a5758311-6270-5365-a679-5836c8e934f0/scratchpad",
-  "node_modules",
-  "pptxgenjs"
-));
+const PptxGenJS = require("pptxgenjs");
 
 /* ------------------------------------------------------- house constants */
 const TITLE_TEAL = "045D66", INK = "16233D", MUTED = "6B7A90", NOTE = "6B6B6B";

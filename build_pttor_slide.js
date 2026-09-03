@@ -7,11 +7,7 @@
 
 const path = require("path");
 const fs = require("fs");
-const PptxGenJS = require(path.join(
-  "/tmp/claude-0/-home-user-claude-code/a5758311-6270-5365-a679-5836c8e934f0/scratchpad",
-  "node_modules",
-  "pptxgenjs"
-));
+const PptxGenJS = require("pptxgenjs");
 
 /* ---------------------------------------------------------------- palette */
 const NAVY = "0E1E3C";

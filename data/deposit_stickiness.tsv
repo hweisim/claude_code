@@ -1,0 +1,16 @@
+matrix	stickiness	rs_very_low	rs_low	rs_medium	rs_high	rs_very_high
+savemax_count	Very High	890	5595	2	2340	3318
+savemax_count	High	829	7809	2	2788	15007
+savemax_count	Medium	31	4791	0	49	236
+savemax_count	Low	4	2073	0	1	11
+savemax_count	Very Low	0	1408	0	0	0
+savemax_balance	Very High	71577853	33234693	1251052	47098190	66707961
+savemax_balance	High	63475215	31984547	501656	55918974	302025859
+savemax_balance	Medium	1637799	3203221	0	923684	4739153
+savemax_balance	Low	180453	295827	0	20000	220995
+savemax_balance	Very Low	0	25994	0	0	0
+all_count	Very High	38436	9260	2	2340	4101
+all_count	High	75965	10897	2	2788	15372
+all_count	Medium	94354	6137	0	49	306
+all_count	Low	37300	2433	0	1	12
+all_count	Very Low	1081554	1564	0	0	2
