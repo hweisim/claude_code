@@ -354,7 +354,7 @@ function matrix(s, x, y, w, key, fmt) {
     {
       x: 0.58, title: "Example 1 · Sticky but rate-sensitive", flag: "Maturity risk", flagCol: AMBER,
       sub: "Balances sit exactly at the promotional caps.",
-      pockets: [["Main Pocket", 50e3, INK], ["Save Max", 20e3, AMBER], ["Save More", 1.0e6, AMBER]],
+      pockets: [["Main Pocket", 50e3, INK], ["Save Max", 20e3, AMBER, true], ["Save More", 1.0e6, AMBER, true]],
       comp: [95, 100, 75, 50], nearCap: 2,
       fill: WARM,
       layman: "Layman view: the money has stayed so far, but the customer behaves like a rate optimiser — retest retention when the promo rate reprices.",
@@ -362,7 +362,7 @@ function matrix(s, x, y, w, key, fmt) {
     {
       x: 6.87, title: "Example 2 · Core sticky depositor", flag: "Lower risk", flagCol: R3,
       sub: "Holds meaningful balance above both promotional caps.",
-      pockets: [["Main Pocket", 300e3, INK], ["Save Max", 100e3, R3], ["Save More", 1.5e6, R3]],
+      pockets: [["Main Pocket", 300e3, INK], ["Save Max", 100e3, R3, true], ["Save More", 1.5e6, R3, true]],
       comp: [90, 95, 100, 75], nearCap: 0,
       fill: "E8F6F3",
       layman: "Layman view: the money stays and the customer holds well above the high-rate limits — a sign of structural, not promo-driven, deposits.",
@@ -376,10 +376,14 @@ function matrix(s, x, y, w, key, fmt) {
 
     /* pocket balances */
     const tw = (IW - 0.32) / 3;
-    e.pockets.forEach(([lab, v, col], i) => {
+    /* the promotional pockets carry a holding flag: Y when the customer has
+       balance in that pocket, N when they do not. Main Pocket is not
+       promotional, so it has no flag. */
+    e.pockets.forEach(([lab, v, col, promo], i) => {
       const tx = IN + i * (tw + 0.16);
       card(s, tx, 2.48, tw, 0.66, PAPER);
-      s.addText(lab, { x: tx + 0.16, y: 2.55, w: tw - 0.32, h: 0.20, margin: 0, fontFace: F, fontSize: 9, bold: true, color: MUTED });
+      s.addText(lab, { x: tx + 0.16, y: 2.55, w: tw - (promo ? 0.72 : 0.32), h: 0.20, margin: 0, fontFace: F, fontSize: 9, bold: true, color: MUTED });
+      if (promo) chip(s, tx + tw - 0.68, 2.545, 0.52, 0.21, "FLAG " + (v > 0 ? "Y" : "N"), v > 0 ? R3 : R1, 7);
       s.addText(thb(v), { x: tx + 0.16, y: 2.75, w: tw - 0.32, h: 0.32, margin: 0, valign: "middle", fontFace: F, fontSize: 15, bold: true, color: col });
     });
 
