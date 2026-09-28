@@ -1314,19 +1314,19 @@ balanceByStickiness({
   const PANELS = [
     {
       x: 0.58, num: "1", title: "Rate sensitivity", col: RED,
-      sub: "Add the destination and timing of the move after maturity",
+      sub: "Score the switch to a higher-rate alternative after maturity",
       saw: [
         "High moves at 49.5% yet gained THB 145m; Very High moves at 12.9% and lost THB 36m.",
         "Movers holding Save More retained 108.8% of balance; those without retained 27.1%.",
         "Today 'Move' means only that Save Max is now zero — it says nothing about where the money went.",
       ],
-      addLabel: "Measure at fixed points after each maturity date",
+      addLabel: "New scoring component, observed at a fixed lag after maturity",
       chips: ["D+7", "D+30", "D+60", "D+90"],
       add: [
-        "Destination: higher-rate alternative in-house, another bank, or spent.",
-        "Re-fit the cut-offs on observed destination, not on cap precision alone.",
+        "Did the customer move to a higher-rate alternative within X days?",
+        "Destination: in-house, another bank, or out. Weight it alongside cap precision.",
       ],
-      answers: "Whether cap-optimising behaviour actually predicts runoff, and how long the retention window stays open.",
+      answers: "Turns rate sensitivity from a pre-maturity heuristic into a score built on what customers actually did.",
     },
     {
       x: 6.87, num: "2", title: "Deposit stickiness", col: TITLE_TEAL,
@@ -1386,7 +1386,7 @@ balanceByStickiness({
   ], { x: 0.88, y: 6.44, w: 11.73, h: 0.56, margin: 0, valign: "middle", fontFace: F, fontSize: 10.5 });
 
   s.addNotes("Two workstreams, both grounded in findings earlier in this deck rather than generic improvements. " +
-    "Rate sensitivity: the current Move definition captures only that Save Max reached zero, which is why the score looks inverted - High rate sensitivity moves most and gains money, Very High moves least and loses it. Recording destination and timing at fixed points after each maturity date separates pocket-switching from bank-level runoff and gives the first real label for re-fitting the cut-offs. " +
+    "Rate sensitivity: the current Move definition captures only that Save Max reached zero, which is why the score looks inverted - High rate sensitivity moves most and gains money, Very High moves least and loses it. The proposal is to fold the post-maturity switch into the score itself, not just measure it alongside: a component flagging whether the customer moved to a higher-rate alternative within X days of maturity, weighted with cap precision. X should be set from the observed timing, which is why the D+7 to D+90 window is measured first. That separates pocket-switching from bank-level runoff and gives the score its first outcome-based input. " +
     "Deposit stickiness: one two-snapshot window cannot see the path between the points, so intra-period sweeps are invisible and percentage change is meaningless on near-zero balances. A rolling multi-period panel supports a trough ratio, a test of how stable tier assignment is between periods, and a proper re-weighting on observed retention. " +
     "Sequencing matters. Score confidence tracks the Save Max feed exactly across all 201 rows of the extract, so until that data gap is closed the rate-sensitivity score is structurally capped for 55.7% of customers at Medium confidence and 2.8% at Low, together THB 2,102m of balance. Fixing the feed is a prerequisite, not a parallel task.");
 }
