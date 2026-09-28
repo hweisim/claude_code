@@ -917,5 +917,110 @@ function matrix(s, x, y, w, key, fmt) {
     "On predictive value, stickiness adds little once rate sensitivity and the Save More flag are in hand (AUC 0.766 to 0.779), so its practical use is as an eligibility filter to suppress dormant micro-balance accounts from retention campaigns, not as a targeting dimension.");
 }
 
+/* ============================================================= SLIDE 13 */
+/* Same two dimensions as the move-rate grid, but measuring the change in
+   total deposit balance. Percentages are suppressed where the prior
+   balance is too small for a ratio to mean anything. */
+{
+  const s = pres.addSlide(); s.background = { color: PAPER };
+  const D = fs.readFileSync(path.join(__dirname, "data", "savemax_maturity_stickiness.tsv"), "utf8")
+    .trim().split("\n").slice(1).map((l) => {
+      const c = l.split("\t");
+      return { rs: c[0], st: c[1], n: +c[4], p: +c[5], l: +c[6] };
+    });
+  const S = (f, g = () => true) => D.filter(g).reduce((a, r) => a + f(r), 0);
+  const ST = ["Very High", "High", "Medium", "Low", "Very Low"];
+  const PMIN = 5e6;            // below this prior balance a % change is noise
+  const NMIN = 50;             // below this headcount a cell is not signal
+  const agg = (g) => { const n = S((r) => r.n, g); return n ? { n, p: S((r) => r.p, g), l: S((r) => r.l, g) } : null; };
+  const dm = (v) => (v >= 0 ? "+" : "−") + Math.abs(v / 1e6).toFixed(1);
+  const dp = (a) => (a.l >= a.p ? "+" : "−") + Math.abs((a.l / a.p - 1) * 100).toFixed(1) + "%";
+  const n0 = (v) => Math.round(v).toLocaleString("en-US");
+  const tot = agg(() => true);
+  const colAgg = RS.map((rs) => [rs, agg((r) => r.rs === rs)]);
+  const hiRS = agg((r) => r.rs === "High"), vhRS = agg((r) => r.rs === "Very High");
+  const bestCell = agg((r) => r.st === "High" && r.rs === "High");
+
+  head(s, "Balance change : deposit stickiness against rate sensitivity",
+    `*Change in total deposit balance, prior to latest. Percentages suppressed below THB ${PMIN / 1e6}m prior balance; cells under ${NMIN} customers unshaded.`,
+    `Cohort ${n0(tot.n)}   ·   Total ${dm(tot.l - tot.p)}m (${dp(tot)})   ·   High sensitivity ${dm(hiRS.l - hiRS.p)}m (${dp(hiRS)})   ·   Very High ${dm(vhRS.l - vhRS.p)}m (${dp(vhRS)})`,
+    "Balance change runs opposite to move rate — the segment that emptied Save Max most is the one that grew.");
+
+  tiles(s, [
+    [dm(tot.l - tot.p) + "m", "total balance change", `${dp(tot)} across the cohort`, TEAL],
+    [dm(hiRS.l - hiRS.p) + "m", "High rate sensitivity", `${dp(hiRS)} · moved most`, TEAL],
+    [dm(vhRS.l - vhRS.p) + "m", "Very High rate sensitivity", `${dp(vhRS)} · moved least`, RED],
+    [dm(bestCell.l - bestCell.p) + "m", "largest single cell", "High stickiness × High sensitivity", TEAL],
+  ], 1.80);
+
+  /* the grid ------------------------------------------------------------ */
+  card(s, 0.58, 3.06, 7.35, 2.54);
+  cardHead(s, 0.58, 3.06, 7.35, "Change in total deposit balance, THB m",
+    "Rows: deposit stickiness · columns: rate sensitivity · teal = gained, red = lost");
+  let maxD = 0;
+  ST.forEach((st) => RS.forEach((rs) => {
+    const a = agg((r) => r.st === st && r.rs === rs);
+    if (a && a.n >= NMIN) maxD = Math.max(maxD, Math.abs(a.l - a.p));
+  }));
+  const hdr = [
+    { text: "Stickiness", options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "left" } },
+    ...RS.map((x) => ({ text: x, options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "center" } })),
+  ];
+  const body = ST.map((st) => [
+    { text: st, options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 9.5, align: "left" } },
+    ...RS.map((rs) => {
+      const a = agg((r) => r.st === st && r.rs === rs);
+      if (!a) return { text: "—", options: { fill: { color: PAPER }, color: MUTED, fontFace: F, fontSize: 9, align: "center" } };
+      const d = a.l - a.p, small = a.n < NMIN;
+      const t = small ? 0 : Math.abs(d) / maxD;
+      const dark = t > 0.55;
+      const sub = a.p >= PMIN ? dp(a) : `n ${n0(a.n)}`;
+      return {
+        text: [
+          { text: dm(d), options: { fontFace: F, fontSize: 9.5, bold: !small, color: small ? MUTED : dark ? PAPER : INK } },
+          { text: "\n" + sub, options: { fontFace: F, fontSize: 7, color: small ? MUTED : dark ? "E6EFEC" : MUTED, breakLine: false } },
+        ],
+        options: { fill: { color: small ? PAPER : blend(d >= 0 ? R3 : RED, t) }, align: "center" },
+      };
+    }),
+  ]);
+  s.addTable([hdr, ...body], {
+    x: 0.82, y: 3.80, w: 6.87, colW: [1.27, 1.12, 1.12, 1.12, 1.12, 1.12],
+    rowH: [0.26, 0.30, 0.30, 0.30, 0.30, 0.30],
+    border: { type: "solid", color: RULE, pt: 0.5 }, valign: "middle", margin: [0.01, 0.04, 0.01, 0.04],
+  });
+
+  /* marginal: balance change by rate sensitivity, diverging from zero --- */
+  card(s, 8.18, 3.06, 4.73, 2.54);
+  cardHead(s, 8.18, 3.06, 4.73, "Balance change by rate sensitivity", "THB m · bars diverge from zero");
+  const ZX = 10.62, HALF = 1.00;
+  const mMax = Math.max(...colAgg.map(([, a]) => Math.abs(a.l - a.p)));
+  s.addShape("rect", { x: ZX, y: 3.72, w: 0.012, h: 1.50, fill: { color: MUTED }, line: { type: "none" } });
+  colAgg.slice().reverse().forEach(([rs, a], i) => {
+    const d = a.l - a.p, w = Math.max((Math.abs(d) / mMax) * HALF, 0.03), y = 3.76 + i * 0.30;
+    const col = d >= 0 ? R3 : RED;
+    s.addText(rs, { x: 8.46, y, w: 1.10, h: 0.26, margin: 0, valign: "middle", fontFace: F, fontSize: 10, bold: true, color: INK });
+    s.addShape("roundRect", { x: d >= 0 ? ZX : ZX - w, y: y + 0.04, w, h: 0.18, rectRadius: 0.03, fill: { color: col }, line: { type: "none" } });
+    s.addText(dm(d), { x: 11.70, y, w: 0.93, h: 0.26, margin: 0, align: "right", valign: "middle", fontFace: F, fontSize: 10, bold: true, color: col });
+  });
+  card(s, 8.46, 5.30, 4.17, 0.30, WARM);
+  s.addText("High sensitivity gained; Very High lost.", {
+    x: 8.62, y: 5.30, w: 3.85, h: 0.30, margin: 0, valign: "middle", fontFace: F, fontSize: 9.5, color: INK,
+  });
+
+  card(s, 0.58, 5.78, 12.33, 0.86, "E8F6F3");
+  s.addText([
+    { text: `High rate sensitivity moved most and gained ${dm(hiRS.l - hiRS.p)}m; Very High moved least and lost ${dm(vhRS.l - vhRS.p).replace("−", "")}m`, options: { bold: true, color: TITLE_TEAL } },
+    { text: "  —  emptying the promotional pocket is a reallocation, not a withdrawal. The balance actually leaving sits with customers the score calls least rate-sensitive.", options: { color: INK } },
+  ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+  s.addNotes(`Total deposit balance across the cohort rose ${dm(tot.l - tot.p)}m (${dp(tot)}). ` +
+    `By rate sensitivity: High ${dm(hiRS.l - hiRS.p)}m (${dp(hiRS)}) against Very High ${dm(vhRS.l - vhRS.p)}m (${dp(vhRS)}), and Very Low ${dm(colAgg[0][1].l - colAgg[0][1].p)}m (${dp(colAgg[0][1])}). ` +
+    "That is the reverse of the move-rate grid on the previous slide: the segments most likely to empty Save Max are the ones whose total balance grew, and the segments least likely to move are the ones losing money. " +
+    `The largest single cell is High stickiness with High sensitivity at ${dm(bestCell.l - bestCell.p)}m on ${n0(bestCell.n)} customers. ` +
+    "Percentages are suppressed for the low-stickiness rows because their prior balances are near zero - Very Low stickiness held THB 0.03m in total, so a ratio there reads as +1549% and means nothing. " +
+    "Practical read: pocket-level runoff and bank-level runoff are different outcomes and need separate scores. Rate sensitivity predicts the first and is actively misleading on the second.");
+}
+
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
