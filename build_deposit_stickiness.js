@@ -1300,5 +1300,96 @@ balanceByStickiness({
     `Low Confidence decreases on ${(lo.dec * 100).toFixed(1)}% of its customers but only ${(lo.decP * 100).toFixed(1)}% of its balance, so within that band the large accounts are the stable ones.`);
 }
 
+/* ============================================================= SLIDE 18 */
+/* Next steps. Two workstreams, each grounded in a finding from the deck
+   rather than stated as a generic improvement. */
+{
+  const s = pres.addSlide(); s.background = { color: PAPER };
+
+  head(s, "Next steps",
+    "*Neither workstream needs a new score. Both need the observation window extended and the outcome recorded.",
+    null,
+    "Rate sensitivity needs to know where the money went. Deposit stickiness needs more than one window to be validated.");
+
+  const PANELS = [
+    {
+      x: 0.58, num: "1", title: "Rate sensitivity", col: RED,
+      sub: "Add the destination and timing of the move after maturity",
+      saw: [
+        "High moves at 49.5% yet gained THB 145m; Very High moves at 12.9% and lost THB 36m.",
+        "Movers holding Save More retained 108.8% of balance; those without retained 27.1%.",
+        "Today 'Move' means only that Save Max is now zero — it says nothing about where the money went.",
+      ],
+      addLabel: "Measure at fixed points after each maturity date",
+      chips: ["D+7", "D+30", "D+60", "D+90"],
+      add: [
+        "Destination: higher-rate alternative in-house, another bank, or spent.",
+        "Re-fit the cut-offs on observed destination, not on cap precision alone.",
+      ],
+      answers: "Whether cap-optimising behaviour actually predicts runoff, and how long the retention window stays open.",
+    },
+    {
+      x: 6.87, num: "2", title: "Deposit stickiness", col: TITLE_TEAL,
+      sub: "Validate and re-weight across more periods of balance change",
+      saw: [
+        "Move rate rises with the score: 19.2% at Very High against 1.9% at Very Low.",
+        "Two snapshots hide the path — a customer at 100k → 0 → 100k reads as stable.",
+        "Percentage change is unusable on the low tiers: +1,549% on a THB 0.03m base.",
+      ],
+      addLabel: "Extend to a rolling multi-period panel",
+      chips: ["P−3", "P−2", "P−1", "P"],
+      add: [
+        "Trough ratio per period: 10th percentile ÷ mean daily balance.",
+        "Test tier stability across periods, then re-fit the weights on observed retention.",
+      ],
+      answers: "Whether the score measures retention or activity, and which of the four components earn their weight.",
+    },
+  ];
+
+  PANELS.forEach((pn) => {
+    const X = pn.x, IN = X + 0.28, W = 5.48;
+    card(s, X, 1.80, 6.04, 4.50);
+    s.addShape("roundRect", { x: IN, y: 1.94, w: 0.34, h: 0.32, rectRadius: 0.06, fill: { color: pn.col }, line: { type: "none" } });
+    s.addText(pn.num, { x: IN, y: 1.94, w: 0.34, h: 0.32, margin: 0, align: "center", valign: "middle", fontFace: F, fontSize: 12, bold: true, color: PAPER });
+    s.addText(pn.title, { x: IN + 0.48, y: 1.94, w: W - 0.48, h: 0.32, margin: 0, valign: "middle", fontFace: FH, fontSize: 15, bold: true, color: INK });
+    s.addText(pn.sub, { x: IN, y: 2.30, w: W, h: 0.22, margin: 0, fontFace: F, fontSize: 9.5, color: MUTED });
+
+    const bullets = (items, y0) => items.forEach((t, i) => {
+      const y = y0 + i * 0.36;
+      s.addShape("rect", { x: IN + 0.02, y: y + 0.10, w: 0.09, h: 0.09, fill: { color: pn.col }, line: { type: "none" } });
+      s.addText(t, { x: IN + 0.24, y, w: W - 0.24, h: 0.34, margin: 0, valign: "top", fontFace: F, fontSize: 9.5, color: INK });
+    });
+
+    s.addText("What the data showed", { x: IN, y: 2.58, w: W, h: 0.22, margin: 0, fontFace: F, fontSize: 10, bold: true, color: pn.col });
+    bullets(pn.saw, 2.84);
+
+    s.addShape("rect", { x: IN, y: 4.00, w: W, h: 0.012, fill: { color: RULE }, line: { type: "none" } });
+    s.addText("What to add", { x: IN, y: 4.10, w: W, h: 0.22, margin: 0, fontFace: F, fontSize: 10, bold: true, color: pn.col });
+    s.addText(pn.addLabel, { x: IN, y: 4.32, w: W, h: 0.20, margin: 0, fontFace: F, fontSize: 8.5, italic: true, color: MUTED });
+    const cw = (W - 3 * 0.09) / 4;
+    pn.chips.forEach((c, i) => {
+      const cx = IN + i * (cw + 0.09);
+      s.addShape("roundRect", { x: cx, y: 4.56, w: cw, h: 0.26, rectRadius: 0.05, fill: { color: "E8F6F3" }, line: { type: "none" } });
+      s.addText(c, { x: cx, y: 4.56, w: cw, h: 0.26, margin: 0, align: "center", valign: "middle", fontFace: F, fontSize: 9.5, bold: true, color: TITLE_TEAL });
+    });
+    bullets(pn.add, 4.92);
+
+    s.addShape("rect", { x: IN, y: 5.66, w: W, h: 0.012, fill: { color: RULE }, line: { type: "none" } });
+    s.addText("What it answers", { x: IN, y: 5.76, w: W, h: 0.22, margin: 0, fontFace: F, fontSize: 10, bold: true, color: pn.col });
+    s.addText(pn.answers, { x: IN, y: 5.98, w: W, h: 0.30, margin: 0, valign: "top", fontFace: F, fontSize: 9.5, color: INK });
+  });
+
+  card(s, 0.58, 6.44, 12.33, 0.56, WARM);
+  s.addText([
+    { text: "Resolve score confidence first", options: { bold: true, color: RED } },
+    { text: "  —  it tracks the Save Max feed, so rate sensitivity cannot reach High or Medium without it and THB 2,102m of balance is scored on a capped dimension. Both workstreams above inherit that limit until it is fixed.", options: { color: INK } },
+  ], { x: 0.88, y: 6.44, w: 11.73, h: 0.56, margin: 0, valign: "middle", fontFace: F, fontSize: 10.5 });
+
+  s.addNotes("Two workstreams, both grounded in findings earlier in this deck rather than generic improvements. " +
+    "Rate sensitivity: the current Move definition captures only that Save Max reached zero, which is why the score looks inverted - High rate sensitivity moves most and gains money, Very High moves least and loses it. Recording destination and timing at fixed points after each maturity date separates pocket-switching from bank-level runoff and gives the first real label for re-fitting the cut-offs. " +
+    "Deposit stickiness: one two-snapshot window cannot see the path between the points, so intra-period sweeps are invisible and percentage change is meaningless on near-zero balances. A rolling multi-period panel supports a trough ratio, a test of how stable tier assignment is between periods, and a proper re-weighting on observed retention. " +
+    "Sequencing matters. Score confidence tracks the Save Max feed exactly across all 201 rows of the extract, so until that data gap is closed the rate-sensitivity score is structurally capped for 55.7% of customers at Medium confidence and 2.8% at Low, together THB 2,102m of balance. Fixing the feed is a prerequisite, not a parallel task.");
+}
+
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
