@@ -1202,5 +1202,102 @@ balanceByStickiness({
     "The practical implication is that the stickiness score ranks customers by how active their balance is, not by how much money is at risk, so retention targeting built on it will chase headcount rather than baht.");
 }
 
+/* ============================================================= SLIDE 17 */
+/* Deposit score confidence. The point of the slide is that confidence
+   and balance run in opposite directions: the least reliable scores sit
+   on the largest accounts. */
+{
+  const s = pres.addSlide(); s.background = { color: PAPER };
+  const nv = (v) => (v === undefined || v === "" || v === "NULL" ? 0 : Number(v));
+  const D = fs.readFileSync(path.join(__dirname, "data", "base_movement_confidence.tsv"), "utf8")
+    .trim().split("\n").slice(1).map((l) => {
+      const c = l.split("\t");
+      return { st: c[1], mv: c[3], cf: c[4].replace(" Confidence", ""), n: nv(c[5]), p: nv(c[6]), l: nv(c[7]) };
+    });
+  const S = (f, g = () => true) => D.filter(g).reduce((a, r) => a + f(r), 0);
+  const CF = [["High", R3], ["Medium", R1], ["Low", RED]];
+  const N = S((r) => r.n), P = S((r) => r.p), G = S((r) => r.l - r.p);
+  const n0 = (v) => Math.round(v).toLocaleString("en-US");
+  const dm = (v) => (v >= 0 ? "+" : "−") + Math.abs(v / 1e6).toFixed(1);
+  const p1 = (a, b) => (a / b * 100).toFixed(1) + "%";
+  const row = (c) => {
+    const g = (r) => r.cf === c;
+    const n = S((r) => r.n, g), p = S((r) => r.p, g), l = S((r) => r.l, g);
+    return { c, n, p, l, avg: p / n, dec: S((r) => r.n, (r) => r.cf === c && r.mv === "Decrease") / n,
+             decP: S((r) => r.p, (r) => r.cf === c && r.mv === "Decrease") / p };
+  };
+  const R = CF.map(([c]) => row(c));
+  const hi = R[0], lo = R[2];
+
+  head(s, "Score confidence : least reliable scores, largest balances",
+    "*Every Medium and Low Confidence cell here has no Save Max feed, so confidence appears to track data availability.",
+    `Base ${n0(N)}   ·   High ${p1(hi.n, N)} of customers / ${p1(hi.p, P)} of balance   ·   Medium ${p1(R[1].n, N)} / ${p1(R[1].p, P)}   ·   Low ${p1(lo.n, N)} / ${p1(lo.p, P)}`,
+    `Low Confidence is ${p1(lo.n, N)} of customers but THB ${dm(lo.p).replace("+", "")}m — an average of THB ${n0(lo.avg)}, twice the High Confidence average.`);
+
+  tiles(s, [
+    [p1(hi.n, N), "High confidence", `${p1(hi.p, P)} of balance · avg THB ${n0(hi.avg)}`, R3],
+    [p1(R[1].n, N), "Medium confidence", `${p1(R[1].p, P)} of balance · avg THB ${n0(R[1].avg)}`, R1],
+    [p1(lo.n, N), "Low confidence", `${p1(lo.p, P)} of balance · avg THB ${n0(lo.avg)}`, RED],
+    ["THB " + dm(lo.p).replace("+", "") + "m", "on Low Confidence scores", "the largest average balance", RED],
+  ], 1.80);
+
+  /* the table ----------------------------------------------------------- */
+  card(s, 0.58, 3.06, 7.35, 2.54);
+  cardHead(s, 0.58, 3.06, 7.35, "Coverage and balance by confidence", "Balances in THB m · average balance per customer in THB");
+  const th = (t, al) => ({ text: t, options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 8, align: al || "right" } });
+  const td = (t, al, col, bold) => ({ text: t, options: { fill: { color: PAPER }, color: col || INK, bold: !!bold, fontFace: F, fontSize: 8.5, align: al || "right" } });
+  const body = R.map((r, i) => [
+    { text: r.c, options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 8.5, align: "left" } },
+    td(n0(r.n)), td(p1(r.n, N)), td((r.p / 1e6).toFixed(1)), td(p1(r.p, P)),
+    td(n0(r.avg), "right", CF[i][1], true),
+    td(dm(r.l - r.p), "right", R3, true),
+  ]);
+  const tot = [
+    { text: "All", options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 8.5, align: "left" } },
+    ...[n0(N), "100.0%", (P / 1e6).toFixed(1), "100.0%", n0(P / N), dm(G)].map((t, i) => ({
+      text: t, options: { fill: { color: CARD }, color: i === 5 ? R3 : INK, bold: true, fontFace: F, fontSize: 8.5, align: "right" },
+    })),
+  ];
+  s.addTable([
+    [th("Confidence", "left"), th("Customers"), th("% base"), th("Prior"), th("% book"), th("Avg bal"), th("Change")],
+    ...body, tot,
+  ], {
+    x: 0.82, y: 3.86, w: 6.87, colW: [1.15, 0.98, 0.78, 0.95, 0.78, 1.10, 1.13],
+    rowH: [0.26, 0.30, 0.30, 0.30, 0.30],
+    border: { type: "solid", color: RULE, pt: 0.5 }, valign: "middle", margin: [0.01, 0.06, 0.01, 0.06],
+  });
+  s.addText("Low Confidence holds the largest accounts, not the smallest.", {
+    x: 0.86, y: 5.32, w: 6.8, h: 0.22, margin: 0, fontFace: F, fontSize: 9, italic: true, color: MUTED,
+  });
+
+  /* average balance ------------------------------------------------------ */
+  card(s, 8.18, 3.06, 4.73, 2.54);
+  cardHead(s, 8.18, 3.06, 4.73, "Average balance per customer", "THB, prior period");
+  const aMax = Math.max(...R.map((r) => r.avg));
+  R.forEach((r, i) => {
+    const y = 3.84 + i * 0.36;
+    s.addText(r.c, { x: 8.46, y, w: 1.15, h: 0.30, margin: 0, valign: "middle", fontFace: F, fontSize: 10.5, bold: true, color: INK });
+    s.addShape("roundRect", { x: 9.66, y: y + 0.05, w: Math.max((r.avg / aMax) * 1.55, 0.04), h: 0.20, rectRadius: 0.03, fill: { color: CF[i][1] }, line: { type: "none" } });
+    s.addText("THB " + n0(r.avg), { x: 11.26, y, w: 1.37, h: 0.30, margin: 0, align: "right", valign: "middle", fontFace: F, fontSize: 10.5, bold: true, color: CF[i][1] });
+  });
+  card(s, 8.46, 4.98, 4.17, 0.56, WARM);
+  s.addText(`Low Confidence decreases on ${(lo.dec * 100).toFixed(1)}% of customers but only ${(lo.decP * 100).toFixed(1)}% of its balance — the big accounts sit still.`, {
+    x: 8.62, y: 4.98, w: 3.85, h: 0.56, margin: 0, valign: "middle", fontFace: F, fontSize: 9.5, color: INK,
+  });
+
+  card(s, 0.58, 5.78, 12.33, 0.86, WARM);
+  s.addText([
+    { text: `THB ${dm(lo.p).replace("+", "")}m sits on the scores the framework trusts least`, options: { bold: true, color: RED } },
+    { text: `  —  Low Confidence averages THB ${n0(lo.avg)} per customer against THB ${n0(hi.avg)} for High. Confidence and balance run in opposite directions, so a score-quality gate applied on headcount would leave the largest exposures unreviewed.`, options: { color: INK } },
+  ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+  s.addNotes(`Confidence splits the base ${p1(hi.n, N)} High, ${p1(R[1].n, N)} Medium, ${p1(lo.n, N)} Low by customer, but ${p1(hi.p, P)} / ${p1(R[1].p, P)} / ${p1(lo.p, P)} by balance. ` +
+    `Average prior balance runs THB ${n0(hi.avg)} High, THB ${n0(R[1].avg)} Medium and THB ${n0(lo.avg)} Low, so the least reliable scores attach to the largest accounts - the opposite of what a data-quality problem usually looks like. ` +
+    "In this extract confidence tracks the Save Max feed exactly: all 108 Medium and Low Confidence cells have prev_bal_save_max of zero and latest_bal_save_max NULL, while all 93 High Confidence cells carry real values. " +
+    "So a Low Confidence score is not a noisy estimate, it is a score computed without one of its inputs, and the missing input is the promotional product the whole framework is built around. Worth confirming at source. " +
+    `Balance change is positive in every band: High ${dm(hi.l - hi.p)}m, Medium ${dm(R[1].l - R[1].p)}m, Low ${dm(lo.l - lo.p)}m. ` +
+    `Low Confidence decreases on ${(lo.dec * 100).toFixed(1)}% of its customers but only ${(lo.decP * 100).toFixed(1)}% of its balance, so within that band the large accounts are the stable ones.`);
+}
+
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
