@@ -1,0 +1,101 @@
+rate_sensitivity_segment	deposit_stickiness_segment	save_more_flg	bal_movement	score_confidence	cnt_cust	prev_bal	latest_bal	prev_bal_save_max	latest_bal_save_max
+Very Low	High	0	Decrease	Medium Confidence	15801	36057575.71	7584310.45	0	NULL
+Very Low	Medium	0	Decrease	High Confidence	4886	8149160.01	2316299.17	920540.2	281788.11
+Low	Medium	0	Stable	High Confidence	2773	1396684.27	1396559.52	1161769.11	1086636.01
+Low	Medium	1	Increase	High Confidence	208	10356189.87	17915602.28	84826.02	164485.6
+Low	Low	1	Stable	High Confidence	109	17092.6	17092.6	16495.19	11283.29
+Very Low	Very High	0	Stable	Low Confidence	167	2081310.66	2080384.97	0	NULL
+Very Low	Medium	1	Increase	Low Confidence	30	2446422.37	2510979.93	0	NULL
+Very High	Very High	1	Decrease	Low Confidence	3	3016837.82	1939134.9	0	NULL
+Very Low	High	1	Decrease	Low Confidence	34	1088295.09	33159.86	0	NULL
+Very Low	Very Low	0	Stable	High Confidence	3859	11977.83	11977.83	0	16.51
+Very Low	High	1	Stable	Medium Confidence	607	1212546.24	1213249.23	0	NULL
+Very High	Low	0	Stable	High Confidence	5	100324.86	100324.86	100320.88	100320.88
+Low	Medium	1	Decrease	High Confidence	271	6286654.01	4529607.36	329684.76	26922.36
+High	High	1	Increase	High Confidence	993	259597159.32	389040232.52	19916506.85	5981356.2
+Very High	High	0	Stable	High Confidence	10641	233755248.55	233725593.67	214213592.96	198578600.09
+Very Low	Low	0	Decrease	Medium Confidence	4494	840416.04	70730.83	0	NULL
+Low	High	1	Increase	Medium Confidence	495	24198777.1	42408460.13	0	NULL
+Very Low	Low	1	Decrease	Medium Confidence	240	34623.14	2768.68	0	NULL
+Very High	Very High	1	Stable	High Confidence	345	293183975.93	293155248.58	6567283.91	5539893.89
+Very Low	Very High	0	Stable	High Confidence	2223	33095814.5	33085184.87	19571692.08	17099342.55
+Very Low	Very Low	1	Decrease	High Confidence	18	630.28	106.38	0	0
+Very Low	Medium	0	Increase	Medium Confidence	6477	1654130.1	14802821.28	0	NULL
+Very Low	Medium	1	Stable	Medium Confidence	899	20996.98	20994.38	0	NULL
+Very Low	Very Low	0	Stable	Low Confidence	764	37324.83	37324.83	0	NULL
+Very Low	Medium	0	Stable	Low Confidence	381	313659.82	313680.06	0	NULL
+Low	Very High	1	Stable	Low Confidence	20	3643484.61	3642078.4	0	NULL
+Very Low	Very Low	1	Stable	High Confidence	48	19.62	19.62	0	0
+Low	Very Low	1	Decrease	Medium Confidence	15	1121.33	5.79	0	NULL
+Very Low	Medium	0	Stable	High Confidence	17831	3454726.26	3454644.31	414113.21	414220.31
+High	Very High	1	Decrease	High Confidence	798	134119996.43	97042081.16	16019426.05	6040183.85
+Very Low	Medium	0	Increase	Low Confidence	234	444220.14	1235389.84	0	NULL
+Very High	Medium	1	Decrease	High Confidence	10	6193262.52	4292950.95	139800.81	16468.43
+Low	Very Low	1	Increase	Low Confidence	6	164174.98	1180234.61	0	NULL
+Very Low	Low	0	Increase	High Confidence	1249	83473.7	4368253.41	0	91966.46
+Very Low	Very Low	0	Stable	Medium Confidence	23973	27074.71	27074.8	0	NULL
+Very Low	Very Low	1	Stable	Low Confidence	53	10678.74	10678.74	0	NULL
+Low	Very High	1	Stable	Medium Confidence	1013	197426811.86	197444197.79	0	NULL
+Very High	Very High	1	Increase	Medium Confidence	13	12659365.28	13105163.06	0	NULL
+Low	Medium	1	Stable	Low Confidence	46	9212207.35	9214034.64	0	NULL
+Very Low	Medium	1	Increase	High Confidence	150	999084.68	3048628.83	35681.95	0
+Low	Very Low	1	Stable	High Confidence	57	551.83	551.83	289.13	282.98
+Very High	Medium	1	Increase	Low Confidence	1	956066.63	1000000.63	0	NULL
+Very High	High	0	Decrease	High Confidence	2636	60602547.19	17284528.36	53029574.63	10324409.94
+Low	High	1	Decrease	Medium Confidence	770	19852248.6	11544249.91	0	NULL
+Very High	Very High	1	Increase	High Confidence	72	31461757.58	39059779.32	1385641.65	852942.65
+Very Low	Very Low	0	Increase	Low Confidence	201	640585.95	1804160.62	0	NULL
+Very Low	Very Low	0	Decrease	Low Confidence	354	327092.93	64016.26	0	NULL
+Very High	Medium	1	Stable	High Confidence	58	47453205.04	47447517.8	340744.85	300601.29
+Very High	Medium	0	Increase	High Confidence	4	80068.51	91238.66	79928.84	60328.84
+High	Medium	1	Stable	High Confidence	21	5835748.69	5836302.76	374316.6	200577.05
+Very High	Low	0	Decrease	High Confidence	5	102135.69	6400.68	100478.8	197.89
+Low	Very High	0	Stable	High Confidence	790	5107596.16	5106799.8	4179475.58	3889979.41
+Low	Very High	1	Increase	High Confidence	610	23172658.91	39409817.22	3765427.7	2852484.92
+Low	High	0	Decrease	High Confidence	2080	12323075.42	4904054.51	9347973.47	3274460.07
+Low	Low	0	Decrease	High Confidence	251	168945.73	21967.05	78000.41	11340.89
+Low	Medium	1	Stable	High Confidence	395	24384024.21	24387635.08	52788.85	43819.61
+Very Low	Low	0	Decrease	Low Confidence	399	2195375.47	370072.76	0	NULL
+Very Low	Very High	1	Increase	Low Confidence	8	6278.98	29945.71	0	NULL
+Very High	Very Low	1	Stable	Low Confidence	2	1999054.79	2000071.73	0	NULL
+Very Low	Very High	1	Stable	Medium Confidence	144	8706501.75	8706489.37	0	NULL
+Very Low	Very Low	0	Decrease	Medium Confidence	2001	74383.86	6657.61	0	NULL
+Very Low	High	1	Decrease	High Confidence	352	1548664.51	641655.98	808161.19	274383.03
+Very Low	Very High	1	Stable	High Confidence	47	2363523.72	2362420.36	1198078.63	752514.55
+Very Low	Medium	1	Stable	Low Confidence	29	18355.95	18355.95	0	NULL
+Very High	High	1	Decrease	Low Confidence	6	6599663.58	5029663.58	0	NULL
+Very High	Very High	0	Increase	High Confidence	527	17406252.92	23142908.01	10604356.04	10325882
+High	High	1	Decrease	High Confidence	607	144069315.49	108904219.5	12081859.14	2586823.56
+Very High	Very High	0	Decrease	High Confidence	1176	36963859.81	21195672.91	23633450.46	11803268.58
+High	Low	1	Decrease	High Confidence	1	20006.38	6.38	20000	0
+High	Very High	1	Stable	High Confidence	621	148880493.07	148851775.62	12560892.33	8580267.07
+Very Low	Very High	1	Increase	High Confidence	111	2681231.79	4905144.2	1936706.65	1739112.48
+Low	High	1	Increase	High Confidence	481	20961559.61	38460972.95	1336327.79	1180658.29
+Low	Low	1	Increase	High Confidence	42	2727.96	222852.83	797.14	16179.82
+Very High	High	1	Stable	Medium Confidence	93	92943712.15	92948929.8	0	NULL
+Very Low	Low	1	Increase	Low Confidence	17	2212.6	59941.04	0	NULL
+Low	Low	1	Decrease	Low Confidence	15	838039.85	715565.99	0	NULL
+Very High	Very High	1	Increase	Low Confidence	1	955915.85	1000000	0	NULL
+Low	Low	0	Stable	High Confidence	1422	235068.61	235068.76	166584.81	165196.88
+Low	Medium	1	Decrease	Medium Confidence	248	1654057.67	989563.29	0	NULL
+Very Low	Low	0	Decrease	High Confidence	1195	415208.89	54001.74	130133.77	135.21
+Very Low	Very High	0	Increase	Low Confidence	314	2350906.43	7406732.08	0	NULL
+Very High	Medium	0	Decrease	High Confidence	53	1745644.82	436496.75	1064027.45	267035.79
+Very High	Low	1	Stable	Low Confidence	1	1000224.66	1000224.66	0	NULL
+Low	High	0	Increase	High Confidence	1161	3559680.18	11289313.56	2912895.69	6084004.17
+Very Low	Low	0	Stable	Low Confidence	463	1791292.02	1791455.49	0	NULL
+Very Low	High	1	Increase	Medium Confidence	430	540847.63	1380044.28	0	NULL
+Very Low	Very Low	1	Decrease	Medium Confidence	91	1161.05	43.46	0	NULL
+Very Low	Very High	0	Decrease	Medium Confidence	10479	66738371.4	19586922.35	0	NULL
+Low	Medium	0	Decrease	High Confidence	889	1945982.91	437928.13	1207274.95	237468.93
+Low	Very High	1	Decrease	High Confidence	880	13946609.18	6938660.27	3991927.34	1066891.14
+Very Low	Very Low	0	Decrease	High Confidence	306	13879.11	582.54	0	0
+Low	Low	1	Stable	Medium Confidence	116	3007.93	3007.83	0	NULL
+High	Medium	1	Increase	High Confidence	17	2658567.59	4941010.14	339323.05	166118.38
+Low	Low	1	Increase	Low Confidence	11	1061826.44	2280339.93	0	NULL
+Very Low	Very High	0	Decrease	High Confidence	6596	102288531.25	45545237.82	26531311.94	12791982.97
+Very Low	High	0	Decrease	High Confidence	8648	53224512.52	22842955.87	12952548.74	6374898.21
+Low	Low	0	Increase	High Confidence	233	50348.28	1829277.06	31658.23	1225394.65
+Very Low	High	0	Increase	Medium Confidence	7342	5488678.97	21017905.38	0	NULL
+Very Low	Very Low	0	Increase	High Confidence	433	2801.75	813628.4	0	2013
+High	Medium	1	Decrease	High Confidence	11	2643862.97	2230496.65	210044.61	100174.6
