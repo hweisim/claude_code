@@ -1022,5 +1022,87 @@ function matrix(s, x, y, w, key, fmt) {
     "Practical read: pocket-level runoff and bank-level runoff are different outcomes and need separate scores. Rate sensitivity predicts the first and is actively misleading on the second.");
 }
 
+/* ============================================================= SLIDE 14 */
+/* The two scores side by side on both measures, to show that the
+   move-rate / balance-change inversion belongs to rate sensitivity and
+   does not repeat for deposit stickiness. */
+{
+  const s = pres.addSlide(); s.background = { color: PAPER };
+  const D = fs.readFileSync(path.join(__dirname, "data", "savemax_maturity_stickiness.tsv"), "utf8")
+    .trim().split("\n").slice(1).map((l) => {
+      const c = l.split("\t");
+      return { rs: c[0], st: c[1], mv: c[3] === "Move", n: +c[4], p: +c[5], l: +c[6] };
+    });
+  const S = (f, g = () => true) => D.filter(g).reduce((a, r) => a + f(r), 0);
+  const TIERS = ["Very High", "High", "Medium", "Low", "Very Low"];
+  const PMIN = 5e6, NMIN = 50;
+  const n0 = (v) => Math.round(v).toLocaleString("en-US");
+  const dm = (v) => (v >= 0 ? "+" : "−") + Math.abs(v / 1e6).toFixed(1);
+  const row = (key, t) => {
+    const g = (r) => r[key] === t, n = S((r) => r.n, g);
+    if (!n) return null;
+    const p = S((r) => r.p, g), l = S((r) => r.l, g);
+    return { t, n, p, d: l - p, mv: S((r) => (r.mv ? r.n : 0), g) / n, pct: p >= PMIN ? (l / p - 1) * 100 : null };
+  };
+  const stR = TIERS.map((t) => row("st", t)).filter(Boolean);
+  const rsR = TIERS.map((t) => row("rs", t)).filter(Boolean);
+  const gainSticky = S((r) => r.l - r.p, (r) => r.st === "Very High" || r.st === "High");
+  const gainAll = S((r) => r.l - r.p);
+  const hiRS = rsR.find((r) => r.t === "High"), vhRS = rsR.find((r) => r.t === "Very High");
+  const vhST = stR.find((r) => r.t === "Very High"), vlST = stR.find((r) => r.t === "Very Low");
+
+  head(s, "The inversion belongs to rate sensitivity, not stickiness",
+    `*Move rate = share of tier that emptied Save Max. Percentages suppressed below THB ${PMIN / 1e6}m prior balance; tiers under ${NMIN} customers greyed.`,
+    `Cohort ${n0(S((r) => r.n))}   ·   Move rate ${(S((r) => (r.mv ? r.n : 0)) / S((r) => r.n) * 100).toFixed(1)}%   ·   Balance ${dm(gainAll)}m   ·   Stickiness ≥ 60 contributed ${dm(gainSticky)}m of it`,
+    "Stickiness ranks both measures the same way; rate sensitivity ranks them in opposite directions.");
+
+  tiles(s, [
+    [`${(vlST.mv * 100).toFixed(1)}% → ${(vhST.mv * 100).toFixed(1)}%`, "move rate by stickiness", "Very Low tier to Very High tier", TEAL, 20],
+    [dm(gainSticky) + "m", "gained by stickiness ≥ 60", `${(gainSticky / gainAll * 100).toFixed(0)}% of the cohort's total gain`, TEAL],
+    [`${(hiRS.mv * 100).toFixed(1)}% / ${(vhRS.mv * 100).toFixed(1)}%`, "move rate, High / V.High", "the score's top band moves least", RED, 18],
+    [`${dm(hiRS.d)} / ${dm(vhRS.d)}`, "balance change, THB m", "same pair, opposite directions", RED, 18],
+  ], 1.80);
+
+  /* one card per score: move-rate bar, then diverging balance bar -------- */
+  const panel = (X, title, sub, rows) => {
+    card(s, X, 3.06, 6.04, 2.54);
+    cardHead(s, X, 3.06, 6.04, title, sub);
+    const mvMax = Math.max(...rows.map((r) => r.mv));
+    const dMax = Math.max(...rows.map((r) => Math.abs(r.d)));
+    const ZX = X + 3.92, HALF = 0.52;
+    s.addText("Move rate", { x: X + 1.34, y: 3.70, w: 1.62, h: 0.20, margin: 0, fontFace: F, fontSize: 8.5, bold: true, color: MUTED });
+    s.addText("Balance change, THB m", { x: X + 3.30, y: 3.70, w: 2.46, h: 0.20, margin: 0, align: "center", fontFace: F, fontSize: 8.5, bold: true, color: MUTED });
+    s.addShape("rect", { x: ZX, y: 3.92, w: 0.012, h: 1.58, fill: { color: MUTED }, line: { type: "none" } });
+    rows.forEach((r, i) => {
+      const y = 3.96 + i * 0.32, faint = r.n < NMIN;
+      const mvCol = faint ? RULE : R4, dCol = faint ? RULE : r.d >= 0 ? R3 : RED;
+      s.addText(r.t, { x: X + 0.28, y, w: 1.00, h: 0.28, margin: 0, valign: "middle", fontFace: F, fontSize: 9.5, bold: true, color: faint ? MUTED : INK });
+      s.addShape("roundRect", { x: X + 1.34, y: y + 0.05, w: Math.max((r.mv / mvMax) * 1.10, 0.03), h: 0.18, rectRadius: 0.03, fill: { color: mvCol }, line: { type: "none" } });
+      s.addText((r.mv * 100).toFixed(1) + "%", { x: X + 2.48, y, w: 0.56, h: 0.28, margin: 0, align: "right", valign: "middle", fontFace: F, fontSize: 9.5, bold: true, color: faint ? MUTED : R4 });
+      const w = Math.max((Math.abs(r.d) / dMax) * HALF, 0.03);
+      s.addShape("roundRect", { x: r.d >= 0 ? ZX : ZX - w, y: y + 0.05, w, h: 0.18, rectRadius: 0.03, fill: { color: dCol }, line: { type: "none" } });
+      s.addText(dm(r.d) + (r.pct === null ? "" : ` (${r.pct >= 0 ? "+" : "−"}${Math.abs(r.pct).toFixed(1)}%)`), {
+        x: X + 4.48, y, w: 1.28, h: 0.28, margin: 0, align: "right", valign: "middle",
+        fontFace: F, fontSize: 8.5, bold: true, color: faint ? MUTED : dCol,
+      });
+    });
+  };
+  panel(0.58, "Deposit stickiness", "Both measures rise together — no inversion", stR);
+  panel(6.87, "Rate sensitivity", "The two measures point in opposite directions", rsR);
+
+  card(s, 0.58, 5.78, 12.33, 0.86, WARM);
+  s.addText([
+    { text: "Only rate sensitivity needs re-fitting", options: { bold: true, color: RED } },
+    { text: `  —  stickiness is directionally consistent, though its alignment is partly a size effect: the two top tiers hold 98.8% of the balance. Rate sensitivity genuinely diverges — High gained ${dm(hiRS.d)}m while Very High lost ${Math.abs(vhRS.d / 1e6).toFixed(1)}m.`, options: { color: INK } },
+  ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+  s.addNotes("Deposit stickiness ranks the two measures consistently: move rate runs 1.9% to 19.2% from Very Low to Very High, and balance change is positive in every tier. " +
+    "The caveat is that this consistency is partly mechanical - the High and Very High tiers hold 98.8% of prior balance and contributed 95.5% of the cohort's gain, so the ranking largely restates where the money is. " +
+    "In percentage terms the picture is flatter and mildly reversed: Very High +3.2%, High +4.0%, Medium +8.8%, with the Low and Very Low tiers unusable because their prior balances are near zero. " +
+    "Rate sensitivity diverges for real: High moves at 49.5% and gained THB 144.7m, while Very High moves at 12.9% and lost THB 36.0m. Very Low also lost, THB 11.0m on a 9.6% move rate. " +
+    "Medium is 4 customers in both scores and is greyed out rather than read. " +
+    "Conclusion for the framework: stickiness can stay as an activity and eligibility filter, but rate-sensitivity cut-offs should be re-fitted on observed outcomes, and the two outcomes - emptying the pocket and losing balance - should be scored separately.");
+}
+
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
