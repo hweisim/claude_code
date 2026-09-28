@@ -765,26 +765,32 @@ function matrix(s, x, y, w, key, fmt) {
 
     /* left: retention for all four groups, with a 100% reference line */
     card(s, 0.58, 3.06, 6.04, 2.54);
-    cardHead(s, 0.58, 3.06, 6.04, "Balance retained after maturity", "Latest ÷ prior total deposit balance · the rule marks 100%");
-    const TX = 2.98, TW = 2.15, SCALE = 1.10;
+    cardHead(s, 0.58, 3.06, 6.04, "Balance retained after maturity", "Latest ÷ prior total deposit balance · absolute figures in THB m");
+    const TX = 2.88, TW = 1.44, SCALE = 1.10;
     s.addShape("rect", { x: TX + TW * (1 / SCALE), y: 3.74, w: 0.012, h: 1.64, fill: { color: MUTED }, line: { type: "none" } });
     [
-      ["Moved  ·  holds Save More", mY, R3],
-      ["Moved  ·  no Save More", mN, RED],
-      ["Stayed  ·  holds Save More", sY, R3],
-      ["Stayed  ·  no Save More", sN, R1],
-    ].forEach(([lab, g, col], i) =>
-      bar(s, 3.80 + i * 0.42, 0.86, 2.00, TX, TW, 5.23, 1.11, lab, g.ret / SCALE, col,
-        (g.ret * 100).toFixed(1) + "%", { size: 10 }));
-    s.addText("100%", { x: TX + TW / SCALE - 0.30, y: 5.40, w: 0.60, h: 0.18, margin: 0, align: "center", fontFace: F, fontSize: 8, color: MUTED });
+      ["Moved · has Save More", mY, R3],
+      ["Moved · no Save More", mN, RED],
+      ["Stayed · has Save More", sY, R3],
+      ["Stayed · no Save More", sN, R1],
+    ].forEach(([lab, g, col], i) => {
+      const y = 3.80 + i * 0.42;
+      bar(s, y, 0.86, 1.95, TX, TW, 4.36, 0.58, lab, g.ret / SCALE, col,
+        (g.ret * 100).toFixed(1) + "%", { size: 9.5 });
+      s.addText(`${mm(g.p)} → ${mm(g.l)}`, {
+        x: 4.98, y, w: 1.64, h: 0.28, margin: 0, align: "right", valign: "middle",
+        fontFace: F, fontSize: 8.5, color: MUTED,
+      });
+    });
+    s.addText("100%", { x: TX + TW / SCALE - 0.30, y: 5.44, w: 0.60, h: 0.18, margin: 0, align: "center", fontFace: F, fontSize: 8, color: MUTED });
 
     /* right: the full 2x2 */
     card(s, 6.87, 3.06, 6.04, 2.54);
-    cardHead(s, 6.87, 3.06, 6.04, "Customers and balance change", "Rows: Save Max behaviour · columns: Save More holding");
+    cardHead(s, 6.87, 3.06, 6.04, "Customers and balance change", "Rows: Save Max behaviour · columns: Save More holding · THB m");
     const th = (t) => ({ text: t, options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "center" } });
     const cl = (g, bad) => ({
-      text: `${n0(g.n)}\n${sp(g.ret - 1)}   ${sg(g.l - g.p)}`,
-      options: { fill: { color: bad ? AT_RISK_TINT : PAPER }, color: bad ? RED : INK, bold: bad, fontFace: F, fontSize: 9.5, align: "center" },
+      text: `${n0(g.n)}\n${sp(g.ret - 1)}   ${sg(g.l - g.p)}\n${mm(g.p)} → ${mm(g.l)}`,
+      options: { fill: { color: bad ? AT_RISK_TINT : PAPER }, color: bad ? RED : INK, bold: bad, fontFace: F, fontSize: 8.5, align: "center" },
     });
     const rh = (t) => ({ text: t, options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 9.5, align: "left" } });
     s.addTable([
@@ -792,11 +798,11 @@ function matrix(s, x, y, w, key, fmt) {
       [rh("Moved out"), cl(mY, false), cl(mN, true)],
       [rh("Stayed"), cl(sY, false), cl(sN, false)],
     ], {
-      x: 7.11, y: 3.76, w: 5.56, colW: [1.60, 1.98, 1.98], rowH: 0.40,
+      x: 7.11, y: 3.72, w: 5.56, colW: [1.60, 1.98, 1.98], rowH: 0.46,
       border: { type: "solid", color: RULE, pt: 0.5 }, valign: "middle", margin: [0.04, 0.08, 0.04, 0.08],
     });
     s.addText(`Save More holders move ${(S((r) => r.n, (r) => r.sm === 1 && moved(r)) / S((r) => r.n, (r) => r.sm === 1) * 100).toFixed(1)}% of the time against ${(S((r) => r.n, (r) => r.sm === 0 && moved(r)) / S((r) => r.n, (r) => r.sm === 0) * 100).toFixed(1)}% — they move far more often, but into the next pocket rather than out of the bank.`, {
-      x: 7.15, y: 5.06, w: 5.48, h: 0.44, margin: 0, valign: "top", fontFace: F, fontSize: 9.5, color: INK,
+      x: 7.15, y: 5.18, w: 5.48, h: 0.40, margin: 0, valign: "top", fontFace: F, fontSize: 9, color: INK,
     });
 
     card(s, 0.58, 5.78, 12.33, 0.86, WARM);
