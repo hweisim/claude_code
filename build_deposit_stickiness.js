@@ -917,17 +917,18 @@ function matrix(s, x, y, w, key, fmt) {
     "On predictive value, stickiness adds little once rate sensitivity and the Save More flag are in hand (AUC 0.766 to 0.779), so its practical use is as an eligibility filter to suppress dormant micro-balance accounts from retention campaigns, not as a targeting dimension.");
 }
 
-/* ============================================================= SLIDE 13 */
+/* ======================================================= SLIDES 13 & 14 */
 /* Balance change by deposit stickiness. Absolute change and percentage
    change are shown for every tier; the prior-balance column is kept
    alongside so the large percentages on the small tiers can be read
-   against the base they come from. */
-{
+   against the base they come from. Same builder, two populations. */
+function balanceByStickiness(o) {
   const s = pres.addSlide(); s.background = { color: PAPER };
-  const D = fs.readFileSync(path.join(__dirname, "data", "savemax_maturity_stickiness.tsv"), "utf8")
+  const num = (v) => (v === undefined || v === "" || v === "NULL" ? 0 : Number(v));
+  const D = fs.readFileSync(path.join(__dirname, "data", o.file), "utf8")
     .trim().split("\n").slice(1).map((l) => {
       const c = l.split("\t");
-      return { st: c[1], n: +c[4], p: +c[5], l: +c[6] };
+      return { st: c[1], n: num(c[4]), p: num(c[5]), l: num(c[6]) };
     });
   const S = (f, g = () => true) => D.filter(g).reduce((a, r) => a + f(r), 0);
   const TIERS = ["Very High", "High", "Medium", "Low", "Very Low"];
@@ -941,16 +942,19 @@ function matrix(s, x, y, w, key, fmt) {
   });
   const tot = { n: S((r) => r.n), p: S((r) => r.p), l: S((r) => r.l) };
   const gain = tot.l - tot.p;
-  const sticky = R.filter((r) => r.t === "Very High" || r.t === "High").reduce((a, r) => a + (r.l - r.p), 0);
+  const isHi = (r) => r.t === "Very High" || r.t === "High";
+  const sticky = R.filter(isHi).reduce((a, r) => a + (r.l - r.p), 0);
+  const stickyP = R.filter(isHi).reduce((a, r) => a + r.p, 0);
   const vl = R.find((r) => r.t === "Very Low"), hi = R.find((r) => r.t === "High");
+  const bn = (v) => (v / 1e9 >= 1 ? "THB " + (v / 1e9).toFixed(2) + "bn" : "THB " + mAdapt(v) + "m");
 
-  head(s, "Balance change by deposit stickiness",
-    "*Change in total deposit balance, prior to latest. Percentage change is shown for every tier — read it against the prior-balance column.",
-    `Cohort ${n0(tot.n)}   ·   Prior THB ${mAdapt(tot.p)}m → latest THB ${mAdapt(tot.l)}m   ·   Change ${dm(gain)}m (${dpct(tot.p, tot.l)})`,
-    "Every tier gained. The percentages reverse the ranking, but the low tiers grow from near-zero balances.");
+  head(s, o.title,
+    o.note + " Percentage change is shown for every tier — read it against the prior-balance column.",
+    `${o.label} ${n0(tot.n)}   ·   Prior ${bn(tot.p)} → latest ${bn(tot.l)}   ·   Change ${dm(gain)}m (${dpct(tot.p, tot.l)})`,
+    o.insight);
 
   tiles(s, [
-    [dm(gain) + "m", "total balance change", `${dpct(tot.p, tot.l)} across the cohort`, TEAL],
+    [dm(gain) + "m", "total balance change", `${dpct(tot.p, tot.l)} across the base`, TEAL],
     [dm(hi.l - hi.p) + "m", "High stickiness tier", `${dpct(hi.p, hi.l)} · largest contributor`, TEAL],
     [dpct(vl.p, vl.l), "Very Low stickiness", `on a THB ${mAdapt(vl.p)}m prior balance`, AMBER, 20],
     [(sticky / gain * 100).toFixed(1) + "%", "of the gain", "came from stickiness ≥ 60", TEAL],
@@ -965,9 +969,7 @@ function matrix(s, x, y, w, key, fmt) {
     const d = r.l - r.p, up = d >= 0;
     return [
       { text: r.t, options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 9, align: "left" } },
-      td(n0(r.n)),
-      td(mAdapt(r.p)),
-      td(mAdapt(r.l)),
+      td(n0(r.n)), td(mAdapt(r.p)), td(mAdapt(r.l)),
       td(dm(d), "right", up ? R3 : RED, true),
       td(dpct(r.p, r.l), "right", up ? R3 : RED, true),
     ];
@@ -1000,7 +1002,7 @@ function matrix(s, x, y, w, key, fmt) {
     s.addText(dm(r.l - r.p), { x: 12.00, y, w: 0.63, h: 0.26, margin: 0, align: "right", valign: "middle", fontFace: F, fontSize: 8.5, color: MUTED });
   });
   card(s, 8.46, 5.30, 4.17, 0.30, WARM);
-  s.addText(`Stickiness ≥ 60 holds ${(S((r) => r.p, (r) => r.st === "Very High" || r.st === "High") / tot.p * 100).toFixed(1)}% of the prior balance.`, {
+  s.addText(`Stickiness ≥ 60 holds ${(stickyP / tot.p * 100).toFixed(1)}% of the prior balance.`, {
     x: 8.62, y: 5.30, w: 3.85, h: 0.30, margin: 0, valign: "middle", fontFace: F, fontSize: 9.5, color: INK,
   });
 
@@ -1010,14 +1012,30 @@ function matrix(s, x, y, w, key, fmt) {
     { text: `  —  the Low and Very Low tiers post ${dpct(R[3].p, R[3].l)} and ${dpct(vl.p, vl.l)}, but on prior balances of THB ${mAdapt(R[3].p)}m and THB ${mAdapt(vl.p)}m. Rank the tiers on absolute change; read the percentages as a signal that dormant accounts are being funded again.`, options: { color: INK } },
   ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
 
-  s.addNotes(`Total deposit balance rose from THB ${n0(tot.p)} to THB ${n0(tot.l)}, ${dm(gain)}m or ${dpct(tot.p, tot.l)}. ` +
-    `Every stickiness tier gained. In absolute terms the gain is concentrated: High ${dm(hi.l - hi.p)}m and Very High ${dm(R[0].l - R[0].p)}m together are ${(sticky / gain * 100).toFixed(1)}% of it, which follows from those two tiers holding ${(S((r) => r.p, (r) => r.st === "Very High" || r.st === "High") / tot.p * 100).toFixed(1)}% of prior balance. ` +
-    `In percentage terms the ranking reverses: Very High ${dpct(R[0].p, R[0].l)}, High ${dpct(hi.p, hi.l)}, Medium ${dpct(R[2].p, R[2].l)}, Low ${dpct(R[3].p, R[3].l)}, Very Low ${dpct(vl.p, vl.l)}. ` +
-    `Those last two are computed on prior balances of THB ${n0(R[3].p)} and THB ${n0(vl.p)} across ${n0(R[3].n)} and ${n0(vl.n)} customers - average prior balances of THB ${n0(R[3].p / R[3].n)} and THB ${n0(vl.p / vl.n)} - so they represent dormant accounts receiving small deposits rather than material growth. ` +
-    "Both readings are kept on the slide deliberately: the absolute column is the one to rank on, and the percentage column is a useful early indicator that previously unfunded accounts are becoming funded.");
+  s.addNotes(`${o.label} of ${n0(tot.n)}. Total deposit balance rose from THB ${n0(tot.p)} to THB ${n0(tot.l)}, ${dm(gain)}m or ${dpct(tot.p, tot.l)}. ` +
+    `Every stickiness tier gained. In absolute terms the gain concentrates in the top two tiers: High ${dm(hi.l - hi.p)}m and Very High ${dm(R[0].l - R[0].p)}m, together ${(sticky / gain * 100).toFixed(1)}% of it, which follows from those tiers holding ${(stickyP / tot.p * 100).toFixed(1)}% of prior balance. ` +
+    `In percentage terms the ranking reverses cleanly: Very High ${dpct(R[0].p, R[0].l)}, High ${dpct(hi.p, hi.l)}, Medium ${dpct(R[2].p, R[2].l)}, Low ${dpct(R[3].p, R[3].l)}, Very Low ${dpct(vl.p, vl.l)}. ` +
+    `Average prior balance per customer runs from THB ${n0(R[0].p / R[0].n)} in the Very High tier to THB ${n0(vl.p / vl.n)} in the Very Low tier, so the low tiers' percentages reflect dormant accounts receiving small deposits rather than material growth. ` +
+    "Both readings are kept deliberately: rank on the absolute column, and read the percentage column as an early indicator that previously unfunded accounts are becoming funded.");
 }
 
-/* ============================================================= SLIDE 14 */
+balanceByStickiness({
+  file: "savemax_maturity_stickiness.tsv",
+  label: "Cohort",
+  title: "Balance change by deposit stickiness — Save Max holders",
+  note: "*Save Max holders with balance > 0.",
+  insight: "Every tier gained. The percentages reverse the ranking, but the low tiers grow from near-zero balances.",
+});
+
+balanceByStickiness({
+  file: "base_maturity_stickiness.tsv",
+  label: "Base",
+  title: "Balance change by deposit stickiness — whole deposit base",
+  note: "*Whole funded deposit base (balance > 0), all customers.",
+  insight: "The same shape at seven times the size — but a fifth of the growth now comes from the three lower tiers.",
+});
+
+/* ============================================================= SLIDE 15 */
 /* The two scores side by side on both measures, to show that the
    move-rate / balance-change inversion belongs to rate sensitivity and
    does not repeat for deposit stickiness. */
