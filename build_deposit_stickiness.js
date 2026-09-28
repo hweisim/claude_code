@@ -688,7 +688,7 @@ function matrix(s, x, y, w, key, fmt) {
   {
     const s = pres.addSlide(); s.background = { color: PAPER };
     head(s, `Maturity outcome : Save Max ${sg(lsAll - psAll)}, total balance ${sg(lAll - pAll)}`,
-      "*Save Max holders with prior balance > 0. 'Move' = Save Max now zero. prev / latest balance is the customer's total deposit balance.",
+      "*Save Max holders with balance > 0. 'Move' = Save Max now zero. prev / latest balance is the customer's total deposit balance, not Save Max alone.",
       `Customers ${n0(nAll)}  ·  Moved ${n0(nMv)} (${(nMv / nAll * 100).toFixed(1)}%)  ·  Save Max ${mR(psAll)} → ${Math.round(lsAll / 1e6)}m  ·  Total ${bn2(pAll)} → ${(lAll / 1e9).toFixed(2)}bn`,
       `The money left the pocket, not the bank — Save Max fell ${Math.abs((lsAll / psAll - 1) * 100).toFixed(0)}% while total deposit balance rose ${((lAll / pAll - 1) * 100).toFixed(0)}%.`);
 
