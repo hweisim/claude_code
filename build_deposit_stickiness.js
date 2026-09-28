@@ -1122,84 +1122,79 @@ balanceByStickiness({
 }
 
 /* ============================================================= SLIDE 16 */
-/* Three-way balance movement across the stickiness tiers, shown twice:
-   once weighted by customers and once by prior balance. The two panels
-   disagree, which is the point of the slide. */
+/* Three-way balance movement across the stickiness tiers, read six ways:
+   by customers and by balance, each split into the three score
+   confidence levels. */
 {
   const s = pres.addSlide(); s.background = { color: PAPER };
   const numv = (v) => (v === undefined || v === "" || v === "NULL" ? 0 : Number(v));
-  const D = fs.readFileSync(path.join(__dirname, "data", "base_balance_movement.tsv"), "utf8")
+  const D = fs.readFileSync(path.join(__dirname, "data", "base_movement_confidence.tsv"), "utf8")
     .trim().split("\n").slice(1).map((l) => {
       const c = l.split("\t");
-      return { st: c[1], mv: c[3], n: numv(c[4]), p: numv(c[5]), l: numv(c[6]) };
+      return { st: c[1], mv: c[3], cf: c[4].replace(" Confidence", ""), n: numv(c[5]), p: numv(c[6]), l: numv(c[7]) };
     });
   const S = (f, g = () => true) => D.filter(g).reduce((a, r) => a + f(r), 0);
   const MV = [["Increase", R3], ["Stable", R1], ["Decrease", RED]];
   const ST = ["Very High", "High", "Medium", "Low", "Very Low"];
+  const CFS = [["High", R3], ["Medium", R1], ["Low", RED]];
   const N = S((r) => r.n), P = S((r) => r.p), G = S((r) => r.l - r.p);
   const n0 = (v) => Math.round(v).toLocaleString("en-US");
-  const dm = (v) => (v >= 0 ? "+" : "−") + "THB " + Math.abs(Math.round(v / 1e6)).toLocaleString("en-US") + "m";
+  const mm = (v) => (v / 1e6).toFixed(1);
   const pc1 = (a, b) => (a / b * 100).toFixed(1) + "%";
-  const share = (m, w) => S((r) => r[w], (r) => r.mv === m) / S((r) => r[w]);
+  const loDecN = S((r) => r.n, (r) => r.cf === "Low" && r.mv === "Decrease") / S((r) => r.n, (r) => r.cf === "Low");
+  const loDecP = S((r) => r.p, (r) => r.cf === "Low" && r.mv === "Decrease") / S((r) => r.p, (r) => r.cf === "Low");
 
-  head(s, "Balance movement by deposit stickiness",
-    "*Funded base, balance > 0. Movement is measured against a band of 5% of prior balance or THB 100, whichever is larger.",
-    `Base ${n0(N)}   ·   Increase ${pc1(S((r) => r.n, (r) => r.mv === "Increase"), N)}   ·   Stable ${pc1(S((r) => r.n, (r) => r.mv === "Stable"), N)}   ·   Decrease ${pc1(S((r) => r.n, (r) => r.mv === "Decrease"), N)}   ·   Net ${dm(G)}`,
-    "Decrease covers 46% of Very High stickiness customers but only 23% of their balance.");
+  head(s, "Balance movement by stickiness and score confidence",
+    "*Funded base, balance > 0. Movement is measured against a band of 5% of prior balance or THB 100, whichever is larger. Each bar runs to 100%.",
+    `Base ${n0(N)}   ·   Increase ${pc1(S((r) => r.n, (r) => r.mv === "Increase"), N)}   ·   Stable ${pc1(S((r) => r.n, (r) => r.mv === "Stable"), N)}   ·   Decrease ${pc1(S((r) => r.n, (r) => r.mv === "Decrease"), N)}   ·   Net +THB ${mm(G)}m`,
+    `Low confidence decreases on ${(loDecN * 100).toFixed(1)}% of customers but only ${(loDecP * 100).toFixed(1)}% of its balance.`);
 
-  tiles(s, [
-    [pc1(S((r) => r.n, (r) => r.mv === "Increase"), N), "increased", `${dm(S((r) => r.l - r.p, (r) => r.mv === "Increase"))} added`, R3],
-    [pc1(S((r) => r.n, (r) => r.mv === "Stable"), N), "stable", "balance held within the band", R1],
-    [pc1(S((r) => r.n, (r) => r.mv === "Decrease"), N), "decreased", `${dm(S((r) => r.l - r.p, (r) => r.mv === "Decrease"))} lost`, RED],
-    [dm(G), "net change", `${(G / P * 100).toFixed(1)}% across the base`, TEAL],
-  ], 1.80);
+  /* shared legend */
+  let lx = 0.60;
+  MV.forEach(([m, col]) => {
+    s.addShape("rect", { x: lx, y: 1.76, w: 0.16, h: 0.13, fill: { color: col }, line: { type: "none" } });
+    s.addText(m, { x: lx + 0.22, y: 1.71, w: 0.95, h: 0.22, margin: 0, valign: "middle", fontFace: F, fontSize: 8.5, color: MUTED });
+    lx += 1.15;
+  });
 
-  /* one 100% stacked bar per tier, weighted either way ------------------ */
-  const panel = (X, title, sub, w) => {
-    card(s, X, 3.06, 6.04, 2.54);
-    cardHead(s, X, 3.06, 6.04, title, sub);
-    const LX = X + 0.28, TX = X + 1.52, TW = 4.24;
-    ST.forEach((t, i) => {
-      const y = 3.78 + i * 0.32;
-      const tot = S((r) => r[w], (r) => r.st === t);
-      s.addText(t, { x: LX, y, w: 1.15, h: 0.28, margin: 0, valign: "middle", fontFace: F, fontSize: 9.5, bold: true, color: INK });
-      let bx = TX;
-      MV.forEach(([m, col]) => {
-        const frac = S((r) => r[w], (r) => r.st === t && r.mv === m) / tot;
-        const bw = TW * frac;
-        if (bw <= 0) return;
-        s.addShape("rect", { x: bx, y: y + 0.05, w: bw, h: 0.19, fill: { color: col }, line: { type: "none" } });
-        if (bw >= 0.42) {
-          s.addText((frac * 100).toFixed(0) + "%", {
-            x: bx, y: y + 0.05, w: bw, h: 0.19, margin: 0, align: "center", valign: "middle",
-            fontFace: F, fontSize: 8, bold: true, color: PAPER,
-          });
-        }
-        bx += bw;
+  [
+    { w: "n", label: "Share of customers", y: 1.96, fmt: (cf) => `${n0(S((r) => r.n, (r) => r.cf === cf))} customers` },
+    { w: "p", label: "Share of prior balance", y: 4.50, fmt: (cf) => `THB ${mm(S((r) => r.p, (r) => r.cf === cf))}m` },
+  ].forEach((row) => {
+    CFS.forEach(([cf, ccol], ci) => {
+      const X = 0.58 + ci * 4.18, Y = row.y, IN = X + 0.24;
+      card(s, X, Y, 3.96, 2.42);
+      s.addText(cf + " confidence", { x: IN, y: Y + 0.10, w: 3.48, h: 0.24, margin: 0, valign: "middle", fontFace: F, fontSize: 11, bold: true, color: ccol });
+      s.addText(`${row.label}  ·  ${row.fmt(cf)}`, { x: IN, y: Y + 0.34, w: 3.48, h: 0.20, margin: 0, fontFace: F, fontSize: 8, color: MUTED });
+      const TX = X + 1.14, TW = 2.58;
+      ST.forEach((t, i) => {
+        const y = Y + 0.64 + i * 0.32;
+        const tot = S((r) => r[row.w], (r) => r.st === t && r.cf === cf);
+        s.addText(t, { x: IN, y, w: 0.84, h: 0.26, margin: 0, valign: "middle", fontFace: F, fontSize: 8.5, bold: true, color: tot ? INK : RULE });
+        if (!tot) { s.addText("—", { x: TX, y, w: TW, h: 0.26, margin: 0, valign: "middle", fontFace: F, fontSize: 8.5, color: RULE }); return; }
+        let bx = TX;
+        MV.forEach(([m, col]) => {
+          const frac = S((r) => r[row.w], (r) => r.st === t && r.cf === cf && r.mv === m) / tot;
+          const bw = TW * frac;
+          if (bw <= 0) return;
+          s.addShape("rect", { x: bx, y: y + 0.045, w: bw, h: 0.17, fill: { color: col }, line: { type: "none" } });
+          if (bw >= 0.34) {
+            s.addText((frac * 100).toFixed(0) + "%", {
+              x: bx, y: y + 0.045, w: bw, h: 0.17, margin: 0, align: "center", valign: "middle",
+              fontFace: F, fontSize: 7.5, bold: true, color: PAPER,
+            });
+          }
+          bx += bw;
+        });
       });
     });
-    /* legend */
-    let lx = TX;
-    MV.forEach(([m, col]) => {
-      s.addShape("rect", { x: lx, y: 5.42, w: 0.16, h: 0.13, fill: { color: col }, line: { type: "none" } });
-      s.addText(m, { x: lx + 0.22, y: 5.37, w: 0.95, h: 0.22, margin: 0, valign: "middle", fontFace: F, fontSize: 8.5, color: MUTED });
-      lx += 1.30;
-    });
-  };
-  panel(0.58, "Share of customers", "Each tier to 100% · Very High decreases most", "n");
-  panel(6.87, "Share of prior balance", "Same tiers, weighted by money", "p");
+  });
 
-  card(s, 0.58, 5.78, 12.33, 0.86, WARM);
-  s.addText([
-    { text: "Weighted by money the score barely discriminates", options: { bold: true, color: RED } },
-    { text: `  —  the top three tiers lose ${["Very High", "High", "Medium"].map((t) => pc1(S((r) => r.p, (r) => r.st === t && r.mv === "Decrease"), S((r) => r.p, (r) => r.st === t))).join(", ")} of their balance, against decrease rates of ${["Very High", "High", "Medium"].map((t) => pc1(S((r) => r.n, (r) => r.st === t && r.mv === "Decrease"), S((r) => r.n, (r) => r.st === t))).join(", ")} by customer. The customer gap is six-fold; the money gap is not.`, options: { color: INK } },
-  ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
-
-  s.addNotes(`Base ${n0(N)} funded customers holding THB ${n0(P)}. Increase ${n0(S((r) => r.n, (r) => r.mv === "Increase"))} customers adding ${dm(S((r) => r.l - r.p, (r) => r.mv === "Increase"))}, Decrease ${n0(S((r) => r.n, (r) => r.mv === "Decrease"))} customers losing ${dm(S((r) => r.l - r.p, (r) => r.mv === "Decrease"))}, net ${dm(G)}. ` +
-    "Stable is the largest group either way, 55.5% of customers and 57.0% of prior balance, and contributes essentially nothing to the net change. " +
-    "The three-way split explains what the binary sticky flag was hiding. That flag counted Increase and Stable together, so the Very Low tier scored 92% sticky purely because 82% of it is Stable - those accounts average THB 143 and nothing happens in them. " +
-    "By customer the tiers look very different: Very High decreases at 46.4% against Very Low at 7.7%. By balance they converge - 23.4%, 24.9%, 23.4% across the top three tiers. " +
-    "The practical implication is that the stickiness score ranks customers by how active their balance is, not by how much money is at risk, so retention targeting built on it will chase headcount rather than baht.");
+  s.addNotes(`Balance movement across the stickiness tiers, split by score confidence, on the funded base of ${n0(N)} customers and THB ${n0(P)}, net +THB ${mm(G)}m. ` +
+    `Overall the base is ${pc1(S((r) => r.n, (r) => r.mv === "Increase"), N)} Increase, ${pc1(S((r) => r.n, (r) => r.mv === "Stable"), N)} Stable and ${pc1(S((r) => r.n, (r) => r.mv === "Decrease"), N)} Decrease by customer. ` +
+    `The customer row and the balance row disagree in every confidence panel, and most sharply at Low confidence: ${(loDecN * 100).toFixed(1)}% of those customers decreased but only ${(loDecP * 100).toFixed(1)}% of their balance did, so within that band the large accounts are the stable ones. ` +
+    "Low confidence holds THB 489.9m across 8,982 customers, so its panels are thin but the balances behind them are not - average prior balance there is THB 54,539 against THB 25,414 at High confidence. " +
+    "Reading down each column shows the same pattern the deck has found throughout: the stickiness score separates customers far more cleanly than it separates money, and splitting by confidence does not change that.");
 }
 
 /* ============================================================= SLIDE 17 */
