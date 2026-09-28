@@ -652,5 +652,166 @@ function matrix(s, x, y, w, key, fmt) {
     `The remaining ${pc(rsSticky, rsB)} of rate-sensitive balance sits with customers who currently score High or Very High stickiness, which is exactly the stickiness maturity will test.`);
 }
 
+/* ===================================================== SLIDES 10 and 11 */
+/* Post-maturity validation. Rows are the Save Max cohort crossed by rate
+   sensitivity, Save More holding and whether the customer emptied Save Max.
+   Every figure below is aggregated from data/savemax_maturity.tsv. */
+{
+  const MAT = fs.readFileSync(path.join(__dirname, "data", "savemax_maturity.tsv"), "utf8")
+    .trim().split("\n").slice(1).map((l) => {
+      const c = l.split("\t");
+      return { rs: c[0], sm: +c[1], mv: c[2], n: +c[3], p: +c[4], l: +c[5], ps: +c[6], ls: +c[7] };
+    });
+  const S = (f, g = () => true) => MAT.filter(g).reduce((a, r) => a + f(r), 0);
+  const moved = (r) => r.mv === "Move";
+  const cell = (mv, sm) => (r) => (r.mv === "Move") === mv && r.sm === sm;
+
+  const nAll = S((r) => r.n);
+  const pAll = S((r) => r.p), lAll = S((r) => r.l);
+  const psAll = S((r) => r.ps), lsAll = S((r) => r.ls);
+  const nMv = S((r) => r.n, moved);
+  const bn2 = (v) => "THB " + (v / 1e9).toFixed(2) + "bn";
+  const mR = (v) => "THB " + Math.round(v / 1e6).toLocaleString("en-US") + "m";
+  const sg = (v) => (v < 0 ? "−" : "+") + "THB " + Math.round(Math.abs(v) / 1e6) + "m";
+  const sp = (v) => (v < 0 ? "−" : "+") + Math.abs(v * 100).toFixed(1) + "%";
+  const n0 = (v) => Math.round(v).toLocaleString("en-US");
+
+  /* horizontal bar row: label | track | value */
+  function bar(s, y, lx, lw, tx, tw, vx, vw, label, frac, col, value, opt = {}) {
+    s.addText(label, { x: lx, y, w: lw, h: 0.28, margin: 0, valign: "middle", fontFace: F, fontSize: opt.size || 10, bold: !!opt.bold, color: opt.labelCol || INK });
+    s.addShape("roundRect", { x: tx, y: y + 0.05, w: tw, h: 0.18, rectRadius: 0.03, fill: { color: "E4E9F0" }, line: { type: "none" } });
+    s.addShape("roundRect", { x: tx, y: y + 0.05, w: Math.max(tw * frac, 0.04), h: 0.18, rectRadius: 0.03, fill: { color: col }, line: { type: "none" } });
+    s.addText(value, { x: vx, y, w: vw, h: 0.28, margin: 0, align: "right", valign: "middle", fontFace: F, fontSize: opt.size || 10, bold: true, color: col });
+  }
+
+  /* ---------------------------------------------------------- SLIDE 10 */
+  {
+    const s = pres.addSlide(); s.background = { color: PAPER };
+    head(s, `Maturity outcome : Save Max ${sg(lsAll - psAll)}, total balance ${sg(lAll - pAll)}`,
+      "*Save Max holders with prior balance > 0. 'Move' = Save Max now zero. prev / latest balance is the customer's total deposit balance.",
+      `Customers ${n0(nAll)}  ·  Moved ${n0(nMv)} (${(nMv / nAll * 100).toFixed(1)}%)  ·  Save Max ${mR(psAll)} → ${Math.round(lsAll / 1e6)}m  ·  Total ${bn2(pAll)} → ${(lAll / 1e9).toFixed(2)}bn`,
+      `The money left the pocket, not the bank — Save Max fell ${Math.abs((lsAll / psAll - 1) * 100).toFixed(0)}% while total deposit balance rose ${((lAll / pAll - 1) * 100).toFixed(0)}%.`);
+
+    tiles(s, [
+      [k(nAll), "customers in cohort", "held Save Max last period", TEAL],
+      [n0(nMv), "moved out of Save Max", `${(nMv / nAll * 100).toFixed(1)}% · Save Max now zero`, AMBER],
+      [sg(lsAll - psAll), "Save Max balance", `${sp(lsAll / psAll - 1)} period on period`, RED],
+      [sg(lAll - pAll), "total deposit balance", `${sp(lAll / pAll - 1)} period on period`, TEAL],
+    ], 1.80);
+
+    /* left: the two balance measures, prior vs latest, on one scale */
+    card(s, 0.58, 3.06, 6.04, 2.54);
+    cardHead(s, 0.58, 3.06, 6.04, "Prior period against latest", "Both measures on one scale — Save Max is a pocket inside the total");
+    const scale = Math.max(pAll, lAll);
+    [
+      ["Save Max pocket", [["Prior", psAll, R1], ["Latest", lsAll, RED]]],
+      ["Total deposit balance", [["Prior", pAll, R1], ["Latest", lAll, R3]]],
+    ].forEach(([grp, bars], gi) => {
+      const gy = 3.72 + gi * 0.92;
+      s.addText(grp, { x: 0.86, y: gy, w: 5.48, h: 0.22, margin: 0, fontFace: F, fontSize: 10.5, bold: true, color: TITLE_TEAL });
+      bars.forEach(([lab, v, col], i) =>
+        bar(s, gy + 0.24 + i * 0.32, 0.86, 1.35, 2.33, 2.55, 4.98, 1.36, lab, v / scale, col, mR(v)));
+    });
+
+    /* right: move rate by rate-sensitivity segment */
+    card(s, 6.87, 3.06, 6.04, 2.54);
+    cardHead(s, 6.87, 3.06, 6.04, "Who emptied Save Max", "Share of each rate-sensitivity segment that moved");
+    const segs = ["Very High", "High", "Medium", "Low", "Very Low"];
+    const segCol = { "Very High": R4, High: RED, Medium: R2, Low: AMBER, "Very Low": R1 };
+    segs.forEach((rs, i) => {
+      const tot = S((r) => r.n, (r) => r.rs === rs), mvd = S((r) => r.n, (r) => r.rs === rs && moved(r));
+      const y = 3.76 + i * 0.34;
+      bar(s, y, 7.15, 1.15, 8.40, 2.00, 10.50, 0.85, rs, mvd / tot, segCol[rs],
+        (mvd / tot * 100).toFixed(1) + "%", { bold: true });
+      s.addText(`${n0(mvd)} of ${n0(tot)}`, { x: 11.45, y, w: 1.40, h: 0.28, margin: 0, align: "right", valign: "middle", fontFace: F, fontSize: 9, color: MUTED });
+    });
+    s.addText("High is the mover band — Very High moves at barely a quarter of that rate.", {
+      x: 7.15, y: 5.42, w: 5.48, h: 0.18, margin: 0, fontFace: F, fontSize: 8.5, italic: true, color: MUTED,
+    });
+
+    card(s, 0.58, 5.78, 12.33, 0.86, "E8F6F3");
+    s.addText([
+      { text: `Save Max lost ${mR(psAll - lsAll)} but the book gained ${mR(lAll - pAll)}`, options: { bold: true, color: TITLE_TEAL } },
+      { text: `  —  the ${n0(nMv)} customers who emptied Save Max took ${mR(S((r) => r.ps, moved))} out of the pocket, yet total deposits rose. Runoff from the promotional pocket is not the same as runoff from the bank.`, options: { color: INK } },
+    ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+    s.addNotes(`Cohort: ${n0(nAll)} customers holding Save Max in the prior period. ${n0(nMv)} of them (${(nMv / nAll * 100).toFixed(1)}%) now show zero Save Max balance. ` +
+      `Save Max fell from THB ${n0(psAll)} to THB ${n0(lsAll)}, down ${Math.abs((lsAll / psAll - 1) * 100).toFixed(1)}%, of which THB ${n0(S((r) => r.ps, moved))} came from movers zeroing out and THB ${n0(S((r) => r.ps, (r) => !moved(r)) - lsAll)} from non-movers trimming. ` +
+      `Total deposit balance nevertheless rose from THB ${n0(pAll)} to THB ${n0(lAll)}, up ${((lAll / pAll - 1) * 100).toFixed(1)}%. Save Max fell from ${(psAll / pAll * 100).toFixed(1)}% to ${(lsAll / lAll * 100).toFixed(1)}% of the book. ` +
+      "Move rate is not monotonic in rate sensitivity: the High band moves at 49.5% against 12.8% for Very High, so the current cut-offs do not rank runoff risk correctly and should be recalibrated on this outcome.");
+  }
+
+  /* ---------------------------------------------------------- SLIDE 11 */
+  {
+    const s = pres.addSlide(); s.background = { color: PAPER };
+    const grp = (mv, sm) => {
+      const g = cell(mv, sm);
+      const n = S((r) => r.n, g), p = S((r) => r.p, g), l = S((r) => r.l, g);
+      return { n, p, l, ret: l / p };
+    };
+    const mY = grp(true, 1), mN = grp(true, 0), sY = grp(false, 1), sN = grp(false, 0);
+
+    head(s, "The Save More flag decides whether the money stays",
+      "*Balance retained = latest total deposit balance ÷ prior total deposit balance, for the same customers.",
+      `Movers ${n0(nMv)}   ·   With Save More ${n0(mY.n)} → ${sg(mY.l - mY.p)} (${sp(mY.ret - 1)})   ·   Without Save More ${n0(mN.n)} → ${sg(mN.l - mN.p)} (${sp(mN.ret - 1)})`,
+      "Among customers who emptied Save Max, holding Save More is the difference between growth and near-total runoff.");
+
+    tiles(s, [
+      [n0(mY.n), "movers holding Save More", `${(mY.n / nMv * 100).toFixed(0)}% of all movers`, TEAL],
+      [(mY.ret * 100).toFixed(0) + "%", "balance retained", `${mR(mY.p)} → ${bn2(mY.l)}`, TEAL],
+      [n0(mN.n), "movers without Save More", `${(mN.n / nMv * 100).toFixed(0)}% of all movers`, RED],
+      [(mN.ret * 100).toFixed(0) + "%", "balance retained", `${mR(mN.p)} → ${mR(mN.l)}`, RED],
+    ], 1.80);
+
+    /* left: retention for all four groups, with a 100% reference line */
+    card(s, 0.58, 3.06, 6.04, 2.54);
+    cardHead(s, 0.58, 3.06, 6.04, "Balance retained after maturity", "Latest ÷ prior total deposit balance · the rule marks 100%");
+    const TX = 2.98, TW = 2.15, SCALE = 1.10;
+    s.addShape("rect", { x: TX + TW * (1 / SCALE), y: 3.74, w: 0.012, h: 1.64, fill: { color: MUTED }, line: { type: "none" } });
+    [
+      ["Moved  ·  holds Save More", mY, R3],
+      ["Moved  ·  no Save More", mN, RED],
+      ["Stayed  ·  holds Save More", sY, R3],
+      ["Stayed  ·  no Save More", sN, R1],
+    ].forEach(([lab, g, col], i) =>
+      bar(s, 3.80 + i * 0.42, 0.86, 2.00, TX, TW, 5.23, 1.11, lab, g.ret / SCALE, col,
+        (g.ret * 100).toFixed(1) + "%", { size: 10 }));
+    s.addText("100%", { x: TX + TW / SCALE - 0.30, y: 5.40, w: 0.60, h: 0.18, margin: 0, align: "center", fontFace: F, fontSize: 8, color: MUTED });
+
+    /* right: the full 2x2 */
+    card(s, 6.87, 3.06, 6.04, 2.54);
+    cardHead(s, 6.87, 3.06, 6.04, "Customers and balance change", "Rows: Save Max behaviour · columns: Save More holding");
+    const th = (t) => ({ text: t, options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "center" } });
+    const cl = (g, bad) => ({
+      text: `${n0(g.n)}\n${sp(g.ret - 1)}   ${sg(g.l - g.p)}`,
+      options: { fill: { color: bad ? AT_RISK_TINT : PAPER }, color: bad ? RED : INK, bold: bad, fontFace: F, fontSize: 9.5, align: "center" },
+    });
+    const rh = (t) => ({ text: t, options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 9.5, align: "left" } });
+    s.addTable([
+      [{ text: "Save Max", options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "left" } }, th("Holds Save More"), th("No Save More")],
+      [rh("Moved out"), cl(mY, false), cl(mN, true)],
+      [rh("Stayed"), cl(sY, false), cl(sN, false)],
+    ], {
+      x: 7.11, y: 3.76, w: 5.56, colW: [1.60, 1.98, 1.98], rowH: 0.40,
+      border: { type: "solid", color: RULE, pt: 0.5 }, valign: "middle", margin: [0.04, 0.08, 0.04, 0.08],
+    });
+    s.addText(`Save More holders move ${(S((r) => r.n, (r) => r.sm === 1 && moved(r)) / S((r) => r.n, (r) => r.sm === 1) * 100).toFixed(1)}% of the time against ${(S((r) => r.n, (r) => r.sm === 0 && moved(r)) / S((r) => r.n, (r) => r.sm === 0) * 100).toFixed(1)}% — they move far more often, but into the next pocket rather than out of the bank.`, {
+      x: 7.15, y: 5.06, w: 5.48, h: 0.44, margin: 0, valign: "top", fontFace: F, fontSize: 9.5, color: INK,
+    });
+
+    card(s, 0.58, 5.78, 12.33, 0.86, WARM);
+    s.addText([
+      { text: `The ${n0(mN.n)} movers with no Save More kept only ${(mN.ret * 100).toFixed(0)}% of their balance`, options: { bold: true, color: RED } },
+      { text: `  —  ${sg(mN.l - mN.p)} gone. The same behaviour with a Save More holding grew ${sp(mY.ret - 1)}. Cross-holding, not the stickiness score, is what converts a maturing promotion into retained deposits.`, options: { color: INK } },
+    ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+    s.addNotes(`Movers split sharply on the Save More flag. With Save More: ${n0(mY.n)} customers, THB ${n0(mY.p)} → THB ${n0(mY.l)}, ${(mY.ret * 100).toFixed(1)}% retained. ` +
+      `Without: ${n0(mN.n)} customers, THB ${n0(mN.p)} → THB ${n0(mN.l)}, only ${(mN.ret * 100).toFixed(1)}% retained. ` +
+      `Non-movers are stable either way: ${(sY.ret * 100).toFixed(1)}% with Save More and ${(sN.ret * 100).toFixed(1)}% without. ` +
+      "Caveat on causality: Save More holders are also much larger balances, so part of the gap is cohort composition rather than the product itself. " +
+      "The actionable read is still that a second promotional pocket gives maturing Save Max money somewhere to go inside the bank - worth testing as a deliberate retention offer before the next maturity wave.");
+  }
+}
+
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
