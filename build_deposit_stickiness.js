@@ -936,6 +936,7 @@ function balanceByStickiness(o) {
   const mAdapt = (v) => (v / 1e6 >= 10 ? (v / 1e6).toFixed(1) : (v / 1e6).toFixed(2));
   const dm = (v) => (v >= 0 ? "+" : "−") + Math.abs(v / 1e6).toFixed(1);
   const dpct = (p, l) => (l >= p ? "+" : "−") + Math.abs((l / p - 1) * 100).toFixed(1) + "%";
+  const dpc = (v) => (v >= 0 ? "+" : "−") + Math.abs(Math.round(v)).toLocaleString("en-US");
   const R = TIERS.map((t) => {
     const g = (r) => r.st === t;
     return { t, n: S((r) => r.n, g), p: S((r) => r.p, g), l: S((r) => r.l, g) };
@@ -962,29 +963,30 @@ function balanceByStickiness(o) {
 
   /* the table ----------------------------------------------------------- */
   card(s, 0.58, 3.06, 7.35, 2.54);
-  cardHead(s, 0.58, 3.06, 7.35, "Total deposit balance by stickiness tier", "THB m · absolute change and percentage change for every tier");
-  const th = (t, al) => ({ text: t, options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 8.5, align: al || "right" } });
-  const td = (t, al, col, bold) => ({ text: t, options: { fill: { color: PAPER }, color: col || INK, bold: !!bold, fontFace: F, fontSize: 9, align: al || "right" } });
+  cardHead(s, 0.58, 3.06, 7.35, "Total deposit balance by stickiness tier", "Balances in THB m · change per customer in THB");
+  const th = (t, al) => ({ text: t, options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 8, align: al || "right" } });
+  const td = (t, al, col, bold) => ({ text: t, options: { fill: { color: PAPER }, color: col || INK, bold: !!bold, fontFace: F, fontSize: 8.5, align: al || "right" } });
   const body = R.map((r) => {
     const d = r.l - r.p, up = d >= 0;
     return [
-      { text: r.t, options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 9, align: "left" } },
+      { text: r.t, options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 8.5, align: "left" } },
       td(n0(r.n)), td(mAdapt(r.p)), td(mAdapt(r.l)),
       td(dm(d), "right", up ? R3 : RED, true),
       td(dpct(r.p, r.l), "right", up ? R3 : RED, true),
+      td(dpc(d / r.n), "right", up ? R3 : RED, true),
     ];
   });
   const totRow = [
-    { text: "All tiers", options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 9, align: "left" } },
-    ...[n0(tot.n), mAdapt(tot.p), mAdapt(tot.l), dm(gain), dpct(tot.p, tot.l)].map((t, i) => ({
-      text: t, options: { fill: { color: CARD }, color: i >= 3 ? R3 : INK, bold: true, fontFace: F, fontSize: 9, align: "right" },
+    { text: "All tiers", options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 8.5, align: "left" } },
+    ...[n0(tot.n), mAdapt(tot.p), mAdapt(tot.l), dm(gain), dpct(tot.p, tot.l), dpc(gain / tot.n)].map((t, i) => ({
+      text: t, options: { fill: { color: CARD }, color: i >= 3 ? R3 : INK, bold: true, fontFace: F, fontSize: 8.5, align: "right" },
     })),
   ];
   s.addTable([
-    [th("Stickiness", "left"), th("Customers"), th("Prior"), th("Latest"), th("Change"), th("Change %")],
+    [th("Stickiness", "left"), th("Customers"), th("Prior"), th("Latest"), th("Change"), th("Change %"), th("Chg / cust")],
     ...body, totRow,
   ], {
-    x: 0.82, y: 3.80, w: 6.87, colW: [1.22, 1.06, 1.12, 1.12, 1.12, 1.23],
+    x: 0.82, y: 3.80, w: 6.87, colW: [1.12, 0.95, 0.95, 0.95, 0.95, 0.99, 0.96],
     rowH: [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25],
     border: { type: "solid", color: RULE, pt: 0.5 }, valign: "middle", margin: [0.01, 0.06, 0.01, 0.06],
   });
@@ -1016,7 +1018,9 @@ function balanceByStickiness(o) {
     `Every stickiness tier gained. In absolute terms the gain concentrates in the top two tiers: High ${dm(hi.l - hi.p)}m and Very High ${dm(R[0].l - R[0].p)}m, together ${(sticky / gain * 100).toFixed(1)}% of it, which follows from those tiers holding ${(stickyP / tot.p * 100).toFixed(1)}% of prior balance. ` +
     `In percentage terms the ranking reverses cleanly: Very High ${dpct(R[0].p, R[0].l)}, High ${dpct(hi.p, hi.l)}, Medium ${dpct(R[2].p, R[2].l)}, Low ${dpct(R[3].p, R[3].l)}, Very Low ${dpct(vl.p, vl.l)}. ` +
     `Average prior balance per customer runs from THB ${n0(R[0].p / R[0].n)} in the Very High tier to THB ${n0(vl.p / vl.n)} in the Very Low tier, so the low tiers' percentages reflect dormant accounts receiving small deposits rather than material growth. ` +
-    "Both readings are kept deliberately: rank on the absolute column, and read the percentage column as an early indicator that previously unfunded accounts are becoming funded.");
+    `Average change per customer runs ${R.map((r) => r.t + " " + dpc((r.l - r.p) / r.n)).join(", ")}, against ${dpc(gain / tot.n)} across the base. ` +
+    "That column ranks differently again - the Low tier beats Medium on change per customer despite holding far less balance - so it is the fairest way to compare tiers of very different size. " +
+    "All three readings are kept deliberately: rank on absolute change for materiality, on change per customer for per-head value, and read the percentage column as an early indicator that previously unfunded accounts are becoming funded.");
 }
 
 balanceByStickiness({
