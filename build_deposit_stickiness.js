@@ -813,5 +813,109 @@ function matrix(s, x, y, w, key, fmt) {
   }
 }
 
+/* ============================================================= SLIDE 12 */
+/* Move rate across both scores. Rows are deposit stickiness, columns are
+   rate sensitivity, so the grid matches the matrices earlier in the deck.
+   Built from data/savemax_maturity_stickiness.tsv. */
+{
+  const s = pres.addSlide(); s.background = { color: PAPER };
+  const D = fs.readFileSync(path.join(__dirname, "data", "savemax_maturity_stickiness.tsv"), "utf8")
+    .trim().split("\n").slice(1).map((l) => {
+      const c = l.split("\t");
+      return { rs: c[0], st: c[1], sm: +c[2], mv: c[3] === "Move", n: +c[4], ps: +c[7] };
+    });
+  const S = (f, g = () => true) => D.filter(g).reduce((a, r) => a + f(r), 0);
+  const N = S((r) => r.n), MOV = S((r) => (r.mv ? r.n : 0)), baseR = MOV / N;
+  const ST = ["Very High", "High", "Medium", "Low", "Very Low"];
+  const rate = (g) => { const n = S((r) => r.n, g); return n ? { n, r: S((x) => (x.mv ? x.n : 0), g) / n } : null; };
+  const hiB = (x) => x === "Very High" || x === "High";
+  const walked = S((r) => (r.mv ? r.ps : 0));
+  const walkedSticky = S((r) => (r.mv ? r.ps : 0), (r) => hiB(r.st));
+  const fragN = S((r) => r.n, (r) => !hiB(r.st) && hiB(r.rs));
+  const fragB = S((r) => r.ps, (r) => !hiB(r.st) && hiB(r.rs));
+  const lowN = S((r) => r.n, (r) => !hiB(r.st)), lowB = S((r) => r.ps, (r) => !hiB(r.st));
+  const n0 = (v) => Math.round(v).toLocaleString("en-US");
+  const best = { st: "High", rs: "High" };
+  const bestC = rate((r) => r.st === best.st && r.rs === best.rs);
+
+  head(s, "Move rate : deposit stickiness against rate sensitivity",
+    "*Save Max holders with balance > 0. 'Move' = Save Max balance now zero. Each cell shows the move rate with its customer count beneath.",
+    `Cohort ${n0(N)}   ·   Moved ${n0(MOV)} (${(baseR * 100).toFixed(1)}%)   ·   Hottest cell: High stickiness × High sensitivity ${(bestC.r * 100).toFixed(1)}% on ${n0(bestC.n)} customers`,
+    "Move rate climbs with both scores — the runoff sits in the sticky, rate-sensitive core, not in the low-stickiness corner.");
+
+  tiles(s, [
+    [(baseR * 100).toFixed(1) + "%", "cohort move rate", `${n0(MOV)} of ${n0(N)} emptied Save Max`, TEAL],
+    [(bestC.r * 100).toFixed(1) + "%", "hottest cell", "High stickiness × High sensitivity", RED],
+    [(walkedSticky / walked * 100).toFixed(1) + "%", "of walked balance", "came from stickiness ≥ 60", RED],
+    [n0(fragN), "in the 'fragile' corner", "stickiness < 60 and RS ≥ 60", MUTED],
+  ], 1.80);
+
+  /* the grid ------------------------------------------------------------ */
+  card(s, 0.58, 3.06, 7.35, 2.54);
+  cardHead(s, 0.58, 3.06, 7.35, "Move rate by cell", "Rows: deposit stickiness · columns: rate sensitivity · shaded by move rate");
+  const maxR = Math.max(...ST.flatMap((st) => RS.map((rs) => (rate((r) => r.st === st && r.rs === rs) || { r: 0 }).r)));
+  const hdr = [
+    { text: "Stickiness", options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "left" } },
+    ...RS.map((x) => ({ text: x, options: { fill: { color: TITLE_TEAL }, color: PAPER, bold: true, fontFace: F, fontSize: 9, align: "center" } })),
+  ];
+  const body = ST.map((st) => [
+    { text: st, options: { fill: { color: CARD }, color: INK, bold: true, fontFace: F, fontSize: 9.5, align: "left" } },
+    ...RS.map((rs) => {
+      const c = rate((r) => r.st === st && r.rs === rs);
+      if (!c) return { text: "—", options: { fill: { color: PAPER }, color: MUTED, fontFace: F, fontSize: 9, align: "center" } };
+      if (c.n < 50) return {
+        text: [
+          { text: (c.r * 100).toFixed(1) + "%", options: { fontFace: F, fontSize: 9.5, color: MUTED } },
+          { text: "\n" + n0(c.n), options: { fontFace: F, fontSize: 7, color: MUTED, breakLine: false } },
+        ],
+        options: { fill: { color: PAPER }, align: "center" },
+      };
+      const t = c.r / maxR;
+      return {
+        text: [
+          { text: (c.r * 100).toFixed(1) + "%", options: { fontFace: F, fontSize: 9.5, bold: true, color: t > 0.55 ? PAPER : INK } },
+          { text: "\n" + n0(c.n), options: { fontFace: F, fontSize: 7, color: t > 0.55 ? "F0D6D6" : MUTED, breakLine: false } },
+        ],
+        options: { fill: { color: blend(RED, t) }, align: "center" },
+      };
+    }),
+  ]);
+  s.addTable([hdr, ...body], {
+    x: 0.82, y: 3.80, w: 6.87, colW: [1.27, 1.12, 1.12, 1.12, 1.12, 1.12],
+    rowH: [0.26, 0.30, 0.30, 0.30, 0.30, 0.30],
+    border: { type: "solid", color: RULE, pt: 0.5 }, valign: "middle", margin: [0.01, 0.04, 0.01, 0.04],
+  });
+
+  /* marginal: the new dimension on its own ------------------------------ */
+  card(s, 8.18, 3.06, 4.73, 2.54);
+  cardHead(s, 8.18, 3.06, 4.73, "Move rate by stickiness", "The new dimension, on its own");
+  const stCol = { "Very High": R4, High: R3, Medium: R2, Low: AMBER, "Very Low": R1 };
+  const marg = ST.map((st) => [st, rate((r) => r.st === st)]);
+  const mMax = Math.max(...marg.map(([, c]) => c.r));
+  marg.forEach(([st, c], i) => {
+    const y = 3.76 + i * 0.30;
+    s.addText(st, { x: 8.46, y, w: 1.15, h: 0.26, margin: 0, valign: "middle", fontFace: F, fontSize: 10, bold: true, color: INK });
+    s.addShape("roundRect", { x: 9.66, y: y + 0.04, w: Math.max((c.r / mMax) * 1.55, 0.04), h: 0.18, rectRadius: 0.03, fill: { color: stCol[st] }, line: { type: "none" } });
+    s.addText((c.r * 100).toFixed(1) + "%", { x: 11.26, y, w: 0.72, h: 0.26, margin: 0, align: "right", valign: "middle", fontFace: F, fontSize: 10, bold: true, color: stCol[st] });
+    s.addText(n0(c.n), { x: 12.02, y, w: 0.61, h: 0.26, margin: 0, align: "right", valign: "middle", fontFace: F, fontSize: 8.5, color: MUTED });
+  });
+  card(s, 8.46, 5.26, 4.17, 0.30, WARM);
+  s.addText(`Stickiness < 60: ${(lowN / N * 100).toFixed(1)}% of customers, ${(lowB / S((r) => r.ps) * 100).toFixed(1)}% of pocket.`, {
+    x: 8.62, y: 5.26, w: 3.85, h: 0.30, margin: 0, valign: "middle", fontFace: F, fontSize: 9.5, color: INK,
+  });
+
+  card(s, 0.58, 5.78, 12.33, 0.86, WARM);
+  s.addText([
+    { text: `${(walkedSticky / walked * 100).toFixed(1)}% of the Save Max balance that walked came from customers scoring stickiness ≥ 60`, options: { bold: true, color: RED } },
+    { text: `  —  the low-stickiness corner the decision view flags as fragile holds ${n0(fragN)} customers and THB ${(fragB / 1e6).toFixed(1)}m. Low stickiness here means dormant, not disloyal.`, options: { color: INK } },
+  ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+  s.addNotes(`Move rate rises with stickiness, which is the opposite of what the name suggests: Very High ${(rate((r) => r.st === "Very High").r * 100).toFixed(1)}% against Very Low ${(rate((r) => r.st === "Very Low").r * 100).toFixed(1)}%. ` +
+    "The reason is dormancy, not loyalty - average Save Max balance falls from THB 18,104 in the Very High tier to THB 18 in the Very Low tier, so the low tiers have nothing to move and nobody managing the account. " +
+    `Read the columns, not the rows: the High rate-sensitivity column is hot at every stickiness level, peaking at ${(bestC.r * 100).toFixed(1)}% for High stickiness. ` +
+    `The fragile quadrant - stickiness < 60 with rate sensitivity >= 60 - is ${n0(fragN)} customers holding THB ${n0(fragB)}, so the decision view on slide 2 points at an almost empty cell. ` +
+    "On predictive value, stickiness adds little once rate sensitivity and the Save More flag are in hand (AUC 0.766 to 0.779), so its practical use is as an eligibility filter to suppress dormant micro-balance accounts from retention campaigns, not as a targeting dimension.");
+}
+
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
