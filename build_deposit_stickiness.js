@@ -1121,5 +1121,86 @@ balanceByStickiness({
     "Conclusion for the framework: stickiness can stay as an activity and eligibility filter, but rate-sensitivity cut-offs should be re-fitted on observed outcomes, and the two outcomes - emptying the pocket and losing balance - should be scored separately.");
 }
 
+/* ============================================================= SLIDE 16 */
+/* Three-way balance movement across the stickiness tiers, shown twice:
+   once weighted by customers and once by prior balance. The two panels
+   disagree, which is the point of the slide. */
+{
+  const s = pres.addSlide(); s.background = { color: PAPER };
+  const numv = (v) => (v === undefined || v === "" || v === "NULL" ? 0 : Number(v));
+  const D = fs.readFileSync(path.join(__dirname, "data", "base_balance_movement.tsv"), "utf8")
+    .trim().split("\n").slice(1).map((l) => {
+      const c = l.split("\t");
+      return { st: c[1], mv: c[3], n: numv(c[4]), p: numv(c[5]), l: numv(c[6]) };
+    });
+  const S = (f, g = () => true) => D.filter(g).reduce((a, r) => a + f(r), 0);
+  const MV = [["Increase", R3], ["Stable", R1], ["Decrease", RED]];
+  const ST = ["Very High", "High", "Medium", "Low", "Very Low"];
+  const N = S((r) => r.n), P = S((r) => r.p), G = S((r) => r.l - r.p);
+  const n0 = (v) => Math.round(v).toLocaleString("en-US");
+  const dm = (v) => (v >= 0 ? "+" : "−") + "THB " + Math.abs(Math.round(v / 1e6)).toLocaleString("en-US") + "m";
+  const pc1 = (a, b) => (a / b * 100).toFixed(1) + "%";
+  const share = (m, w) => S((r) => r[w], (r) => r.mv === m) / S((r) => r[w]);
+
+  head(s, "Balance movement by deposit stickiness",
+    "*Funded base, balance > 0. Movement is measured against a band of 5% of prior balance or THB 100, whichever is larger.",
+    `Base ${n0(N)}   ·   Increase ${pc1(S((r) => r.n, (r) => r.mv === "Increase"), N)}   ·   Stable ${pc1(S((r) => r.n, (r) => r.mv === "Stable"), N)}   ·   Decrease ${pc1(S((r) => r.n, (r) => r.mv === "Decrease"), N)}   ·   Net ${dm(G)}`,
+    "Decrease covers 46% of Very High stickiness customers but only 23% of their balance.");
+
+  tiles(s, [
+    [pc1(S((r) => r.n, (r) => r.mv === "Increase"), N), "increased", `${dm(S((r) => r.l - r.p, (r) => r.mv === "Increase"))} added`, R3],
+    [pc1(S((r) => r.n, (r) => r.mv === "Stable"), N), "stable", "balance held within the band", R1],
+    [pc1(S((r) => r.n, (r) => r.mv === "Decrease"), N), "decreased", `${dm(S((r) => r.l - r.p, (r) => r.mv === "Decrease"))} lost`, RED],
+    [dm(G), "net change", `${(G / P * 100).toFixed(1)}% across the base`, TEAL],
+  ], 1.80);
+
+  /* one 100% stacked bar per tier, weighted either way ------------------ */
+  const panel = (X, title, sub, w) => {
+    card(s, X, 3.06, 6.04, 2.54);
+    cardHead(s, X, 3.06, 6.04, title, sub);
+    const LX = X + 0.28, TX = X + 1.52, TW = 4.24;
+    ST.forEach((t, i) => {
+      const y = 3.78 + i * 0.32;
+      const tot = S((r) => r[w], (r) => r.st === t);
+      s.addText(t, { x: LX, y, w: 1.15, h: 0.28, margin: 0, valign: "middle", fontFace: F, fontSize: 9.5, bold: true, color: INK });
+      let bx = TX;
+      MV.forEach(([m, col]) => {
+        const frac = S((r) => r[w], (r) => r.st === t && r.mv === m) / tot;
+        const bw = TW * frac;
+        if (bw <= 0) return;
+        s.addShape("rect", { x: bx, y: y + 0.05, w: bw, h: 0.19, fill: { color: col }, line: { type: "none" } });
+        if (bw >= 0.42) {
+          s.addText((frac * 100).toFixed(0) + "%", {
+            x: bx, y: y + 0.05, w: bw, h: 0.19, margin: 0, align: "center", valign: "middle",
+            fontFace: F, fontSize: 8, bold: true, color: PAPER,
+          });
+        }
+        bx += bw;
+      });
+    });
+    /* legend */
+    let lx = TX;
+    MV.forEach(([m, col]) => {
+      s.addShape("rect", { x: lx, y: 5.42, w: 0.16, h: 0.13, fill: { color: col }, line: { type: "none" } });
+      s.addText(m, { x: lx + 0.22, y: 5.37, w: 0.95, h: 0.22, margin: 0, valign: "middle", fontFace: F, fontSize: 8.5, color: MUTED });
+      lx += 1.30;
+    });
+  };
+  panel(0.58, "Share of customers", "Each tier to 100% · Very High decreases most", "n");
+  panel(6.87, "Share of prior balance", "Same tiers, weighted by money", "p");
+
+  card(s, 0.58, 5.78, 12.33, 0.86, WARM);
+  s.addText([
+    { text: "Weighted by money the score barely discriminates", options: { bold: true, color: RED } },
+    { text: `  —  the top three tiers lose ${["Very High", "High", "Medium"].map((t) => pc1(S((r) => r.p, (r) => r.st === t && r.mv === "Decrease"), S((r) => r.p, (r) => r.st === t))).join(", ")} of their balance, against decrease rates of ${["Very High", "High", "Medium"].map((t) => pc1(S((r) => r.n, (r) => r.st === t && r.mv === "Decrease"), S((r) => r.n, (r) => r.st === t))).join(", ")} by customer. The customer gap is six-fold; the money gap is not.`, options: { color: INK } },
+  ], { x: 0.88, y: 5.78, w: 11.73, h: 0.86, margin: 0, valign: "middle", fontFace: F, fontSize: 11 });
+
+  s.addNotes(`Base ${n0(N)} funded customers holding THB ${n0(P)}. Increase ${n0(S((r) => r.n, (r) => r.mv === "Increase"))} customers adding ${dm(S((r) => r.l - r.p, (r) => r.mv === "Increase"))}, Decrease ${n0(S((r) => r.n, (r) => r.mv === "Decrease"))} customers losing ${dm(S((r) => r.l - r.p, (r) => r.mv === "Decrease"))}, net ${dm(G)}. ` +
+    "Stable is the largest group either way, 55.5% of customers and 57.0% of prior balance, and contributes essentially nothing to the net change. " +
+    "The three-way split explains what the binary sticky flag was hiding. That flag counted Increase and Stable together, so the Very Low tier scored 92% sticky purely because 82% of it is Stable - those accounts average THB 143 and nothing happens in them. " +
+    "By customer the tiers look very different: Very High decreases at 46.4% against Very Low at 7.7%. By balance they converge - 23.4%, 24.9%, 23.4% across the top three tiers. " +
+    "The practical implication is that the stickiness score ranks customers by how active their balance is, not by how much money is at risk, so retention targeting built on it will chase headcount rather than baht.");
+}
+
 const out = path.join(__dirname, "Deposit_Stickiness_Framework.pptx");
 pres.writeFile({ fileName: out }).then(() => console.log("wrote", out));
