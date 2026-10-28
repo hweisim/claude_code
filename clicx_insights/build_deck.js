@@ -343,24 +343,43 @@ pres.addSection({ title: "Q5 Impact on KTB" });
 {
   const s = qSlide("Q5 Impact on KTB", "Q5  |  IMPACT ON KTB  (2/2)",
     "Does CLICX take products away from KTB?",
-    "Not for loans: we mostly lend to people KTB's own app loan (Jai-pump) does not serve or turns down. We cannot check savings yet",
-    "Source: KTB and CLICX matched customer data (Oct 2026)");
-  s.addChart(pres.charts.BAR, [{ name: "CLICX customers, K", labels: ["Our borrowers with no KTB loan", "Turned down by KTB, applied to us", "Turned down by KTB, got our loan"], values: [116, 156, 23] }], {
-    x: 0.5, y: 2.35, w: 5.4, h: 4.35, barDir: "bar", catAxisOrientation: "maxMin", ...AX, ...quiet(), ...chartTitle("CLICX lending that KTB's Jai-pump loan does not cover, thousand customers"),
-    chartColors: [BLUE, NAVY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
-    dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 50, valAxisMaxVal: 190, catAxisLabelFontSize: 11, objectName: "Lending outside KTB" });
-  s.addShape(pres.shapes.RECTANGLE, { x: 6.1, y: 2.45, w: 2.8, h: 4.15, fill: { color: C.background2 }, line: { color: GREY, width: 1, dashType: "dash" }, objectName: "Deposit gap box" });
+    "Not for loans: 78% of our 148K borrowers have no KTB Jai-pump loan, and we approve some people KTB turns down. We cannot check savings yet",
+    "Borrowers = CLICX customers with a loan (Sep 2026). Turned down = rejected by KTB's Jai-pump loan in the last 3 months. Source: KTB and CLICX matched data");
+  // Chart 1: CLICX borrowers split by whether they also hold a KTB Jai-pump loan
+  s.addChart(pres.charts.DOUGHNUT, [{ name: "CLICX borrowers", labels: ["No KTB Jai-pump loan (116K)", "Also has a Jai-pump loan (32K)"], values: [116, 32] }], {
+    x: 0.5, y: 2.35, w: 3.7, h: 4.35, ...AX, ...chartTitle("Our borrowers: do they also have a KTB loan?"),
+    chartColors: [BLUE, GREY], holeSize: 62, showPercent: true, showValue: false, dataLabelColor: "FFFFFF", dataLabelFontSize: 12,
+    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, objectName: "Borrowers by KTB loan" });
   s.addText([
-    { text: "SAVINGS: NOT KNOWN YET", options: { bold: true, fontSize: 11, color: C.accent5, charSpacing: 1, breakLine: true } },
-    { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "We cannot yet see CLICX balances, so we cannot tell if money is moving out of KTB accounts.", options: { fontSize: 12, color: C.text1, breakLine: true } },
-    { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "Next step: once the data is in, compare shared customers' KTB balances before and after they joined CLICX", options: { fontSize: 12, bold: true, color: C.text2 } },
-  ], { x: 6.3, y: 2.65, w: 2.4, h: 3.8, valign: "top", margin: 0, isTextBox: true, objectName: "Deposit gap text" });
+    { text: "148K", options: { bold: true, fontSize: 24, color: C.text2, breakLine: true } },
+    { text: "CLICX borrowers", options: { fontSize: 10, color: MUTED } },
+  ], { x: 1.6, y: 4.15, w: 1.5, h: 0.7, align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: "Borrowers total" });
+
+  // Chart 2: funnel from KTB rejection to CLICX loan (shapes)
+  const cx = 6.65;
+  s.addText("From KTB rejection to CLICX loan (last 3 months)", { x: 4.4, y: 2.4, w: 4.5, h: 0.35, fontSize: 13, bold: true, color: C.text2, align: "center", margin: 0, isTextBox: true, objectName: "Funnel title" });
+  const stage = (w, y, fill, line, lines, name) => {
+    s.addShape(pres.shapes.RECTANGLE, { x: cx - w / 2, y, w, h: 0.85, fill: { color: fill }, line, objectName: name });
+    s.addText(lines, { x: cx - 2.2, y, w: 4.4, h: 0.85, align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: name + " text" });
+  };
+  stage(4.4, 2.95, C.background2, { color: GREY, width: 1, dashType: "dash" }, [
+    { text: "Turned down by KTB's Jai-pump", options: { fontSize: 12, color: C.text1, breakLine: true } },
+    { text: "Total: data to come", options: { fontSize: 14, bold: true, color: C.accent5 } },
+  ], "Funnel stage 1");
+  s.addText("came to CLICX: to be confirmed", { x: 4.4, y: 3.82, w: 4.5, h: 0.26, fontSize: 10, italic: true, color: MUTED, align: "center", margin: 0, isTextBox: true, objectName: "Funnel step 1" });
+  stage(3.2, 4.1, C.text2, { type: "none" }, [
+    { text: "Applied to CLICX", options: { fontSize: 12, color: C.background1, breakLine: true } },
+    { text: "156K", options: { fontSize: 18, bold: true, color: C.background1 } },
+  ], "Funnel stage 2");
+  s.addText("15% approved", { x: 4.4, y: 4.97, w: 4.5, h: 0.26, fontSize: 11, bold: true, color: C.accent1, align: "center", margin: 0, isTextBox: true, objectName: "Funnel step 2" });
+  stage(2.0, 5.25, C.accent1, { type: "none" }, [
+    { text: "Got a CLICX loan", options: { fontSize: 12, color: C.background1, breakLine: true } },
+    { text: "23K", options: { fontSize: 18, bold: true, color: C.background1 } },
+  ], "Funnel stage 3");
   insights(s, [
-    ["New loans for the group", "116K of our borrowers have no KTB Jai-pump loan"],
-    ["A safety net for KTB", "156K people KTB turned down in the last 3 months applied to us instead of going to another bank"],
-    ["Few loyal KTB users among our best customers", "Only 15% of our most engaged shared customers are loyal to KTB"],
+    ["Mostly new loans for the group", "116K of our 148K borrowers (78%) have no KTB Jai-pump loan"],
+    ["A safety net for KTB rejects", "156K people KTB turned down applied to us; we approved 23K (15%) instead of losing them to other banks"],
+    ["Savings: not known yet", "We cannot see CLICX balances yet. Once we can, compare shared customers' KTB balances before and after joining"],
   ]);
 }
 
