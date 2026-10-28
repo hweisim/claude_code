@@ -315,13 +315,25 @@ pres.addSection({ title: "Q5 Impact on KTB" });
     "Source: KTB and CLICX matched customer data (Oct 2026)");
   const b = ["Loyal to KTB (at risk)", "Uses KTB and other banks", "Loyal to other banks (won back)", "Stopped using KTB (brought back)"];
   s.addChart(pres.charts.BAR, [{ name: "Share of shared customers", labels: b, values: [0.13, 0.26, 0.31, 0.30] }], {
-    x: 0.5, y: 2.35, w: 5.0, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Customers we share with KTB, by how they use KTB, %"),
+    x: 0.5, y: 2.35, w: 4.2, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Customers we share with KTB, by how they use KTB, %"),
     chartColors: [RED, GREY, BLUE, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
     dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.4, catAxisOrientation: "maxMin", objectName: "Overlap by KTB relationship" });
-  s.addChart(pres.charts.BAR, [{ name: "Joined CLICX", labels: ["Loyal to KTB", "KTB and others", "Other banks", "Stopped KTB"], values: [0.033, 0.074, 0.079, 0.030] }], {
-    x: 5.6, y: 2.35, w: 3.3, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("% of each KTB group who joined CLICX"),
-    chartColors: [RED, GREY, BLUE, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
-    dataLabelFormatCode: "0.0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.1, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "Penetration by KTB group" });
+  // Placeholder: product use by KTB group, data not yet available
+  const kg = ["Loyal to KTB", "KTB and others", "Other banks", "Stopped KTB"];
+  s.addShape(pres.shapes.RECTANGLE, { x: 4.8, y: 2.4, w: 4.1, h: 4.25, fill: { color: "FFFFFF" }, line: { color: GREY, width: 1, dashType: "dash" }, objectName: "Placeholder frame" });
+  s.addChart(pres.charts.BAR, [
+    { name: "Applied for loan", labels: kg, values: [0.6, 0.8, 0.85, 0.7] },
+    { name: "Got a loan", labels: kg, values: [0.12, 0.08, 0.1, 0.06] },
+    { name: "Save pocket", labels: kg, values: [0.3, 0.2, 0.25, 0.15] },
+    { name: "Paid with CLICX", labels: kg, values: [0.25, 0.18, 0.2, 0.1] },
+  ], { x: 4.9, y: 2.45, w: 3.9, h: 4.15, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("What each KTB group uses in CLICX, %"),
+    chartColors: ["C9CED3", "B3BAC1", "DDE1E5", "A2AAAD"], showValue: false, showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED,
+    barGapWidthPct: 35, valAxisMaxVal: 1, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "Placeholder product use by KTB group" });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 6.35, y: 4.15, w: 2.3, h: 0.75, rectRadius: 0.08, fill: { color: "FFFFFF" }, line: { color: C.accent5, width: 1.25 }, objectName: "Illustrative tag" });
+  s.addText([
+    { text: "ILLUSTRATIVE", options: { bold: true, fontSize: 12, color: C.accent5, charSpacing: 1, breakLine: true } },
+    { text: "Data not yet available", options: { fontSize: 11, color: C.text1 } },
+  ], { x: 6.35, y: 4.15, w: 2.3, h: 0.75, align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: "Illustrative tag text" });
   insights(s, [
     ["KTB loyalists rarely switch", "Only 3.3% of them joined, less than half the rate of people who bank elsewhere (7.9%)"],
     ["We win back other banks' customers", "515K customers mainly banked elsewhere. Now they are back in the KTB group through CLICX"],
