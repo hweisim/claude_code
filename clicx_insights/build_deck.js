@@ -119,7 +119,7 @@ pres.addSection({ title: "Opening" });
     [cell("1"), cell("Do all CLICX customers come from our partners' customers?"), verdict("Almost all", BLUE), cell("96% were already KTB, AIS or OR customers. Only 51K came from outside. But just 3.7% of partner customers have joined so far")],
     [cell("2"), cell("Are our customers the people we planned for?"), verdict("Mostly", BLUE), cell("Tech-savvy people and freelancers sign up far more than others, as planned. People who use several banks and over-40s are hard to win")],
     [cell("3"), cell("Do different customers come for different products?"), verdict("Same reason, different use", BLUE), cell("Almost everyone (84–92%) applies for a loan. Office workers get loans, shop owners keep savings, gig workers are mostly turned down")],
-    [cell("4"), cell("Are active customers different from inactive ones?"), verdict("Yes", BLUE), cell("Active customers are mostly office workers and shop owners with monthly phone bills. Inactive ones are often manual workers or people turned down for a loan")],
+    [cell("4"), cell("Are active customers different from inactive ones?"), verdict("Yes", BLUE), cell("Active customers are mostly office workers and shop owners with monthly phone bills. Inactive ones are often blue-collar workers or people turned down for a loan")],
     [cell("5"), cell("Do we take customers or products away from KTB?"), verdict("Very little", RED), cell("Only 13% of shared customers are loyal to KTB. Most used other banks or had stopped using KTB. 116K of our borrowers have no KTB loan")],
   ];
   s.addTable(rows, { x: 0.5, y: 2.4, w: 12.33, colW: [0.45, 3.6, 2.1, 6.18], fontFace: "Arial", border: { type: "solid", pt: 0.75, color: LGREY },
@@ -196,14 +196,14 @@ pres.addSection({ title: "Q2 Who our customers are" });
     "Are we reaching people with real income but no payslip, as our strategy says?",
     "Yes. Freelancers (40%) and riders/drivers (22%) join far more than anyone else, and 35% of our loans go to people banks usually turn away, above our 30% goal",
     "Source: CLICX, AIS, KTB, OR matched occupation data (Oct 2026); CLICX 5-Year Business Plan");
-  const occ = ["Freelancer (232K)", "Rider / driver (66K)", "Manual worker (401K)", "Office worker (700K)", "Shop owner (293K)", "Unknown (129K)"];
+  const occ = ["Freelancer (232K)", "Rider / driver (66K)", "Blue-collar worker (401K)", "Office worker (700K)", "Shop owner (293K)", "Unknown (129K)"];
   s.addChart(pres.charts.BAR, [{ name: "Joined CLICX", labels: occ, values: [0.40, 0.22, 0.16, 0.09, 0.09, 0.004] }], {
     x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("% of partner customers in each job who joined CLICX (number of CLICX customers)"),
     chartColors: [BLUE, BLUE, NAVY, NAVY, NAVY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
     dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.46, catAxisOrientation: "maxMin", catAxisLabelFontSize: 12, objectName: "Occupation penetration" });
   insights(s, [
     ["Gig workers love CLICX", "4 in 10 freelancers and 2 in 10 riders we can reach have joined. Proof that lending on phone and spending data works"],
-    ["Workers are the bulk", "Office and manual workers are 1.1M customers, over 60% of CLICX"],
+    ["Workers are the bulk", "Office and blue-collar workers are 1.1M customers, over 60% of CLICX"],
     ["Shop owners: room to grow", "293K have joined out of 3.3M. A route into small-business loans"],
   ]);
 }
@@ -216,7 +216,7 @@ pres.addSection({ title: "Q3 What they come for" });
     "Do different types of customer come for the same product or different ones?",
     "The same: almost everyone comes to borrow. But what they end up using differs. Office workers get loans, shop owners keep savings, and gig workers are mostly turned down",
     "Source: CLICX, AIS, KTB, OR matched occupation data (Oct 2026)");
-  const occ = ["Office worker", "Shop owner", "Manual worker", "Freelancer", "Rider / driver"];
+  const occ = ["Office worker", "Shop owner", "Blue-collar worker", "Freelancer", "Rider / driver"];
   s.addChart(pres.charts.BAR, [
     { name: "Applied for a loan", labels: occ, values: [0.85, 0.84, 0.92, 0.88, 0.91] },
     { name: "Got a loan", labels: occ, values: [0.11, 0.07, 0.07, 0.06, 0.05] },
@@ -243,10 +243,10 @@ pres.addSection({ title: "Q4 Active vs inactive" });
 {
   const s = qSlide("Q4 Active vs inactive", "Q4  |  WHO KEEPS USING US  (1/2)",
     "Are active CLICX customers a different type of person from inactive ones?",
-    "Yes. Only 1 in 5 customers is active (has money in CLICX or a CLICX loan). Active customers are mostly office workers and shop owners; inactive ones are more often manual workers",
+    "Yes. Only 1 in 5 customers is active (has money in CLICX or a CLICX loan). Active customers are mostly office workers and shop owners; inactive ones are more often blue-collar workers",
     "Source: CLICX, AIS, KTB, OR matched occupation data (Oct 2026)");
   const act = [164, 68, 64, 42, 10, 10], tot = [700, 293, 401, 232, 66, 129];
-  const occ = ["Office worker (23% active)", "Shop owner (23%)", "Manual worker (16%)", "Freelancer (18%)", "Rider / driver (15%)", "Unknown job (8%)"];
+  const occ = ["Office worker (23% active)", "Shop owner (23%)", "Blue-collar worker (16%)", "Freelancer (18%)", "Rider / driver (15%)", "Unknown job (8%)"];
   const sa = 358, si = 1462;
   s.addChart(pres.charts.BAR, [
     { name: "Active customers (358K)", labels: occ, values: act.map((v) => +(v / sa).toFixed(3)) },
@@ -256,7 +256,7 @@ pres.addSection({ title: "Q4 Active vs inactive" });
     showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: 0.55, catAxisOrientation: "maxMin", objectName: "Active vs inactive mix" });
   insights(s, [
     ["Office workers and shop owners stay", "65% of active customers vs 52% of inactive ones. About 1 in 4 of them is active"],
-    ["Manual workers drift away", "They apply for a loan, get turned down and stop using CLICX"],
+    ["Blue-collar workers drift away", "They apply for a loan, get turned down and stop using CLICX"],
     ["Unknown job, unknown customer", "Only 8% are active. Most inactive customers never got a loan or put money in"],
   ]);
 }
@@ -339,7 +339,7 @@ pres.addSection({ title: "What to do next" });
   const cards = [
     ["Q1", "Reach more partner customers", "Start with AIS: only 3.7% of its ~32M customers have joined. Sign them up through the myAIS app and AIS shops"],
     ["Q2", "Find more people like our best customers", "Target tech-savvy 30–34s. Create a clear reason for multi-bank users to switch. Make it easy for gig workers to prove income"],
-    ["Q3", "Say 'yes' more safely", "Over 90% of manual and gig workers apply but only 5–7% get a loan. Improve approval rules and offer small starter loans"],
+    ["Q3", "Say 'yes' more safely", "Over 90% of blue-collar and gig workers apply but only 5–7% get a loan. Improve approval rules and offer small starter loans"],
     ["Q4", "Keep new customers using us", "Get them using 3+ features in the first month. Give people we turn down another reason to stay"],
     ["Q5", "Show KTB we grow the group", "Share the 515K won back and 488K brought back. Set up referrals for people KTB turns down. Check savings once data is in"],
   ];
