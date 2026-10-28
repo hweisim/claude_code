@@ -48,7 +48,7 @@ pres.defineSlideMaster({
     { placeholder: { options: { name: "tracker", type: "body", x: 0.5, y: 0.3, w: 9, h: 0.3, fontSize: 11, bold: true, color: C.accent1, charSpacing: 1, margin: 0 }, text: "" } },
     { placeholder: { options: { name: "title", type: "title", x: 0.5, y: 0.62, w: 12.33, h: 0.9, fontSize: 24, bold: true, color: C.text2, align: "left", valign: "top", margin: 0 }, text: "" } },
     { placeholder: { options: { name: "answer", type: "body", x: 0.5, y: 1.62, w: 12.33, h: 0.65, fontSize: 16, color: C.text1, valign: "top", margin: 0 }, text: "" } },
-    { placeholder: { options: { name: "foot", type: "body", x: 0.5, y: 6.82, w: 11.2, h: 0.45, fontSize: 10, color: "6E7C87", valign: "top", margin: 0 }, text: "" } },
+    { placeholder: { options: { name: "foot", type: "body", x: 0.5, y: 6.92, w: 11.2, h: 0.3, fontSize: 10, color: "6E7C87", valign: "top", margin: 0 }, text: "" } },
     { image: { path: __dirname + "/logo.png", x: 11.63, y: 0.2, w: 1.2, h: 0.3, altText: "CLICX logo" } },
   ],
   slideNumber: { x: 12.33, y: 6.95, w: 0.5, h: 0.3, fontSize: 10, color: "6E7C87", align: "right" },
@@ -100,7 +100,7 @@ pres.addSection({ title: "Opening" });
   const s = pres.addSlide({ masterName: "TITLE", sectionTitle: "Opening" });
   s.addText("CUSTOMER INSIGHTS", { placeholder: "kicker" });
   s.addText("Who is CLICX really winning, and at whose expense?", { placeholder: "title" });
-  s.addText("Five questions on where 1.8M CLICX customers come from, who they are, what they use, who stays active, and whether CLICX cannibalizes KTB", { placeholder: "sub" });
+  s.addText("Five simple questions about our first 1.8 million customers: where they come from, who they are, what they use, who keeps using us, and whether we take customers away from KTB", { placeholder: "sub" });
   s.addText("October 2026  |  CLICX data as of Sep 2026; AIS, KTB, OR data as of Apr 2026", { placeholder: "date" });
 }
 
@@ -108,19 +108,19 @@ pres.addSection({ title: "Opening" });
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Opening" });
   s.addText("EXECUTIVE SUMMARY", { placeholder: "tracker" });
-  s.addText("What have CLICX's first 1.8M customers told us?", { placeholder: "title" });
-  s.addText("CLICX is an ecosystem bank: it wins consortium customers aged 25–39 who come for credit, and mostly grows the pie for KTB rather than taking from it", { placeholder: "answer" });
-  s.addText("Source: CLICX data room (Sep 2026); AIS, KTB, OR captive data (Apr 2026); Data for Business Strategy (14 Oct 2026)", { placeholder: "foot" });
+  s.addText("What have our first 1.8 million customers told us?", { placeholder: "title" });
+  s.addText("Our partners bring in almost everyone. Customers are mostly 25–39 and come to borrow. We mostly win people KTB had already lost, not KTB's loyal customers", { placeholder: "answer" });
+  s.addText("Source: CLICX, AIS, KTB and OR customer data", { placeholder: "foot" });
   const hdr = (t) => ({ text: t, options: { bold: true, color: "FFFFFF", fill: { color: NAVY }, fontSize: 12 } });
   const verdict = (t, col) => ({ text: t, options: { bold: true, color: col, fontSize: 13 } });
   const cell = (t) => ({ text: t, options: { fontSize: 12, color: TXT } });
   const rows = [
-    [hdr("#"), hdr("Question"), hdr("Answer"), hdr("Evidence")],
-    [cell("1"), cell("Do all CLICX customers come from captive consortium customers?"), verdict("Almost all", BLUE), cell("96% come from the AIS x KTB x OR base; only 51K are outside it. Yet CLICX reaches just 3.7% of the 49M base")],
-    [cell("2"), cell("Are the personas who come the ones we planned for?"), verdict("Mostly, with gaps", BLUE), cell("Tech-Savvy over-index 2.2x and gig workers convert best (Freelancer 40%); Multiple-Bank and 40+ customers under-index")],
-    [cell("3"), cell("Do different personas come for the same or different products?"), verdict("Same entry, different use", BLUE), cell("84–92% of every occupation apply for a loan; White-collar books loans (11%), Merchants hold deposits (20%), gig workers rarely get booked (5–6%)")],
-    [cell("4"), cell("Is the persona different for active vs inactive customers?"), verdict("Yes", BLUE), cell("Active base skews to White-collar and Merchant (65% vs 52%), post-paid and FBB users; inactive skews to Blue-collar, prepaid and unknown")],
-    [cell("5"), cell("Does CLICX cannibalize KTB customers or products?"), verdict("Limited", RED), cell("Only 13% of overlap (212K) are KTB-loyal; 61% are competitor-loyal or KTB-inactive. 116K CLICX borrowers have no KTB Jai-pump loan")],
+    [hdr("#"), hdr("Question"), hdr("Short answer"), hdr("Why we say so")],
+    [cell("1"), cell("Do all CLICX customers come from our partners' customers?"), verdict("Almost all", BLUE), cell("96% were already KTB, AIS or OR customers. Only 51K came from outside. But just 3.7% of partner customers have joined so far")],
+    [cell("2"), cell("Are our customers the people we planned for?"), verdict("Mostly", BLUE), cell("Tech-savvy people and freelancers sign up far more than others, as planned. People who use several banks and over-40s are hard to win")],
+    [cell("3"), cell("Do different customers come for different products?"), verdict("Same reason, different use", BLUE), cell("Almost everyone (84–92%) applies for a loan. Office workers get loans, shop owners keep savings, gig workers are mostly turned down")],
+    [cell("4"), cell("Are active customers different from inactive ones?"), verdict("Yes", BLUE), cell("Active customers are mostly office workers and shop owners with monthly phone bills. Inactive ones are often manual workers or people turned down for a loan")],
+    [cell("5"), cell("Do we take customers or products away from KTB?"), verdict("Very little", RED), cell("Only 13% of shared customers are loyal to KTB. Most used other banks or had stopped using KTB. 116K of our borrowers have no KTB loan")],
   ];
   s.addTable(rows, { x: 0.5, y: 2.4, w: 12.33, colW: [0.45, 3.6, 2.1, 6.18], fontFace: "Arial", border: { type: "solid", pt: 0.75, color: LGREY },
     valign: "middle", rowH: [0.4, 0.78, 0.78, 0.78, 0.78, 0.78], margin: [0.05, 0.1, 0.05, 0.1], objectName: "Summary table" });
@@ -130,107 +130,107 @@ pres.addSection({ title: "Opening" });
 // Q1
 pres.addSection({ title: "Q1 Source of customers" });
 {
-  const s = qSlide("Q1 Source of customers", "Q1  |  SOURCE OF CUSTOMERS",
-    "Do all current CLICX customers come from captive consortium customers?",
-    "Almost all: 96% of CLICX customers already bank, phone or fill up with KTB, AIS or OR; only 51K come from outside. But the consortium is far from tapped, with only 3.7% penetration",
-    "Note: one customer can belong to several partners, so partner shares add up to 195%. Penetration = CLICX customers ÷ partner customer base. 85% of CLICX customers gave consent for data matching\nSource: CLICX data (Sep 2026); AIS, KTB, OR data (Apr 2026)");
-  stat(s, 0.5, 2.4, 2.6, "96%", "of 1.8M CLICX customers come from the consortium base");
-  stat(s, 0.5, 3.85, 2.6, "51K", "CLICX customers who are not AIS, KTB or OR customers", C.text2);
-  stat(s, 0.5, 5.3, 2.6, "3.7%", "of the 49M consortium base is on CLICX so far", C.text2);
-  s.addChart(pres.charts.BAR, [{ name: "Share of CLICX customers", labels: ["KTB customers", "AIS customers", "OR customers"], values: [0.88, 0.67, 0.40] }], {
-    x: 3.3, y: 2.35, w: 5.6, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Share of CLICX customers who are also a partner's customer, %"),
+  const s = qSlide("Q1 Source of customers", "Q1  |  WHERE CUSTOMERS COME FROM",
+    "Do all current CLICX customers come from our partners' customers?",
+    "Almost all. 96% were already customers of KTB, AIS or OR, and only 51K came from outside. Yet only 3.7% of partner customers have joined, so there is plenty of room to grow",
+    "Source: CLICX customer data (Sep 2026); AIS, KTB, OR customer data (Apr 2026)");
+  stat(s, 0.5, 2.4, 2.6, "96%", "of our 1.8M customers were already partner customers");
+  stat(s, 0.5, 3.85, 2.6, "51K", "customers came from outside our partners", C.text2);
+  stat(s, 0.5, 5.3, 2.6, "3.7%", "of 49M partner customers have joined CLICX", C.text2);
+  s.addChart(pres.charts.BAR, [{ name: "Share of CLICX customers", labels: ["Also a KTB customer", "Also an AIS customer", "Also an OR customer"], values: [0.88, 0.67, 0.40] }], {
+    x: 3.3, y: 2.35, w: 5.6, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("% of CLICX customers who are also with each partner (many are with more than one)"),
     chartColors: [NAVY, NAVY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
     dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 60, valAxisMinVal: 0, valAxisMaxVal: 1.05, catAxisOrientation: "maxMin", catAxisLabelFontSize: 12, objectName: "Partner reach" });
   insights(s, [
-    ["KTB is the main gateway", "88% of CLICX customers are KTB customers (1.6M), helped by Paotang onboarding"],
-    ["Customers sit in several partners", "Shares add up to 195%: most customers are known to 2+ partners, giving rich data for credit"],
-    ["AIS is the biggest headroom", "Lowest penetration (3.7%) on the largest base (~32M). OR converts best at 7.4%, KTB 4.7%"],
+    ["KTB is the front door", "9 in 10 of our customers bank with KTB, mostly joining through the Paotang app"],
+    ["Most know us through 2+ partners", "That gives us more data to judge who to lend to and what else to offer"],
+    ["AIS is the biggest opportunity", "Only 3.7% of AIS's ~32M customers have joined, against 7.4% for OR and 4.7% for KTB"],
   ]);
 }
 
 // =====================================================================
 // Q2
-pres.addSection({ title: "Q2 Personas vs plan" });
+pres.addSection({ title: "Q2 Who our customers are" });
 {
-  const s = qSlide("Q2 Personas vs plan", "Q2  |  PERSONAS VS PLAN  (1/3)",
-    "Are the personas of customers who come to CLICX the same as we planned?",
-    "Mostly yes. The planned Tech-Savvy target over-indexes 2.2x and Single-Bank users bring the volume, but Multiple-Bank users, also a target, are under-won",
-    "Note: personas assigned by AIS and KTB. Single-Bank = uses one bank, or KTB customer holding Next but inactive. Penetration = CLICX customers ÷ consortium customers in that persona\nSource: CLICX data (Sep 2026); AIS, KTB, OR data (Apr 2026); initial target persona benchmark");
-  const labels = ["Tech-Savvy (8.5% pen.)", "Single-Bank (4.1% pen.)", "Multiple-Bank (2.4% pen.)", "Unknown (2.0% pen.)"];
+  const s = qSlide("Q2 Who our customers are", "Q2  |  WHO OUR CUSTOMERS ARE  (1/3)",
+    "Are the people who come to CLICX the ones we planned for?",
+    "Mostly yes. Tech-savvy people, our main target, join at twice the average rate, and one-bank users bring the most customers. People who use several banks are not yet won",
+    "Source: CLICX customer data (Sep 2026); AIS, KTB, OR customer data (Apr 2026)");
+  const labels = ["Tech-savvy (8.5% joined)", "One-bank users (4.1%)", "Multi-bank users (2.4%)", "Unknown (2.0%)"];
   s.addChart(pres.charts.BAR, [
-    { name: "Share of consortium base (49.5M)", labels, values: [0.127, 0.415, 0.165, 0.292] },
+    { name: "Share of all partner customers (49.5M)", labels, values: [0.127, 0.415, 0.165, 0.292] },
     { name: "Share of CLICX customers (1.87M)", labels, values: [0.285, 0.455, 0.104, 0.156] },
-  ], { x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Persona mix: consortium base vs CLICX customers, %"),
+  ], { x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Customer type: all partner customers vs CLICX customers, %"),
     chartColors: [LGREY, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11, dataLabelFormatCode: "0%",
     showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 60, valAxisMaxVal: 0.55, objectName: "Persona mix" });
   insights(s, [
-    ["Tech-Savvy: target hit", "533K customers, 28% of CLICX from 13% of the base; penetration 8.5% (2.2x average), peaking at 13% for ages 30–34"],
-    ["Single-Bank: volume engine", "850K (45% of CLICX). 577K are KTB customers without AIS, a pool to cross-sell AIS"],
-    ["Multiple-Bank: the miss", "8.2M base but only 2.4% penetration. CLICX is not yet winning customers who already shop around banks"],
+    ["Tech-savvy: target hit", "28% of our customers vs 13% of partner customers. Best of all at ages 30–34, where 13% have joined"],
+    ["One-bank users: the biggest group", "850K customers, almost half of CLICX. 577K are KTB customers who do not use AIS"],
+    ["Multi-bank users: not won yet", "8.2M people, but only 2.4% have joined. People who already shop around need a stronger reason"],
   ]);
 }
 {
-  const s = qSlide("Q2 Personas vs plan", "Q2  |  PERSONAS VS PLAN  (2/3)",
-    "Does the age profile of CLICX customers match the target pool?",
-    "No. The target pool skews older, but CLICX concentrates in ages 25–39: 56% of customers vs 29% of the base. Penetration falls off sharply after 45",
-    "Note: base share excludes 4.7M consortium customers of unknown age; penetration = CLICX customers ÷ captive customers in that age band\nSource: CLICX data (Sep 2026); AIS, KTB, OR data (Apr 2026)");
+  const s = qSlide("Q2 Who our customers are", "Q2  |  WHO OUR CUSTOMERS ARE  (2/3)",
+    "Do our customers' ages match the people we can reach?",
+    "No. Most partner customers are over 40, but most of ours are 25–39 (56% of CLICX vs 29% of partner customers). Few people over 45 join",
+    "Source: CLICX customer data (Sep 2026); AIS, KTB, OR customer data (Apr 2026)");
   const ages = ["<20", "20–24", "25–29", "30–34", "35–39", "40–44", "45–49", "50–54", "55–59", "60+"];
   const clicx = [12.4, 163, 334, 385, 328, 268, 189, 104, 51, 31];
   const base = [2280, 3569, 4162, 4496, 4211, 4271, 4366, 4165, 3954, 9355];
   const sum = (a) => a.reduce((x, y) => x + y, 0);
   const share = (a) => a.map((v) => +(v / sum(a)).toFixed(3));
   s.addChart(pres.charts.BAR, [
-    { name: "Share of consortium base (known age, 44.8M)", labels: ages, values: share(base) },
-    { name: "Share of CLICX customers (1.87M)", labels: ages, values: share(clicx) },
-  ], { x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Age mix: consortium base vs CLICX customers, %"),
+    { name: "Share of partner customers (age known)", labels: ages, values: share(base) },
+    { name: "Share of CLICX customers", labels: ages, values: share(clicx) },
+  ], { x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Age: all partner customers vs CLICX customers, %"),
     chartColors: [LGREY, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 9, dataLabelFormatCode: "0%",
     showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: 0.25, catAxisLabelFontSize: 11, objectName: "Age mix" });
   insights(s, [
-    ["Sweet spot is 25–39", "1.05M customers (56% of CLICX); penetration of 8–9% vs 3.8% overall"],
-    ["Older base is untouched", "Customers aged 40+ make up 58% of the known-age base but only 34% of CLICX; 60+ penetration is 0.3% on 9.4M people"],
-    ["Room left in the core", "2.1M unconverted Tech-Savvy aged 25–39, 1.3M young tech users under 25 and 5.4M Single-Bank millennials"],
+    ["25–39 is our sweet spot", "1.05M customers. About 8–9% of people this age have joined, more than twice the average"],
+    ["Older customers are untouched", "Over-40s are 58% of partner customers but 34% of ours. Only 0.3% of 9.4M over-60s have joined"],
+    ["Plenty left in our core group", "2.1M tech-savvy 25–39s and 5.4M one-bank 25–39s have not joined yet"],
   ]);
 }
 {
-  const s = qSlide("Q2 Personas vs plan", "Q2  |  PERSONAS VS PLAN  (3/3)",
-    "Are we reaching the thin-file, real-income customers our strategy targets?",
-    "Yes. Gig workers convert 5–10x better than average (Freelancer 40%, Rider/Driver 22%), and unserved/underserved borrowers are 35% of loans vs a 30% target",
-    "Note: occupation from AIS x KTB x OR x CLICX matched data; penetration = CLICX customers ÷ captive customers in that occupation; Others = unknown occupation\nSource: Data team occupation analysis (Oct 2026); CLICX 5-Year Business Plan scorecard (Dec 2026 target)");
-  const occ = ["Freelancer (232K)", "Rider / Driver (66K)", "Blue collar (401K)", "White collar (700K)", "Merchant (293K)", "Others (129K)"];
-  s.addChart(pres.charts.BAR, [{ name: "Penetration", labels: occ, values: [0.40, 0.22, 0.16, 0.09, 0.09, 0.004] }], {
-    x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("CLICX penetration of captive base by occupation, % (CLICX customers)"),
+  const s = qSlide("Q2 Who our customers are", "Q2  |  WHO OUR CUSTOMERS ARE  (3/3)",
+    "Are we reaching people with real income but no payslip, as our strategy says?",
+    "Yes. Freelancers (40%) and riders/drivers (22%) join far more than anyone else, and 35% of our loans go to people banks usually turn away, above our 30% goal",
+    "Source: CLICX, AIS, KTB, OR matched occupation data (Oct 2026); CLICX 5-Year Business Plan");
+  const occ = ["Freelancer (232K)", "Rider / driver (66K)", "Manual worker (401K)", "Office worker (700K)", "Shop owner (293K)", "Unknown (129K)"];
+  s.addChart(pres.charts.BAR, [{ name: "Joined CLICX", labels: occ, values: [0.40, 0.22, 0.16, 0.09, 0.09, 0.004] }], {
+    x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("% of partner customers in each job who joined CLICX (number of CLICX customers)"),
     chartColors: [BLUE, BLUE, NAVY, NAVY, NAVY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
     dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.46, catAxisOrientation: "maxMin", catAxisLabelFontSize: 12, objectName: "Occupation penetration" });
   insights(s, [
-    ["Gig workers: best fit", "Freelancers and riders convert at 40% and 22% of their small captive pools, which validates the alternative-data lending thesis"],
-    ["Collars: the volume", "White- and Blue-collar make up 1.1M customers, over 60% of the portfolio"],
-    ["Merchants: proven, not scaled", "293K customers at 9% penetration from a 3.3M base, an entry point for SME supply-chain financing"],
+    ["Gig workers love CLICX", "4 in 10 freelancers and 2 in 10 riders we can reach have joined. Proof that lending on phone and spending data works"],
+    ["Workers are the bulk", "Office and manual workers are 1.1M customers, over 60% of CLICX"],
+    ["Shop owners: room to grow", "293K have joined out of 3.3M. A route into small-business loans"],
   ]);
 }
 
 // =====================================================================
 // Q3
-pres.addSection({ title: "Q3 Persona x product" });
+pres.addSection({ title: "Q3 What they come for" });
 {
-  const s = qSlide("Q3 Persona x product", "Q3  |  PERSONA x PRODUCT",
-    "For different customer personas, do they come for the same or different products?",
-    "They come for the same thing, credit: 84–92% of every occupation applies for a loan. What they end up using differs: White-collar books loans, Merchants keep deposits, gig workers are mostly declined",
-    "Note: % of CLICX customers in each occupation. Deposit = balance > 0; Payment = transacted in Sep 2026; Loan booked = loan disbursed\nSource: Data team occupation analysis, AIS x KTB x OR x CLICX (Oct 2026)");
-  stat(s, 0.5, 2.4, 2.4, "84–92%", "of every occupation applied for a CLICX loan: the same entry product");
-  stat(s, 0.5, 3.95, 2.4, "5–11%", "actually had a loan booked, so usage splits by persona", C.text2);
-  const occ = ["White collar", "Merchant", "Blue collar", "Freelancer", "Rider / Driver"];
+  const s = qSlide("Q3 What they come for", "Q3  |  WHAT THEY COME FOR",
+    "Do different types of customer come for the same product or different ones?",
+    "The same: almost everyone comes to borrow. But what they end up using differs. Office workers get loans, shop owners keep savings, and gig workers are mostly turned down",
+    "Source: CLICX, AIS, KTB, OR matched occupation data (Oct 2026)");
+  stat(s, 0.5, 2.4, 2.4, "84–92%", "of every job type applied for a CLICX loan");
+  stat(s, 0.5, 3.95, 2.4, "5–11%", "actually got a loan", C.text2);
+  const occ = ["Office worker", "Shop owner", "Manual worker", "Freelancer", "Rider / driver"];
   s.addChart(pres.charts.BAR, [
-    { name: "Loan booked", labels: occ, values: [0.11, 0.07, 0.07, 0.06, 0.05] },
-    { name: "Deposit > 0", labels: occ, values: [0.18, 0.20, 0.12, 0.16, 0.13] },
-    { name: "Payment (Sep)", labels: occ, values: [0.14, 0.14, 0.10, 0.12, 0.11] },
-  ], { x: 3.1, y: 2.35, w: 5.8, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("What each occupation actually uses, % of its CLICX customers"),
+    { name: "Got a loan", labels: occ, values: [0.11, 0.07, 0.07, 0.06, 0.05] },
+    { name: "Keeps money in CLICX", labels: occ, values: [0.18, 0.20, 0.12, 0.16, 0.13] },
+    { name: "Paid with CLICX in Sep", labels: occ, values: [0.14, 0.14, 0.10, 0.12, 0.11] },
+  ], { x: 3.1, y: 2.35, w: 5.8, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("What each job type actually uses, % of its CLICX customers"),
     chartColors: [NAVY, BLUE, CYAN], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: "0%",
     showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 35, valAxisMaxVal: 0.25, catAxisOrientation: "maxMin", objectName: "Product use by occupation" });
   insights(s, [
-    ["Credit is the hook for all", "1.52M customers (84%) have applied for a loan, whatever their occupation"],
-    ["White-collar: borrow and pay", "Highest booking rate (11%, 79K loans) and 14% pay monthly. The most complete product user"],
-    ["Merchant: deposits", "Highest deposit rate (20%) and payment use (14%), a natural fit for business accounts and SME credit"],
-    ["Gig and Blue-collar: leakage", "Over 90% apply, but only 5–7% are booked. Underwriting, not demand, is the bottleneck"],
+    ["Loans bring everyone in", "1.52M customers (84%) have applied for a loan, whatever their job"],
+    ["Office workers use the most", "Most likely to get a loan (11%) and to pay with CLICX (14%)"],
+    ["Shop owners save", "Most likely to keep money with us (20%), a natural fit for business accounts and loans"],
+    ["Gig workers get turned down", "Over 90% apply but only 5–7% get a loan. The problem is our approval rules, not demand"],
   ]);
 }
 
@@ -238,107 +238,107 @@ pres.addSection({ title: "Q3 Persona x product" });
 // Q4
 pres.addSection({ title: "Q4 Active vs inactive" });
 {
-  const s = qSlide("Q4 Active vs inactive", "Q4  |  ACTIVE VS INACTIVE  (1/2)",
-    "For active vs inactive CLICX customers, is the persona different?",
-    "Yes. Only 1 in 5 customers is active, and the active base skews to salaried White-collar and Merchants, while inactive customers skew to Blue-collar and unknown occupations",
-    "Note: Active = CLICX deposit > 0 or a booked CLICX loan. Inactive = all other CLICX customers. Totals: active 358K, inactive 1,462K. Labels show each occupation's active rate\nSource: Data team occupation analysis, AIS x KTB x OR x CLICX (Oct 2026)");
+  const s = qSlide("Q4 Active vs inactive", "Q4  |  WHO KEEPS USING US  (1/2)",
+    "Are active CLICX customers a different type of person from inactive ones?",
+    "Yes. Only 1 in 5 customers is active (has money in CLICX or a CLICX loan). Active customers are mostly office workers and shop owners; inactive ones are more often manual workers",
+    "Source: CLICX, AIS, KTB, OR matched occupation data (Oct 2026)");
   const act = [164, 68, 64, 42, 10, 10], tot = [700, 293, 401, 232, 66, 129];
-  const occ = ["White collar (23% active)", "Merchant (23%)", "Blue collar (16%)", "Freelancer (18%)", "Rider / Driver (15%)", "Others (8%)"];
+  const occ = ["Office worker (23% active)", "Shop owner (23%)", "Manual worker (16%)", "Freelancer (18%)", "Rider / driver (15%)", "Unknown job (8%)"];
   const sa = 358, si = 1462;
   s.addChart(pres.charts.BAR, [
-    { name: "Share of active customers (358K)", labels: occ, values: act.map((v) => +(v / sa).toFixed(3)) },
-    { name: "Share of inactive customers (1,462K)", labels: occ, values: act.map((v, i) => +((tot[i] - v) / si).toFixed(3)) },
-  ], { x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Occupation mix: active vs inactive CLICX customers, %"),
+    { name: "Active customers (358K)", labels: occ, values: act.map((v) => +(v / sa).toFixed(3)) },
+    { name: "Inactive customers (1.46M)", labels: occ, values: act.map((v, i) => +((tot[i] - v) / si).toFixed(3)) },
+  ], { x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Job type of active vs inactive customers, %"),
     chartColors: [NAVY, LGREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11, dataLabelFormatCode: "0%",
     showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: 0.55, catAxisOrientation: "maxMin", objectName: "Active vs inactive mix" });
   insights(s, [
-    ["Salaried and Merchants stay", "White-collar and Merchant make up 65% of active customers but 52% of inactive ones, with an active rate of 23% each"],
-    ["Blue-collar drops out", "23% of inactive customers vs 18% of active ones. They apply for credit, get declined and leave"],
-    ["Unknown means inactive", "Customers with no occupation data are only 8% active, and 3 in 4 inactive customers never got a loan or funded an account"],
+    ["Office workers and shop owners stay", "65% of active customers vs 52% of inactive ones. About 1 in 4 of them is active"],
+    ["Manual workers drift away", "They apply for a loan, get turned down and stop using CLICX"],
+    ["Unknown job, unknown customer", "Only 8% are active. Most inactive customers never got a loan or put money in"],
   ]);
 }
 {
-  const s = qSlide("Q4 Active vs inactive", "Q4  |  ACTIVE VS INACTIVE  (2/2)",
-    "What else separates active from inactive customers?",
-    "Value-tier telco users and borrowers stay active. FBB and post-paid AIS customers are 2–4x more active than AIS-inactive ones, and borrowers pay 6x more often than declined depositors",
-    "Note: Active = CLICX deposit > 0 or a booked CLICX loan; AIS segment base = 1.2M CLICX customers with AIS. Paying = any payment transaction in CLICX; shares of customers in brackets\nSource: AIS x CLICX matched data; Data for Business Strategy (14 Oct 2026)");
-  const seg = ["FBB only", "Post-paid", "Prepaid PPU", "Prepaid zero-ARPU", "Prepaid recurring", "Prepaid non-recurring", "AIS inactive"];
-  s.addChart(pres.charts.BAR, [{ name: "CLICX active rate", labels: seg, values: [0.41, 0.28, 0.22, 0.21, 0.19, 0.15, 0.09] }], {
-    x: 0.5, y: 2.35, w: 4.4, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("CLICX active rate by AIS segment, %"),
+  const s = qSlide("Q4 Active vs inactive", "Q4  |  WHO KEEPS USING US  (2/2)",
+    "What else separates active customers from inactive ones?",
+    "Two things: how they pay for their phone and whether they got a loan. Monthly-bill AIS customers are 3x more active than lapsed ones, and borrowers pay with CLICX 6x more often",
+    "Source: AIS and CLICX matched customer data (Sep 2026)");
+  const seg = ["Home internet only", "Monthly phone bill", "Prepaid, pay-per-use", "Prepaid, little spend", "Prepaid, regular top-up", "Prepaid, occasional top-up", "Stopped using AIS"];
+  s.addChart(pres.charts.BAR, [{ name: "Active in CLICX", labels: seg, values: [0.41, 0.28, 0.22, 0.21, 0.19, 0.15, 0.09] }], {
+    x: 0.5, y: 2.35, w: 4.6, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("% active in CLICX, by type of AIS customer"),
     chartColors: [NAVY, NAVY, GREY, GREY, GREY, GREY, RED], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
     dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 40, valAxisMaxVal: 0.5, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "AIS segment active rate" });
-  s.addChart(pres.charts.BAR, [{ name: "Paying in CLICX", labels: ["Loan booked (11%)", "Deposit, never rejected (22%)", "Deposit, ever rejected (67%)"], values: [0.51, 0.16, 0.08] }], {
-    x: 5.0, y: 2.35, w: 3.9, h: 4.35, barDir: "col", ...AX, ...quiet(), ...chartTitle("Customers paying through CLICX, by product status, %"),
+  s.addChart(pres.charts.BAR, [{ name: "Pays with CLICX", labels: ["Got a loan", "Never turned down", "Turned down for a loan"], values: [0.51, 0.16, 0.08] }], {
+    x: 5.2, y: 2.35, w: 3.7, h: 4.35, barDir: "col", ...AX, ...quiet(), ...chartTitle("% who pay with CLICX"),
     chartColors: [NAVY, GREY, RED], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
     dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 50, valAxisMaxVal: 0.6, catAxisLabelFontSize: 10, objectName: "Paying by product status" });
   insights(s, [
-    ["Telco tier predicts activity", "FBB (41%) and post-paid (28%) users are most active; post-paid is 44% of the active AIS base"],
-    ["A loan creates the habit", "51% of borrowers pay through CLICX vs 8% of customers whose loan was rejected"],
-    ["Rejection drives inactivity", "67% of customers were rejected for credit at some point, and 83% of them never transact"],
+    ["Steady phone payers stay", "Home internet (41%) and monthly-bill (28%) customers are the most active"],
+    ["A loan builds the habit", "Half of borrowers pay with CLICX, against 8% of people we turned down"],
+    ["Saying 'no' loses customers", "2 in 3 customers have been turned down for a loan at some point, and most of them never use CLICX again"],
   ]);
 }
 
 // =====================================================================
 // Q5
-pres.addSection({ title: "Q5 KTB cannibalization" });
+pres.addSection({ title: "Q5 Impact on KTB" });
 {
-  const s = qSlide("Q5 KTB cannibalization", "Q5  |  KTB CANNIBALIZATION  (1/2)",
-    "Does CLICX cannibalize KTB customers?",
-    "Limited. Only 13% of the 1.6M KTB x CLICX overlap are KTB-loyal customers; 61% are competitor-loyal or inactive with KTB, so CLICX mostly wins back or reactivates them",
-    "Note: KTB active = holds at least 1 of 4 core KTB products. KTB-inactive = no KTB transaction in 1 year (incl. Paotang-only without PaotangPay). Shared wallet = KTB swing, low engagement and PaotangPay users\nSource: KTB x CLICX engagement segmentation (Oct 2026)");
-  const b = ["KTB-loyal (at risk)", "Shared wallet", "Competitor-loyal (win-back)", "KTB-inactive (reactivated)"];
-  s.addChart(pres.charts.BAR, [{ name: "Share of overlap", labels: b, values: [0.13, 0.26, 0.31, 0.30] }], {
-    x: 0.5, y: 2.35, w: 4.9, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Share of 1.65M KTB x CLICX customers, %"),
+  const s = qSlide("Q5 Impact on KTB", "Q5  |  IMPACT ON KTB  (1/2)",
+    "Does CLICX take customers away from KTB?",
+    "Very little. Of 1.6M customers we share with KTB, only 13% are loyal to KTB. 61% mainly used other banks or had stopped using KTB, so we are winning them back for the group",
+    "Source: KTB and CLICX matched customer data (Oct 2026)");
+  const b = ["Loyal to KTB (at risk)", "Uses KTB and other banks", "Loyal to other banks (won back)", "Stopped using KTB (brought back)"];
+  s.addChart(pres.charts.BAR, [{ name: "Share of shared customers", labels: b, values: [0.13, 0.26, 0.31, 0.30] }], {
+    x: 0.5, y: 2.35, w: 5.0, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Customers we share with KTB, by how they use KTB, %"),
     chartColors: [RED, GREY, BLUE, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
     dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.4, catAxisOrientation: "maxMin", objectName: "Overlap by KTB relationship" });
-  s.addChart(pres.charts.BAR, [{ name: "Penetration", labels: ["KTB-loyal", "Shared wallet", "Competitor-loyal", "KTB-inactive"], values: [0.033, 0.074, 0.079, 0.030] }], {
-    x: 5.5, y: 2.35, w: 3.4, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("CLICX penetration of each KTB group, %"),
+  s.addChart(pres.charts.BAR, [{ name: "Joined CLICX", labels: ["Loyal to KTB", "KTB and others", "Other banks", "Stopped KTB"], values: [0.033, 0.074, 0.079, 0.030] }], {
+    x: 5.6, y: 2.35, w: 3.3, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("% of each KTB group who joined CLICX"),
     chartColors: [RED, GREY, BLUE, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
     dataLabelFormatCode: "0.0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.1, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "Penetration by KTB group" });
   insights(s, [
-    ["Loyalists are hard to pull", "KTB-loyal penetration is 3.3%, less than half that of competitor-loyal (7.9%) and shared-wallet (7.4%) customers"],
-    ["Defensive growth for KTB", "515K competitor-loyal customers, 79K of them quality users, now bank with the KTB ecosystem through CLICX"],
-    ["Reactivation, not substitution", "488K were inactive with KTB for a year or more but signed up for CLICX"],
+    ["KTB loyalists rarely switch", "Only 3.3% of them joined, less than half the rate of people who bank elsewhere (7.9%)"],
+    ["We win back other banks' customers", "515K customers mainly banked elsewhere. Now they are back in the KTB group through CLICX"],
+    ["We wake up lapsed customers", "488K had not used KTB for a year or more, then joined CLICX"],
   ]);
 }
 {
-  const s = qSlide("Q5 KTB cannibalization", "Q5  |  KTB CANNIBALIZATION  (2/2)",
-    "Does CLICX cannibalize KTB products?",
-    "Not on lending, where CLICX is additive. Its borrowers largely sit outside KTB's Jai-pump digital loan, and it catches customers Jai-pump rejects. Deposit cannibalization cannot yet be measured",
-    "Note: Jai-pump = KTB's digital personal loan. Rejected = rejected by Jai-pump in the last 3 months. Quality = payment in last month, deposit > THB 100 or a performing loan. CLICX balances are not yet in the data room\nSource: KTB x CLICX matched data (Oct 2026)");
-  s.addChart(pres.charts.BAR, [{ name: "CLICX customers, K", labels: ["Borrowers with no Jai-pump loan", "Applicants rejected by Jai-pump", "Borrowers rejected by Jai-pump"], values: [116, 156, 23] }], {
-    x: 0.5, y: 2.35, w: 5.4, h: 4.35, barDir: "bar", catAxisOrientation: "maxMin", ...AX, ...quiet(), ...chartTitle("CLICX lending outside KTB's Jai-pump loan, K customers"),
+  const s = qSlide("Q5 Impact on KTB", "Q5  |  IMPACT ON KTB  (2/2)",
+    "Does CLICX take products away from KTB?",
+    "Not for loans: we mostly lend to people KTB's own app loan (Jai-pump) does not serve or turns down. We cannot check savings yet",
+    "Source: KTB and CLICX matched customer data (Oct 2026)");
+  s.addChart(pres.charts.BAR, [{ name: "CLICX customers, K", labels: ["Our borrowers with no KTB loan", "Turned down by KTB, applied to us", "Turned down by KTB, got our loan"], values: [116, 156, 23] }], {
+    x: 0.5, y: 2.35, w: 5.4, h: 4.35, barDir: "bar", catAxisOrientation: "maxMin", ...AX, ...quiet(), ...chartTitle("CLICX lending that KTB's Jai-pump loan does not cover, thousand customers"),
     chartColors: [BLUE, NAVY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
     dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 50, valAxisMaxVal: 190, catAxisLabelFontSize: 11, objectName: "Lending outside KTB" });
   s.addShape(pres.shapes.RECTANGLE, { x: 6.1, y: 2.45, w: 2.8, h: 4.15, fill: { color: C.background2 }, line: { color: GREY, width: 1, dashType: "dash" }, objectName: "Deposit gap box" });
   s.addText([
-    { text: "DEPOSITS: NOT YET MEASURABLE", options: { bold: true, fontSize: 11, color: C.accent5, charSpacing: 1, breakLine: true } },
+    { text: "SAVINGS: NOT KNOWN YET", options: { bold: true, fontSize: 11, color: C.accent5, charSpacing: 1, breakLine: true } },
     { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "CLICX balances are not yet in the data room, so we cannot test whether KTB deposits move to CLICX.", options: { fontSize: 12, color: C.text1, breakLine: true } },
+    { text: "We cannot yet see CLICX balances, so we cannot tell if money is moving out of KTB accounts.", options: { fontSize: 12, color: C.text1, breakLine: true } },
     { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "Next step: compare KTB balances of the 1.6M overlap before vs after CLICX sign-up once data lands", options: { fontSize: 12, bold: true, color: C.text2 } },
+    { text: "Next step: once the data is in, compare shared customers' KTB balances before and after they joined CLICX", options: { fontSize: 12, bold: true, color: C.text2 } },
   ], { x: 6.3, y: 2.65, w: 2.4, h: 3.8, valign: "top", margin: 0, isTextBox: true, objectName: "Deposit gap text" });
   insights(s, [
-    ["Additive loan book", "116K CLICX borrowers hold no KTB Jai-pump loan, new credit for the ecosystem"],
-    ["A safety net for KTB rejects", "156K applicants and 23K borrowers were rejected by Jai-pump in the last 3 months, demand that would otherwise go to competitors"],
-    ["Value overlap is modest", "Only 15% of the 251K quality CLICX customers in the overlap (38K) are KTB-loyal"],
+    ["New loans for the group", "116K of our borrowers have no KTB Jai-pump loan"],
+    ["A safety net for KTB", "156K people KTB turned down in the last 3 months applied to us instead of going to another bank"],
+    ["Few loyal KTB users among our best customers", "Only 15% of our most engaged shared customers are loyal to KTB"],
   ]);
 }
 
 // =====================================================================
 // Implications
-pres.addSection({ title: "Implications" });
+pres.addSection({ title: "What to do next" });
 {
-  const s = qSlide("Implications", "IMPLICATIONS",
+  const s = qSlide("What to do next", "WHAT TO DO NEXT",
     "What should we do with these answers?",
-    "Keep the consortium as the acquisition engine, but move from sign-ups to active, credit-led customers in the personas that already work",
-    "Source: synthesis of Q1–Q5; actions build on Data for Business Strategy (14 Oct 2026) and CLICX 5-Year Business Plan");
+    "Keep using partners to bring people in, and focus on turning sign-ups into regular users, starting with the customer types that already work",
+    "Source: CLICX team analysis");
   const cards = [
-    ["Q1", "Mine the 47M base", "Go after AIS first (3.7% penetration on ~32M), through myAIS and Dipchip, starting with 1.1M active AIS customers"],
-    ["Q2", "Double down on what fits", "Use Tech-Savvy aged 30–34 as the look-alike seed. Build a Multiple-Bank offer and a proxy-income journey for gig workers"],
-    ["Q3", "Fix the credit funnel", "Over 90% of Blue-collar and gig workers apply but 5–7% are booked. Recalibrate underwriting and offer deposit-backed credit-builder loans"],
-    ["Q4", "Activate after onboarding", "Get new customers onto 3+ use cases in 30 days. Give declined applicants a non-loan reason to stay; target prepaid and AIS-inactive customers"],
-    ["Q5", "Position CLICX as KTB's growth arm", "Report win-back (515K) and reactivation (488K) to KTB. Formalise Jai-pump reject referral; measure deposit overlap once data lands"],
+    ["Q1", "Reach more partner customers", "Start with AIS: only 3.7% of its ~32M customers have joined. Sign them up through the myAIS app and AIS shops"],
+    ["Q2", "Find more people like our best customers", "Target tech-savvy 30–34s. Create a clear reason for multi-bank users to switch. Make it easy for gig workers to prove income"],
+    ["Q3", "Say 'yes' more safely", "Over 90% of manual and gig workers apply but only 5–7% get a loan. Improve approval rules and offer small starter loans"],
+    ["Q4", "Keep new customers using us", "Get them using 3+ features in the first month. Give people we turn down another reason to stay"],
+    ["Q5", "Show KTB we grow the group", "Share the 515K won back and 488K brought back. Set up referrals for people KTB turns down. Check savings once data is in"],
   ];
   const cw = 2.33, gap = 0.17;
   cards.forEach((c, i) => {
@@ -347,7 +347,7 @@ pres.addSection({ title: "Implications" });
     s.addShape(pres.shapes.OVAL, { x: x + 0.2, y: y + 0.22, w: 0.55, h: 0.55, fill: { color: C.text2 }, line: { type: "none" }, objectName: `Card badge ${c[0]}` });
     s.addText(c[0], { x: x + 0.2, y: y + 0.22, w: 0.55, h: 0.55, fontSize: 13, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: `Card badge text ${c[0]}` });
     s.addText(c[1], { x: x + 0.2, y: y + 0.95, w: cw - 0.4, h: 0.85, fontSize: 15, bold: true, color: C.text2, valign: "top", margin: 0, isTextBox: true, objectName: `Card title ${c[0]}` });
-    s.addText(c[2], { x: x + 0.2, y: y + 1.75, w: cw - 0.4, h: 2.35, fontSize: 12, color: C.text1, valign: "top", margin: 0, isTextBox: true, objectName: `Card body ${c[0]}` });
+    s.addText(c[2], { x: x + 0.2, y: y + 1.85, w: cw - 0.4, h: 2.25, fontSize: 12, color: C.text1, valign: "top", margin: 0, isTextBox: true, objectName: `Card body ${c[0]}` });
   });
 }
 
