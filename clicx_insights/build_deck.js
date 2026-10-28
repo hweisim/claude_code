@@ -36,6 +36,7 @@ pres.defineSlideMaster({
     { placeholder: { options: { name: "title", type: "title", x: 0.8, y: 2.45, w: 11.5, h: 1.4, fontSize: 40, bold: true, color: C.background1, valign: "top" }, text: "" } },
     { placeholder: { options: { name: "sub", type: "body", x: 0.8, y: 3.95, w: 10.5, h: 1.0, fontSize: 18, color: C.accent6, valign: "top" }, text: "" } },
     { placeholder: { options: { name: "date", type: "body", x: 0.8, y: 6.3, w: 8, h: 0.4, fontSize: 12, color: C.background1 }, text: "" } },
+    { image: { path: __dirname + "/logo_white.png", x: 11.13, y: 0.5, w: 1.7, h: 0.426, altText: "CLICX logo" } },
   ],
 });
 
@@ -48,7 +49,7 @@ pres.defineSlideMaster({
     { placeholder: { options: { name: "title", type: "title", x: 0.5, y: 0.62, w: 12.33, h: 0.9, fontSize: 24, bold: true, color: C.text2, align: "left", valign: "top", margin: 0 }, text: "" } },
     { placeholder: { options: { name: "answer", type: "body", x: 0.5, y: 1.62, w: 12.33, h: 0.65, fontSize: 16, color: C.text1, valign: "top", margin: 0 }, text: "" } },
     { placeholder: { options: { name: "foot", type: "body", x: 0.5, y: 6.82, w: 11.2, h: 0.45, fontSize: 10, color: "6E7C87", valign: "top", margin: 0 }, text: "" } },
-    { text: { text: "CLICX customer insights", options: { x: 9.3, y: 0.3, w: 3.53, h: 0.3, fontSize: 10, color: "6E7C87", align: "right", margin: 0 } } },
+    { image: { path: __dirname + "/logo.png", x: 11.63, y: 0.2, w: 1.2, h: 0.3, altText: "CLICX logo" } },
   ],
   slideNumber: { x: 12.33, y: 6.95, w: 0.5, h: 0.3, fontSize: 10, color: "6E7C87", align: "right" },
 });
