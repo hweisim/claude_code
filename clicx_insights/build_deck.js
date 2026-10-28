@@ -216,16 +216,19 @@ pres.addSection({ title: "Q3 What they come for" });
     "Do different types of customer come for the same product or different ones?",
     "The same: almost everyone comes to borrow. But what they end up using differs. Office workers get loans, shop owners keep savings, and gig workers are mostly turned down",
     "Source: CLICX, AIS, KTB, OR matched occupation data (Oct 2026)");
-  stat(s, 0.5, 2.4, 2.4, "84–92%", "of every job type applied for a CLICX loan");
-  stat(s, 0.5, 3.95, 2.4, "5–11%", "actually got a loan", C.text2);
   const occ = ["Office worker", "Shop owner", "Manual worker", "Freelancer", "Rider / driver"];
   s.addChart(pres.charts.BAR, [
+    { name: "Applied for a loan", labels: occ, values: [0.85, 0.84, 0.92, 0.88, 0.91] },
     { name: "Got a loan", labels: occ, values: [0.11, 0.07, 0.07, 0.06, 0.05] },
+  ], { x: 0.5, y: 2.35, w: 4.2, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Loans: applied vs got one, % of each job type"),
+    chartColors: [LGREY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: "0%",
+    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: 1.15, catAxisOrientation: "maxMin", objectName: "Loans applied vs got" });
+  s.addChart(pres.charts.BAR, [
     { name: "Keeps money in CLICX", labels: occ, values: [0.18, 0.20, 0.12, 0.16, 0.13] },
     { name: "Paid with CLICX in Sep", labels: occ, values: [0.14, 0.14, 0.10, 0.12, 0.11] },
-  ], { x: 3.1, y: 2.35, w: 5.8, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("What each job type actually uses, % of its CLICX customers"),
-    chartColors: [NAVY, BLUE, CYAN], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: "0%",
-    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 35, valAxisMaxVal: 0.25, catAxisOrientation: "maxMin", objectName: "Product use by occupation" });
+  ], { x: 4.8, y: 2.35, w: 4.1, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Saving and paying, % of each job type"),
+    chartColors: [BLUE, CYAN], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: "0%",
+    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: 0.26, catAxisOrientation: "maxMin", objectName: "Saving and paying" });
   insights(s, [
     ["Loans bring everyone in", "1.52M customers (84%) have applied for a loan, whatever their job"],
     ["Office workers use the most", "Most likely to get a loan (11%) and to pay with CLICX (14%)"],
