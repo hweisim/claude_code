@@ -136,19 +136,15 @@ pres.addSection({ title: "Q1 Source of customers" });
     "Note: one customer can belong to several partners, so partner shares add up to 195%. Penetration = CLICX customers ÷ partner customer base. 85% of CLICX customers gave consent for data matching\nSource: CLICX data (Sep 2026); AIS, KTB, OR data (Apr 2026)");
   stat(s, 0.5, 2.4, 2.6, "96%", "of 1.8M CLICX customers come from the consortium base");
   stat(s, 0.5, 3.85, 2.6, "51K", "CLICX customers who are not AIS, KTB or OR customers", C.text2);
-  stat(s, 0.5, 5.3, 2.6, "47M", "consortium customers not yet on CLICX", C.text2);
-  s.addChart(pres.charts.BAR, [{ name: "CLICX customers, K", labels: ["KTB", "AIS", "OR", "Outside"], values: [1600, 1200, 725, 51] }], {
-    x: 3.2, y: 2.35, w: 3.0, h: 4.35, barDir: "col", ...AX, ...quiet(), ...chartTitle("CLICX customers by partner, K"),
-    chartColors: [NAVY, NAVY, NAVY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
-    dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 60, catAxisLabelFontSize: 10, objectName: "Customers by partner" });
-  s.addChart(pres.charts.BAR, [{ name: "Penetration of partner base", labels: ["KTB", "AIS", "OR"], values: [0.047, 0.037, 0.074] }], {
-    x: 6.3, y: 2.35, w: 2.6, h: 4.35, barDir: "col", ...AX, ...quiet(), ...chartTitle("Penetration of partner base"),
-    chartColors: [CYAN], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
-    dataLabelFormatCode: "0.0%", showLegend: false, barGapWidthPct: 60, valAxisMinVal: 0, valAxisMaxVal: 0.09, objectName: "Penetration by partner" });
+  stat(s, 0.5, 5.3, 2.6, "3.7%", "of the 49M consortium base is on CLICX so far", C.text2);
+  s.addChart(pres.charts.BAR, [{ name: "Share of CLICX customers", labels: ["KTB customers", "AIS customers", "OR customers"], values: [0.88, 0.67, 0.40] }], {
+    x: 3.3, y: 2.35, w: 5.6, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Share of CLICX customers who are also a partner's customer, %"),
+    chartColors: [NAVY, NAVY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
+    dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 60, valAxisMinVal: 0, valAxisMaxVal: 1.05, catAxisOrientation: "maxMin", catAxisLabelFontSize: 12, objectName: "Partner reach" });
   insights(s, [
     ["KTB is the main gateway", "88% of CLICX customers are KTB customers (1.6M), helped by Paotang onboarding"],
     ["Customers sit in several partners", "Shares add up to 195%: most customers are known to 2+ partners, giving rich data for credit"],
-    ["AIS is the biggest headroom", "Lowest penetration (3.7%) on the largest base (~32M). OR converts best at 7.4%"],
+    ["AIS is the biggest headroom", "Lowest penetration (3.7%) on the largest base (~32M). OR converts best at 7.4%, KTB 4.7%"],
   ]);
 }
 
@@ -159,18 +155,14 @@ pres.addSection({ title: "Q2 Personas vs plan" });
   const s = qSlide("Q2 Personas vs plan", "Q2  |  PERSONAS VS PLAN  (1/3)",
     "Are the personas of customers who come to CLICX the same as we planned?",
     "Mostly yes. The planned Tech-Savvy target over-indexes 2.2x and Single-Bank users bring the volume, but Multiple-Bank users, also a target, are under-won",
-    "Note: personas assigned by AIS and KTB. Single-Bank = uses one bank, or KTB customer holding Next but inactive. Index = share of CLICX ÷ share of consortium base\nSource: CLICX data (Sep 2026); AIS, KTB, OR data (Apr 2026); initial target persona benchmark");
-  const labels = ["Tech-Savvy", "Single-Bank", "Multiple-Bank", "Unknown"];
+    "Note: personas assigned by AIS and KTB. Single-Bank = uses one bank, or KTB customer holding Next but inactive. Penetration = CLICX customers ÷ consortium customers in that persona\nSource: CLICX data (Sep 2026); AIS, KTB, OR data (Apr 2026); initial target persona benchmark");
+  const labels = ["Tech-Savvy (8.5% pen.)", "Single-Bank (4.1% pen.)", "Multiple-Bank (2.4% pen.)", "Unknown (2.0% pen.)"];
   s.addChart(pres.charts.BAR, [
     { name: "Share of consortium base (49.5M)", labels, values: [0.127, 0.415, 0.165, 0.292] },
     { name: "Share of CLICX customers (1.87M)", labels, values: [0.285, 0.455, 0.104, 0.156] },
-  ], { x: 0.5, y: 2.35, w: 5.4, h: 4.35, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Persona mix: consortium base vs CLICX, %"),
-    chartColors: [LGREY, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: "0%",
-    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 50, valAxisMaxVal: 0.55, objectName: "Persona mix" });
-  s.addChart(pres.charts.BAR, [{ name: "Penetration", labels, values: [0.085, 0.041, 0.024, 0.020] }], {
-    x: 6.0, y: 2.35, w: 2.9, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Penetration by persona"),
-    chartColors: [BLUE, NAVY, GREY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
-    dataLabelFormatCode: "0.0%", showLegend: false, barGapWidthPct: 50, valAxisMaxVal: 0.11, catAxisOrientation: "maxMin", objectName: "Persona penetration" });
+  ], { x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Persona mix: consortium base vs CLICX customers, %"),
+    chartColors: [LGREY, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11, dataLabelFormatCode: "0%",
+    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 60, valAxisMaxVal: 0.55, objectName: "Persona mix" });
   insights(s, [
     ["Tech-Savvy: target hit", "533K customers, 28% of CLICX from 13% of the base; penetration 8.5% (2.2x average), peaking at 13% for ages 30–34"],
     ["Single-Bank: volume engine", "850K (45% of CLICX). 577K are KTB customers without AIS, a pool to cross-sell AIS"],
@@ -181,19 +173,18 @@ pres.addSection({ title: "Q2 Personas vs plan" });
   const s = qSlide("Q2 Personas vs plan", "Q2  |  PERSONAS VS PLAN  (2/3)",
     "Does the age profile of CLICX customers match the target pool?",
     "No. The target pool skews older, but CLICX concentrates in ages 25–39: 56% of customers vs 29% of the base. Penetration falls off sharply after 45",
-    "Note: penetration = CLICX customers ÷ consortium captive customers in that age band; base share excludes 4.7M customers of unknown age\nSource: CLICX data (Sep 2026); AIS, KTB, OR data (Apr 2026)");
+    "Note: base share excludes 4.7M consortium customers of unknown age; penetration = CLICX customers ÷ captive customers in that age band\nSource: CLICX data (Sep 2026); AIS, KTB, OR data (Apr 2026)");
   const ages = ["<20", "20–24", "25–29", "30–34", "35–39", "40–44", "45–49", "50–54", "55–59", "60+"];
   const clicx = [12.4, 163, 334, 385, 328, 268, 189, 104, 51, 31];
   const base = [2280, 3569, 4162, 4496, 4211, 4271, 4366, 4165, 3954, 9355];
-  const pen = clicx.map((v, i) => +(v / base[i]).toFixed(4));
-  s.addChart(pres.charts.BAR, [{ name: "CLICX customers, K", labels: ages, values: clicx }], {
-    x: 0.5, y: 2.35, w: 8.4, h: 2.15, barDir: "col", ...AX, ...quiet(), ...chartTitle("CLICX customers by age, K"),
-    chartColors: [NAVY, NAVY, BLUE, BLUE, BLUE, NAVY, NAVY, NAVY, NAVY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT,
-    dataLabelFontSize: 10, dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 40, valAxisMaxVal: 480, catAxisLabelFontSize: 10, objectName: "Customers by age" });
-  s.addChart(pres.charts.BAR, [{ name: "Penetration", labels: ages, values: pen }], {
-    x: 0.5, y: 4.55, w: 8.4, h: 2.15, barDir: "col", ...AX, ...quiet(), ...chartTitle("Penetration of captive base by age, %"),
-    chartColors: [GREY, GREY, CYAN, CYAN, CYAN, GREY, GREY, GREY, GREY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT,
-    dataLabelFontSize: 10, dataLabelFormatCode: "0.0%", showLegend: false, barGapWidthPct: 40, valAxisMaxVal: 0.11, catAxisLabelFontSize: 10, objectName: "Penetration by age" });
+  const sum = (a) => a.reduce((x, y) => x + y, 0);
+  const share = (a) => a.map((v) => +(v / sum(a)).toFixed(3));
+  s.addChart(pres.charts.BAR, [
+    { name: "Share of consortium base (known age, 44.8M)", labels: ages, values: share(base) },
+    { name: "Share of CLICX customers (1.87M)", labels: ages, values: share(clicx) },
+  ], { x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Age mix: consortium base vs CLICX customers, %"),
+    chartColors: [LGREY, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 9, dataLabelFormatCode: "0%",
+    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: 0.25, catAxisLabelFontSize: 11, objectName: "Age mix" });
   insights(s, [
     ["Sweet spot is 25–39", "1.05M customers (56% of CLICX); penetration of 8–9% vs 3.8% overall"],
     ["Older base is untouched", "Customers aged 40+ make up 58% of the known-age base but only 34% of CLICX; 60+ penetration is 0.3% on 9.4M people"],
@@ -205,15 +196,11 @@ pres.addSection({ title: "Q2 Personas vs plan" });
     "Are we reaching the thin-file, real-income customers our strategy targets?",
     "Yes. Gig workers convert 5–10x better than average (Freelancer 40%, Rider/Driver 22%), and unserved/underserved borrowers are 35% of loans vs a 30% target",
     "Note: occupation from AIS x KTB x OR x CLICX matched data; penetration = CLICX customers ÷ captive customers in that occupation; Others = unknown occupation\nSource: Data team occupation analysis (Oct 2026); CLICX 5-Year Business Plan scorecard (Dec 2026 target)");
-  const occ = ["Freelancer", "Rider / Driver", "Blue collar", "White collar", "Merchant", "Others"];
+  const occ = ["Freelancer (232K)", "Rider / Driver (66K)", "Blue collar (401K)", "White collar (700K)", "Merchant (293K)", "Others (129K)"];
   s.addChart(pres.charts.BAR, [{ name: "Penetration", labels: occ, values: [0.40, 0.22, 0.16, 0.09, 0.09, 0.004] }], {
-    x: 0.5, y: 2.35, w: 4.2, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Penetration of captive base, %"),
-    chartColors: [BLUE, BLUE, NAVY, NAVY, NAVY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
-    dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.5, catAxisOrientation: "maxMin", objectName: "Occupation penetration" });
-  s.addChart(pres.charts.BAR, [{ name: "CLICX customers, K", labels: occ, values: [232, 66, 401, 700, 293, 129] }], {
-    x: 4.8, y: 2.35, w: 4.1, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("CLICX customers, K"),
-    chartColors: [GREY, GREY, NAVY, NAVY, NAVY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
-    dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 850, catAxisOrientation: "maxMin", objectName: "Occupation volume" });
+    x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("CLICX penetration of captive base by occupation, % (CLICX customers)"),
+    chartColors: [BLUE, BLUE, NAVY, NAVY, NAVY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
+    dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.46, catAxisOrientation: "maxMin", catAxisLabelFontSize: 12, objectName: "Occupation penetration" });
   insights(s, [
     ["Gig workers: best fit", "Freelancers and riders convert at 40% and 22% of their small captive pools, which validates the alternative-data lending thesis"],
     ["Collars: the volume", "White- and Blue-collar make up 1.1M customers, over 60% of the portfolio"],
@@ -228,20 +215,17 @@ pres.addSection({ title: "Q3 Persona x product" });
   const s = qSlide("Q3 Persona x product", "Q3  |  PERSONA x PRODUCT",
     "For different customer personas, do they come for the same or different products?",
     "They come for the same thing, credit: 84–92% of every occupation applies for a loan. What they end up using differs: White-collar books loans, Merchants keep deposits, gig workers are mostly declined",
-    "Note: % of CLICX customers in each occupation. Deposit = balance > 0; Payment = transacted in Sep 2026; Booked = loan booked\nSource: Data team occupation analysis, AIS x KTB x OR x CLICX (Oct 2026)");
+    "Note: % of CLICX customers in each occupation. Deposit = balance > 0; Payment = transacted in Sep 2026; Loan booked = loan disbursed\nSource: Data team occupation analysis, AIS x KTB x OR x CLICX (Oct 2026)");
+  stat(s, 0.5, 2.4, 2.4, "84–92%", "of every occupation applied for a CLICX loan: the same entry product");
+  stat(s, 0.5, 3.95, 2.4, "5–11%", "actually had a loan booked, so usage splits by persona", C.text2);
   const occ = ["White collar", "Merchant", "Blue collar", "Freelancer", "Rider / Driver"];
   s.addChart(pres.charts.BAR, [
-    { name: "Applied for loan", labels: occ, values: [0.85, 0.84, 0.92, 0.88, 0.91] },
     { name: "Loan booked", labels: occ, values: [0.11, 0.07, 0.07, 0.06, 0.05] },
-  ], { x: 0.5, y: 2.35, w: 4.2, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Credit: applied vs booked, %"),
-    chartColors: [LGREY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: "0%",
-    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: 1.15, catAxisOrientation: "maxMin", objectName: "Credit funnel by occupation" });
-  s.addChart(pres.charts.BAR, [
     { name: "Deposit > 0", labels: occ, values: [0.18, 0.20, 0.12, 0.16, 0.13] },
     { name: "Payment (Sep)", labels: occ, values: [0.14, 0.14, 0.10, 0.12, 0.11] },
-  ], { x: 4.8, y: 2.35, w: 4.1, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Save & pay usage, %"),
-    chartColors: [BLUE, CYAN], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: "0%",
-    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: 0.26, catAxisOrientation: "maxMin", objectName: "Save and pay by occupation" });
+  ], { x: 3.1, y: 2.35, w: 5.8, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("What each occupation actually uses, % of its CLICX customers"),
+    chartColors: [NAVY, BLUE, CYAN], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: "0%",
+    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 35, valAxisMaxVal: 0.25, catAxisOrientation: "maxMin", objectName: "Product use by occupation" });
   insights(s, [
     ["Credit is the hook for all", "1.52M customers (84%) have applied for a loan, whatever their occupation"],
     ["White-collar: borrow and pay", "Highest booking rate (11%, 79K loans) and 14% pay monthly. The most complete product user"],
@@ -257,25 +241,16 @@ pres.addSection({ title: "Q4 Active vs inactive" });
   const s = qSlide("Q4 Active vs inactive", "Q4  |  ACTIVE VS INACTIVE  (1/2)",
     "For active vs inactive CLICX customers, is the persona different?",
     "Yes. Only 1 in 5 customers is active, and the active base skews to salaried White-collar and Merchants, while inactive customers skew to Blue-collar and unknown occupations",
-    "Note: Active = CLICX deposit > 0 or a booked CLICX loan. Inactive = all other CLICX customers. Totals: active 358K, inactive 1,462K\nSource: Data team occupation analysis, AIS x KTB x OR x CLICX (Oct 2026)");
-  const grp = ["Active (358K)", "Inactive (1,462K)"];
-  const act = { WC: 164, M: 68, BC: 64, F: 42, R: 10, O: 10 }, tot = { WC: 700, M: 293, BC: 401, F: 232, R: 66, O: 129 };
-  const sa = 358, si = 1462, sh = (k) => [+(act[k] / sa).toFixed(3), +((tot[k] - act[k]) / si).toFixed(3)];
+    "Note: Active = CLICX deposit > 0 or a booked CLICX loan. Inactive = all other CLICX customers. Totals: active 358K, inactive 1,462K. Labels show each occupation's active rate\nSource: Data team occupation analysis, AIS x KTB x OR x CLICX (Oct 2026)");
+  const act = [164, 68, 64, 42, 10, 10], tot = [700, 293, 401, 232, 66, 129];
+  const occ = ["White collar (23% active)", "Merchant (23%)", "Blue collar (16%)", "Freelancer (18%)", "Rider / Driver (15%)", "Others (8%)"];
+  const sa = 358, si = 1462;
   s.addChart(pres.charts.BAR, [
-    { name: "White collar", labels: grp, values: sh("WC") },
-    { name: "Merchant", labels: grp, values: sh("M") },
-    { name: "Blue collar", labels: grp, values: sh("BC") },
-    { name: "Freelancer", labels: grp, values: sh("F") },
-    { name: "Rider / Driver", labels: grp, values: sh("R") },
-    { name: "Others", labels: grp, values: sh("O") },
-  ], { x: 0.5, y: 2.35, w: 4.6, h: 4.35, barDir: "col", barGrouping: "percentStacked", ...AX, ...quiet(), ...chartTitle("Occupation mix, % of segment"),
-    chartColors: [NAVY, BLUE, CYAN, LCYAN, GREY, LGREY], showValue: true, dataLabelPosition: "ctr", dataLabelColor: "FFFFFF", dataLabelFontSize: 10,
-    dataLabelFormatCode: "0%", showLegend: true, legendPos: "r", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 45, objectName: "Active vs inactive mix" });
-  const occ = ["White collar", "Merchant", "Freelancer", "Blue collar", "Rider / Driver", "Others"];
-  s.addChart(pres.charts.BAR, [{ name: "Active rate", labels: occ, values: [0.23, 0.23, 0.18, 0.16, 0.15, 0.08] }], {
-    x: 5.2, y: 2.35, w: 3.7, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Active rate by occupation, %"),
-    chartColors: [NAVY, NAVY, GREY, GREY, GREY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
-    dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.3, catAxisOrientation: "maxMin", objectName: "Active rate" });
+    { name: "Share of active customers (358K)", labels: occ, values: act.map((v) => +(v / sa).toFixed(3)) },
+    { name: "Share of inactive customers (1,462K)", labels: occ, values: act.map((v, i) => +((tot[i] - v) / si).toFixed(3)) },
+  ], { x: 0.5, y: 2.35, w: 8.4, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Occupation mix: active vs inactive CLICX customers, %"),
+    chartColors: [NAVY, LGREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11, dataLabelFormatCode: "0%",
+    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: 0.55, catAxisOrientation: "maxMin", objectName: "Active vs inactive mix" });
   insights(s, [
     ["Salaried and Merchants stay", "White-collar and Merchant make up 65% of active customers but 52% of inactive ones, with an active rate of 23% each"],
     ["Blue-collar drops out", "23% of inactive customers vs 18% of active ones. They apply for credit, get declined and leave"],
@@ -286,21 +261,16 @@ pres.addSection({ title: "Q4 Active vs inactive" });
   const s = qSlide("Q4 Active vs inactive", "Q4  |  ACTIVE VS INACTIVE  (2/2)",
     "What else separates active from inactive customers?",
     "Value-tier telco users and borrowers stay active. FBB and post-paid AIS customers are 2–4x more active than AIS-inactive ones, and borrowers pay 6x more often than declined depositors",
-    "Note: Active = CLICX deposit > 0 or a booked CLICX loan; AIS segment base = 1.2M CLICX customers with AIS. Right chart: share of users by payment behaviour in CLICX\nSource: AIS x CLICX matched data; Data for Business Strategy (14 Oct 2026)");
+    "Note: Active = CLICX deposit > 0 or a booked CLICX loan; AIS segment base = 1.2M CLICX customers with AIS. Paying = any payment transaction in CLICX; shares of customers in brackets\nSource: AIS x CLICX matched data; Data for Business Strategy (14 Oct 2026)");
   const seg = ["FBB only", "Post-paid", "Prepaid PPU", "Prepaid zero-ARPU", "Prepaid recurring", "Prepaid non-recurring", "AIS inactive"];
   s.addChart(pres.charts.BAR, [{ name: "CLICX active rate", labels: seg, values: [0.41, 0.28, 0.22, 0.21, 0.19, 0.15, 0.09] }], {
-    x: 0.5, y: 2.35, w: 4.2, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("CLICX active rate by AIS segment, %"),
+    x: 0.5, y: 2.35, w: 4.4, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("CLICX active rate by AIS segment, %"),
     chartColors: [NAVY, NAVY, GREY, GREY, GREY, GREY, RED], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
     dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 40, valAxisMaxVal: 0.5, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "AIS segment active rate" });
-  const st = ["Loan booked (11%)", "Deposit, never rejected (22%)", "Deposit, ever rejected (67%)"];
-  s.addChart(pres.charts.BAR, [
-    { name: "No txn, no balance", labels: st, values: [0.26, 0.61, 0.83] },
-    { name: "No txn, has balance", labels: st, values: [0.23, 0.23, 0.08] },
-    { name: "Txn in 1 month", labels: st, values: [0.25, 0.08, 0.05] },
-    { name: "Txn in 2+ months", labels: st, values: [0.26, 0.08, 0.03] },
-  ], { x: 4.8, y: 2.35, w: 4.1, h: 4.35, barDir: "bar", barGrouping: "percentStacked", ...AX, ...quiet(), ...chartTitle("Payment behaviour by product status"),
-    chartColors: [LGREY, GREY, CYAN, NAVY], showValue: true, dataLabelPosition: "ctr", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: "0%",
-    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 35, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "Payment by product status" });
+  s.addChart(pres.charts.BAR, [{ name: "Paying in CLICX", labels: ["Loan booked (11%)", "Deposit, never rejected (22%)", "Deposit, ever rejected (67%)"], values: [0.51, 0.16, 0.08] }], {
+    x: 5.0, y: 2.35, w: 3.9, h: 4.35, barDir: "col", ...AX, ...quiet(), ...chartTitle("Customers paying through CLICX, by product status, %"),
+    chartColors: [NAVY, GREY, RED], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
+    dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 50, valAxisMaxVal: 0.6, catAxisLabelFontSize: 10, objectName: "Paying by product status" });
   insights(s, [
     ["Telco tier predicts activity", "FBB (41%) and post-paid (28%) users are most active; post-paid is 44% of the active AIS base"],
     ["A loan creates the habit", "51% of borrowers pay through CLICX vs 8% of customers whose loan was rejected"],
@@ -315,19 +285,18 @@ pres.addSection({ title: "Q5 KTB cannibalization" });
   const s = qSlide("Q5 KTB cannibalization", "Q5  |  KTB CANNIBALIZATION  (1/2)",
     "Does CLICX cannibalize KTB customers?",
     "Limited. Only 13% of the 1.6M KTB x CLICX overlap are KTB-loyal customers; 61% are competitor-loyal or inactive with KTB, so CLICX mostly wins back or reactivates them",
-    "Note: KTB active = holds at least 1 of 4 core KTB products. Inactive = no KTB transaction in 1 year (incl. Paotang-only without PaotangPay). Shared wallet = KTB swing, low engagement and PaotangPay users\nSource: KTB x CLICX engagement segmentation (Oct 2026)");
+    "Note: KTB active = holds at least 1 of 4 core KTB products. KTB-inactive = no KTB transaction in 1 year (incl. Paotang-only without PaotangPay). Shared wallet = KTB swing, low engagement and PaotangPay users\nSource: KTB x CLICX engagement segmentation (Oct 2026)");
   const b = ["KTB-loyal (at risk)", "Shared wallet", "Competitor-loyal (win-back)", "KTB-inactive (reactivated)"];
-  s.addChart(pres.charts.BAR, [{ name: "CLICX customers, K", labels: b, values: [212, 434, 515, 488] }], {
-    x: 0.5, y: 2.35, w: 4.6, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Overlap by KTB relationship, K"),
-    chartColors: [RED, GREY, BLUE, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
-    dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 40, valAxisMaxVal: 650, catAxisOrientation: "maxMin", objectName: "Overlap by KTB relationship" });
-  const g = ["PaotangPay active", "KTB swing", "Competitor-loyal", "Paotang, no Pay", "KTB-loyal", "Inactive both", "KTB low engaged", "KTB inactive"];
-  s.addChart(pres.charts.BAR, [{ name: "Penetration", labels: g, values: [0.12, 0.085, 0.079, 0.054, 0.033, 0.026, 0.010, 0.009] }], {
-    x: 5.2, y: 2.35, w: 3.7, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Penetration by KTB group"),
-    chartColors: [GREY, GREY, BLUE, GREY, RED, GREY, GREY, GREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10,
-    dataLabelFormatCode: "0.0%", showLegend: false, barGapWidthPct: 35, valAxisMaxVal: 0.15, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "Penetration by KTB group" });
+  s.addChart(pres.charts.BAR, [{ name: "Share of overlap", labels: b, values: [0.13, 0.26, 0.31, 0.30] }], {
+    x: 0.5, y: 2.35, w: 4.9, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Share of 1.65M KTB x CLICX customers, %"),
+    chartColors: [RED, GREY, BLUE, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
+    dataLabelFormatCode: "0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.4, catAxisOrientation: "maxMin", objectName: "Overlap by KTB relationship" });
+  s.addChart(pres.charts.BAR, [{ name: "Penetration", labels: ["KTB-loyal", "Shared wallet", "Competitor-loyal", "KTB-inactive"], values: [0.033, 0.074, 0.079, 0.030] }], {
+    x: 5.5, y: 2.35, w: 3.4, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("CLICX penetration of each KTB group, %"),
+    chartColors: [RED, GREY, BLUE, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
+    dataLabelFormatCode: "0.0%", showLegend: false, barGapWidthPct: 45, valAxisMaxVal: 0.1, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "Penetration by KTB group" });
   insights(s, [
-    ["Loyalists are hard to pull", "KTB-loyal penetration is 3.3%, less than half that of competitor-loyal (7.9%) and swing (8.5%) customers"],
+    ["Loyalists are hard to pull", "KTB-loyal penetration is 3.3%, less than half that of competitor-loyal (7.9%) and shared-wallet (7.4%) customers"],
     ["Defensive growth for KTB", "515K competitor-loyal customers, 79K of them quality users, now bank with the KTB ecosystem through CLICX"],
     ["Reactivation, not substitution", "488K were inactive with KTB for a year or more but signed up for CLICX"],
   ]);
@@ -337,18 +306,22 @@ pres.addSection({ title: "Q5 KTB cannibalization" });
     "Does CLICX cannibalize KTB products?",
     "Not on lending, where CLICX is additive. Its borrowers largely sit outside KTB's Jai-pump digital loan, and it catches customers Jai-pump rejects. Deposit cannibalization cannot yet be measured",
     "Note: Jai-pump = KTB's digital personal loan. Rejected = rejected by Jai-pump in the last 3 months. Quality = payment in last month, deposit > THB 100 or a performing loan. CLICX balances are not yet in the data room\nSource: KTB x CLICX matched data (Oct 2026)");
-  s.addChart(pres.charts.BAR, [{ name: "CLICX customers, K", labels: ["CLICX borrowers with no Jai-pump loan", "CLICX applicants rejected by Jai-pump", "CLICX borrowers rejected by Jai-pump"], values: [116, 156, 23] }], {
-    x: 0.5, y: 2.35, w: 4.3, h: 4.35, barDir: "col", ...AX, ...quiet(), ...chartTitle("Lending gained outside KTB, K"),
+  s.addChart(pres.charts.BAR, [{ name: "CLICX customers, K", labels: ["Borrowers with no Jai-pump loan", "Applicants rejected by Jai-pump", "Borrowers rejected by Jai-pump"], values: [116, 156, 23] }], {
+    x: 0.5, y: 2.35, w: 5.4, h: 4.35, barDir: "bar", catAxisOrientation: "maxMin", ...AX, ...quiet(), ...chartTitle("CLICX lending outside KTB's Jai-pump loan, K customers"),
     chartColors: [BLUE, NAVY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 12,
-    dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 50, valAxisMaxVal: 190, catAxisLabelFontSize: 10, objectName: "Lending outside KTB" });
-  s.addChart(pres.charts.DOUGHNUT, [{ name: "Quality CLICX customers", labels: ["Competitor-loyal", "KTB swing", "KTB-loyal", "KTB-inactive", "Other"], values: [79, 76, 38, 48, 10] }], {
-    x: 4.9, y: 2.35, w: 4.0, h: 4.35, ...AX, ...chartTitle("Quality customers (251K) by KTB group"),
-    chartColors: [BLUE, GREY, RED, CYAN, LGREY], holeSize: 55, showPercent: true, showValue: false, dataLabelColor: "FFFFFF", dataLabelFontSize: 10,
-    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, objectName: "Quality customers by KTB group" });
+    dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 50, valAxisMaxVal: 190, catAxisLabelFontSize: 11, objectName: "Lending outside KTB" });
+  s.addShape(pres.shapes.RECTANGLE, { x: 6.1, y: 2.45, w: 2.8, h: 4.15, fill: { color: C.background2 }, line: { color: GREY, width: 1, dashType: "dash" }, objectName: "Deposit gap box" });
+  s.addText([
+    { text: "DEPOSITS: NOT YET MEASURABLE", options: { bold: true, fontSize: 11, color: C.accent5, charSpacing: 1, breakLine: true } },
+    { text: " ", options: { fontSize: 8, breakLine: true } },
+    { text: "CLICX balances are not yet in the data room, so we cannot test whether KTB deposits move to CLICX.", options: { fontSize: 12, color: C.text1, breakLine: true } },
+    { text: " ", options: { fontSize: 8, breakLine: true } },
+    { text: "Next step: compare KTB balances of the 1.6M overlap before vs after CLICX sign-up once data lands", options: { fontSize: 12, bold: true, color: C.text2 } },
+  ], { x: 6.3, y: 2.65, w: 2.4, h: 3.8, valign: "top", margin: 0, isTextBox: true, objectName: "Deposit gap text" });
   insights(s, [
     ["Additive loan book", "116K CLICX borrowers hold no KTB Jai-pump loan, new credit for the ecosystem"],
     ["A safety net for KTB rejects", "156K applicants and 23K borrowers were rejected by Jai-pump in the last 3 months, demand that would otherwise go to competitors"],
-    ["Value overlap is modest", "Only 15% of quality CLICX customers (38K) are KTB-loyal. Deposit overlap still needs testing once CLICX balances reach the data room"],
+    ["Value overlap is modest", "Only 15% of the 251K quality CLICX customers in the overlap (38K) are KTB-loyal"],
   ]);
 }
 
