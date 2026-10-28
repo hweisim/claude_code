@@ -241,7 +241,7 @@ pres.addSection({ title: "Q3 What they come for" });
 // Q4
 pres.addSection({ title: "Q4 Active vs inactive" });
 {
-  const s = qSlide("Q4 Active vs inactive", "Q4  |  WHO KEEPS USING US  (1/2)",
+  const s = qSlide("Q4 Active vs inactive", "Q4  |  WHO KEEPS USING US  (1/3)",
     "Are active CLICX customers a different type of person from inactive ones?",
     "Yes. Only 1 in 5 customers is active (has money in CLICX or a CLICX loan). Active customers are mostly office workers and shop owners; inactive ones are more often blue-collar workers",
     "Source: CLICX, AIS, KTB, OR matched occupation data (Oct 2026)");
@@ -261,7 +261,7 @@ pres.addSection({ title: "Q4 Active vs inactive" });
   ]);
 }
 {
-  const s = qSlide("Q4 Active vs inactive", "Q4  |  WHO KEEPS USING US  (2/2)",
+  const s = qSlide("Q4 Active vs inactive", "Q4  |  WHO KEEPS USING US  (2/3)",
     "What else separates active customers from inactive ones?",
     "Two things: how they pay for their phone and whether they got a loan. Monthly-bill AIS customers are 3x more active than lapsed ones, and borrowers pay with CLICX 6x more often",
     "Source: AIS and CLICX matched customer data (Sep 2026)");
@@ -278,6 +278,28 @@ pres.addSection({ title: "Q4 Active vs inactive" });
     ["Steady phone payers stay", "Home internet (41%) and monthly-bill (28%) customers are the most active"],
     ["A loan builds the habit", "Half of borrowers pay with CLICX, against 8% of people we turned down"],
     ["Saying 'no' loses customers", "2 in 3 customers have been turned down for a loan at some point, and most of them never use CLICX again"],
+  ]);
+}
+
+{
+  const s = qSlide("Q4 Active vs inactive", "Q4  |  WHO KEEPS USING US  (3/3)",
+    "Who pays bills, tops up or scans to pay with CLICX, and are they different from those who don't?",
+    "Payers are not a different type of person: their age and job look almost the same as non-payers. What sets them apart is that they have put money in and got a loan",
+    "Source: CLICX payment segments, Aug–Oct 2026 (1.50M customers with an account)");
+  stat(s, 0.5, 2.4, 2.4, "8%", "paid with CLICX in October (117K of 1.5M)");
+  stat(s, 0.5, 3.95, 2.4, "85%", "have never paid with CLICX in the last 3 months (1.27M)", C.text2);
+  stat(s, 0.5, 5.5, 2.4, "−29%", "fewer payers in Oct than in Aug", C.accent5);
+  const traits = ["In their 30s", "In their 20s", "Salaried (company or government)", "Blue-collar or farm worker", "AIS monthly phone bill", "Not an AIS customer", "Has a CLICX loan", "Has put money into CLICX"];
+  s.addChart(pres.charts.BAR, [
+    { name: "Regular payers (paid Aug, Sep and Oct, 58K)", labels: traits, values: [0.407, 0.212, 0.44, 0.14, 0.342, 0.306, 0.464, 0.999] },
+    { name: "Never paid (1.27M)", labels: traits, values: [0.382, 0.266, 0.37, 0.19, 0.188, 0.46, 0.059, 0.237] },
+  ], { x: 3.1, y: 2.35, w: 5.8, h: 4.35, barDir: "bar", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("Who they are: regular payers vs never paid, % of each group"),
+    chartColors: [NAVY, LGREY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 9, dataLabelFormatCode: "0%",
+    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 30, valAxisMaxVal: 1.2, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "Payers vs non-payers profile" });
+  insights(s, [
+    ["Age and job barely matter", "Gaps are small: 41% vs 38% in their 30s, 44% vs 37% salaried, 14% vs 19% blue-collar"],
+    ["Money in is the dividing line", "Nearly all regular payers have put money in, vs 24% of non-payers. Without money in, almost no one pays (0.1%)"],
+    ["Loans and phone bills help", "46% of regular payers have a loan vs 6% of non-payers. AIS monthly-bill customers are 34% of regular payers vs 19% of non-payers"],
   ]);
 }
 
