@@ -1,0 +1,480 @@
+<title>CLICX Customer Insights</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style id="page-style">
+/* Layout: sticky toolbar over a vertical stack of 16:9 slide "papers"; slides are fixed 1280x720 canvases scaled to width */
+:root {
+  --page: #E8EBEF; --chrome: #FFFFFF; --chrome-fg: #051C2C; --chrome-muted: #5F6B76; --chrome-line: #D5DADF; --accent: #2251FF;
+  /* slide palette: slides are printed-paper documents and keep one look in both themes */
+  --s-bg: #FFFFFF; --s-ink: #1A1A1A; --s-navy: #051C2C; --s-blue: #2251FF; --s-cyan: #00A9F4; --s-grey: #A2AAAD;
+  --s-lgrey: #D5DADF; --s-red: #D9475C; --s-lcyan: #7FD1F7; --s-muted: #5F6B76; --s-tint: #F2F4F7; --s-foot: #6E7C87;
+  --font: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --logo: url("data:image/png;base64,__LOGO__");
+  --logo-white: url("data:image/png;base64,__LOGO_WHITE__");
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --page: #0D151C; --chrome: #131E27; --chrome-fg: #E6EDF3; --chrome-muted: #9AA7B2; --chrome-line: #2A3A47; --accent: #7C9BFF; color-scheme: dark } }
+:root[data-theme="dark"] { --page: #0D151C; --chrome: #131E27; --chrome-fg: #E6EDF3; --chrome-muted: #9AA7B2; --chrome-line: #2A3A47; --accent: #7C9BFF; color-scheme: dark }
+
+body { background: var(--page); color: var(--chrome-fg); font-family: var(--font); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--chrome); }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--chrome); border-bottom: 1px solid var(--chrome-line);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px; }
+.bar-in { max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.bar h1 { font-size: 16px; margin: 0; letter-spacing: .01em; }
+.bar .meta { color: var(--chrome-muted); font-size: 13px; flex: 1 1 200px; min-width: 0; }
+.bar .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { font: 600 13px var(--font); padding: 8px 14px; border-radius: 6px; border: 1px solid var(--chrome-line); background: var(--chrome); color: var(--chrome-fg); cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn:focus-visible, [contenteditable]:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #FFFFFF; }
+.btn:disabled { opacity: .45; cursor: default; }
+.status { width: 100%; font-size: 13px; color: var(--chrome-muted); min-height: 0; }
+.status:empty { display: none; }
+.status.warn { color: #D9475C; }
+.hint { width: 100%; font-size: 13px; color: var(--chrome-muted); }
+
+.deck { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 40px; }
+.frame { width: 100%; max-width: 100%; aspect-ratio: 16 / 9; position: relative; overflow: hidden; border-radius: 4px; box-shadow: 0 2px 12px rgba(5,28,44,.14); background: var(--s-bg); }
+.slide { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transform-origin: 0 0; transform: scale(var(--s, 1));
+  background: var(--s-bg); color: var(--s-ink); font-family: var(--font); display: flex; flex-direction: column; padding: 28px 48px 18px; box-sizing: border-box; }
+.slide .logo { position: absolute; right: 48px; top: 20px; width: 115px; height: 29px; background: var(--logo) no-repeat center / contain; }
+.slide .num { position: absolute; right: 48px; bottom: 16px; font-size: 13px; color: var(--s-foot); }
+.tracker { font-size: 14.5px; font-weight: 700; color: var(--s-blue); letter-spacing: .08em; text-transform: uppercase; margin-right: 160px; }
+.s-title { font-size: 32px; font-weight: 700; color: var(--s-navy); line-height: 1.2; margin-top: 10px; text-wrap: balance; }
+.answer { font-size: 21px; line-height: 1.3; margin-top: 12px; color: var(--s-ink); }
+.body { flex: 1; display: flex; gap: 14px; margin-top: 18px; min-height: 0; }
+.main { width: 806px; display: flex; gap: 10px; min-height: 0; }
+.foot { font-size: 13px; color: var(--s-foot); margin-top: 12px; margin-right: 60px; min-height: 16px; }
+
+.panel { flex: 1; background: var(--s-tint); padding: 18px 24px; display: flex; flex-direction: column; }
+.panel .lbl { font-size: 14.5px; font-weight: 700; color: var(--s-blue); letter-spacing: .08em; }
+.panel ol { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; justify-content: space-around; flex: 1; gap: 10px; }
+.panel li { display: grid; grid-template-columns: 31px 1fr; gap: 12px; align-items: start; }
+.badge { width: 31px; height: 31px; border-radius: 50%; background: var(--s-navy); color: #FFFFFF; font-size: 14.5px; font-weight: 700; display: grid; place-items: center; }
+.panel h5 { margin: 0; font-size: 18.5px; color: var(--s-navy); line-height: 1.2; }
+.panel p { margin: 3px 0 0; font-size: 16px; line-height: 1.3; }
+
+.block { position: relative; display: flex; flex-direction: column; min-width: 0; }
+.block h4 { order: 0; margin: 0 0 6px; font-size: 17px; color: var(--s-navy); text-align: center; line-height: 1.2; }
+.plot { order: 2; flex: 1; min-height: 0; position: relative; }
+.legend { order: 3; }
+.plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: 13px; color: var(--s-muted); margin-top: 6px; }
+.legend i { display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; }
+.block.illus { outline: 1.5px dashed var(--s-grey); outline-offset: -2px; padding: 8px; }
+.tag { position: absolute; left: 50%; top: 52%; transform: translate(-30%, -50%); background: #FFFFFF; border: 1.5px solid var(--s-red); border-radius: 8px; padding: 10px 18px; text-align: center; }
+.tag b { display: block; color: var(--s-red); letter-spacing: .08em; font-size: 16px; }
+.tag span { font-size: 14.5px; }
+.stats { display: flex; flex-direction: column; justify-content: space-between; padding-block: 6px; }
+.stat .big { font-size: 53px; font-weight: 700; line-height: 1; }
+.stat .big.blue { color: var(--s-blue); } .stat .big.navy { color: var(--s-navy); } .stat .big.red { color: var(--s-red); }
+.stat .small { font-size: 16px; margin-top: 6px; }
+.note { background: var(--s-tint); outline: 1.5px dashed var(--s-grey); outline-offset: -2px; padding: 20px; }
+.note b { color: var(--s-red); letter-spacing: .08em; font-size: 14.5px; display: block; margin-bottom: 12px; }
+.note p { font-size: 16px; margin: 0 0 12px; line-height: 1.3; }
+.note p.strong { font-weight: 700; color: var(--s-navy); }
+.funnel { align-items: center; }
+.funnel .stage { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 82px; text-align: center; color: #FFFFFF; }
+.funnel .stage.ph { background: var(--s-tint); outline: 1.5px dashed var(--s-grey); outline-offset: -2px; color: var(--s-ink); }
+.funnel .stage.navy { background: var(--s-navy); } .funnel .stage.blue { background: var(--s-blue); }
+.funnel .stage .l { font-size: 16px; } .funnel .stage .v { font-size: 24px; font-weight: 700; }
+.funnel .stage.ph .v { font-size: 18.5px; color: var(--s-red); }
+.funnel .step { font-size: 14.5px; height: 28px; display: grid; place-items: center; color: var(--s-blue); font-weight: 700; }
+.funnel .step.soft { color: var(--s-muted); font-weight: 400; font-style: italic; font-size: 13px; }
+.funnel .stages { flex: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+.sum-table { width: 100%; border-collapse: collapse; font-size: 16px; }
+.sum-table th { background: var(--s-navy); color: #FFFFFF; text-align: left; padding: 9px 12px; font-size: 16px; }
+.sum-table td { border: 1px solid var(--s-lgrey); padding: 10px 12px; line-height: 1.3; vertical-align: middle; height: 74px; box-sizing: border-box; }
+.sum-table td.v { font-weight: 700; color: var(--s-blue); font-size: 17px; }
+.sum-table td.v.red { color: var(--s-red); }
+.cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; width: 100%; }
+.card { background: var(--s-tint); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.card .badge { width: 53px; height: 53px; font-size: 17px; }
+.card h5 { margin: 0; font-size: 20px; color: var(--s-navy); line-height: 1.2; min-height: 72px; }
+.card p { margin: 0; font-size: 16px; line-height: 1.35; }
+
+.slide.title-slide { background: var(--s-navy); padding: 0 77px; justify-content: center; }
+.title-slide .logo { background-image: var(--logo-white); width: 163px; height: 41px; right: 48px; top: 48px; }
+.title-slide .kicker { color: var(--s-cyan); font-weight: 700; letter-spacing: .12em; font-size: 18.5px; }
+.title-slide .t { color: #FFFFFF; font-size: 53px; font-weight: 700; line-height: 1.15; margin-top: 14px; max-width: 1000px; text-wrap: balance; }
+.title-slide .sub { color: var(--s-lcyan); font-size: 24px; line-height: 1.35; margin-top: 24px; max-width: 1000px; }
+.title-slide .date { color: #FFFFFF; font-size: 16px; position: absolute; left: 77px; bottom: 56px; }
+
+/* editing affordances */
+.editing [data-path] { cursor: text; border-radius: 3px; }
+.editing [data-path]:hover { box-shadow: 0 0 0 2px rgba(34,81,255,.35); }
+.editing [data-path]:focus { box-shadow: 0 0 0 2px var(--s-blue); outline: none; }
+.edit-data { display: none; align-self: center; order: 1; margin-bottom: 6px; font: 700 13px var(--font); padding: 4px 10px; border-radius: 5px;
+  border: 1px solid var(--s-blue); background: #FFFFFF; color: var(--s-blue); cursor: pointer; }
+.editing .edit-data { display: block; }
+
+.overlay { position: fixed; inset: 0; z-index: 20; background: rgba(5,28,44,.45); display: grid; place-items: center;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px; }
+.dialog { background: var(--chrome); color: var(--chrome-fg); border-radius: 8px; width: min(760px, 100%); max-height: 100%; overflow: auto; padding: 20px; box-sizing: border-box; }
+.dialog h2 { margin: 0 0 4px; font-size: 18px; }
+.dialog p { margin: 0 0 14px; color: var(--chrome-muted); font-size: 13px; }
+.grid-wrap { overflow-x: auto; }
+.dialog table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.dialog th, .dialog td { padding: 4px; text-align: left; }
+.dialog input[type=text], .dialog input[type=number] { width: 100%; min-width: 80px; box-sizing: border-box; font: 13px var(--font); padding: 6px 8px;
+  border: 1px solid var(--chrome-line); border-radius: 5px; background: var(--page); color: var(--chrome-fg); }
+.dialog input[type=number] { font-variant-numeric: tabular-nums; }
+.dialog .row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; flex-wrap: wrap; }
+.dialog label.chk { display: flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<div id="root"></div>
+<script type="application/json" id="deck-data">__DATA__</script>
+<script id="deck-app">
+(function () {
+  "use strict";
+  var COLORS = { navy: "#051C2C", blue: "#2251FF", cyan: "#00A9F4", grey: "#A2AAAD", lgrey: "#D5DADF", red: "#D9475C", lcyan: "#7FD1F7",
+    ph1: "#C9CED3", ph2: "#B3BAC1", ph3: "#DDE1E5", ph4: "#A2AAAD", white: "#FFFFFF" };
+  var INK = "#1A1A1A", MUTED = "#5F6B76", LINE = "#D5DADF";
+  var dataEl = document.getElementById("deck-data");
+  var saved = JSON.parse(dataEl.textContent);
+  var state = JSON.parse(JSON.stringify(saved));
+  var editing = false, dirty = false, saving = false;
+  var root = document.getElementById("root");
+
+  function h(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === "text") e.textContent = attrs[k];
+      else if (k === "cls") e.className = attrs[k];
+      else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), attrs[k]);
+      else e.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function T(tag, path, text, cls) { return h(tag, { "data-path": path, text: text, cls: cls || "" }); }
+  function setPath(path, value) {
+    var parts = path.split("."), o = state;
+    for (var i = 0; i < parts.length - 1; i++) o = o[parts[i]];
+    o[parts[parts.length - 1]] = value;
+  }
+  function fmt(v, f) {
+    if (f === "pct0") return Math.round(v * 100) + "%";
+    if (f === "pct1") return (Math.round(v * 1000) / 10).toFixed(1) + "%";
+    return Number(v).toLocaleString("en-US");
+  }
+  var isPct = function (f) { return f === "pct0" || f === "pct1"; };
+
+  // ---------- toolbar ----------
+  var status = h("div", { cls: "status", role: "status" });
+  var btnEdit = h("button", { cls: "btn", type: "button", text: "Edit", onclick: function () { setEditing(!editing); } });
+  var btnSave = h("button", { cls: "btn primary", type: "button", text: "Save changes", onclick: save });
+  var btnDiscard = h("button", { cls: "btn", type: "button", text: "Discard changes", onclick: discard });
+  var hint = h("div", { cls: "hint", text: "Click any text on a slide to change it. Use “Edit numbers” on a chart to change its data. Save changes keeps them for everyone who opens this page." });
+  var bar = h("header", { cls: "bar" }, [h("div", { cls: "bar-in" }, [
+    h("h1", { text: "CLICX Customer Insights" }),
+    h("div", { cls: "meta", text: "" }),
+    h("div", { cls: "actions" }, [btnEdit, btnDiscard, btnSave]),
+    hint, status
+  ])]);
+  var deck = h("main", { cls: "deck" });
+  root.appendChild(bar); root.appendChild(deck);
+
+  function refreshBar() {
+    bar.querySelector(".meta").textContent = state.slides.length + " slides" + (dirty ? " · unsaved changes" : "");
+    btnEdit.textContent = editing ? "Done editing" : "Edit";
+    btnSave.hidden = !dirty; btnDiscard.hidden = !dirty; hint.hidden = !editing;
+    btnSave.disabled = saving;
+  }
+  function say(msg, warn) { status.textContent = msg || ""; status.className = "status" + (warn ? " warn" : ""); }
+  function markDirty() { if (!dirty) { dirty = true; refreshBar(); } }
+
+  function setEditing(on) {
+    editing = on;
+    document.body.classList.toggle("editing", on);
+    deck.querySelectorAll("[data-path]").forEach(function (el) {
+      if (on) { el.setAttribute("contenteditable", "true"); el.setAttribute("spellcheck", "true"); }
+      else el.removeAttribute("contenteditable");
+    });
+    refreshBar();
+  }
+  deck.addEventListener("input", function (e) {
+    var el = e.target.closest && e.target.closest("[data-path]");
+    if (!el) return;
+    setPath(el.getAttribute("data-path"), el.innerText.replace(/\n+$/, ""));
+    markDirty();
+  });
+  deck.addEventListener("paste", function (e) {
+    if (!e.target.closest || !e.target.closest("[data-path]")) return;
+    e.preventDefault();
+    var t = (e.clipboardData || window.clipboardData).getData("text/plain");
+    document.execCommand("insertText", false, t);
+  });
+  deck.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target.closest && e.target.closest("[data-path]")) { e.preventDefault(); e.target.blur(); }
+  });
+
+  // ---------- slide builders ----------
+  function insightsPanel(s, i) {
+    return h("aside", { cls: "panel" }, [
+      h("div", { cls: "lbl", text: "SO WHAT" }),
+      h("ol", null, s.insights.map(function (it, k) {
+        return h("li", null, [h("div", { cls: "badge", text: String(k + 1) }),
+          h("div", null, [T("h5", "slides." + i + ".insights." + k + ".0", it[0]), T("p", "slides." + i + ".insights." + k + ".1", it[1])])]);
+      }))
+    ]);
+  }
+  function blockEl(b, i, j) {
+    var p = "slides." + i + ".blocks." + j;
+    var el = h("section", { cls: "block", style: "width:" + b.w + "px" });
+    if (b.kind === "stats") {
+      el.classList.add("stats");
+      b.items.forEach(function (it, k) {
+        el.appendChild(h("div", { cls: "stat" }, [T("div", p + ".items." + k + ".0", it[0], "big " + (it[2] || "blue")), T("div", p + ".items." + k + ".1", it[1], "small")]));
+      });
+    } else if (b.kind === "chart") {
+      el.appendChild(T("h4", p + ".title", b.title));
+      el.appendChild(h("div", { cls: "plot" }));
+      el.appendChild(h("div", { cls: "legend" }));
+      el.appendChild(h("button", { cls: "edit-data", type: "button", text: "Edit numbers", onclick: function () { openEditor(i, j); } }));
+      if (b.illustrative) { el.classList.add("illus"); el.appendChild(h("div", { cls: "tag" }, [h("b", { text: "ILLUSTRATIVE" }), h("span", { text: "Data not yet available" })])); }
+    } else if (b.kind === "note") {
+      el.classList.add("note");
+      el.appendChild(T("b", p + ".head", b.head));
+      el.appendChild(T("p", p + ".body", b.body));
+      el.appendChild(T("p", p + ".next", b.next, "strong"));
+    } else if (b.kind === "funnel") {
+      el.classList.add("funnel");
+      el.appendChild(T("h4", p + ".title", b.title));
+      var st = h("div", { cls: "stages" });
+      b.stages.forEach(function (sg, k) {
+        st.appendChild(h("div", { cls: "stage " + sg.style, style: "width:" + sg.width + "%" }, [T("div", p + ".stages." + k + ".label", sg.label, "l"), T("div", p + ".stages." + k + ".value", sg.value, "v")]));
+        if (k < b.steps.length) st.appendChild(T("div", p + ".steps." + k + ".text", b.steps[k].text, "step" + (b.steps[k].soft ? " soft" : "")));
+      });
+      el.appendChild(st);
+    }
+    return el;
+  }
+  function slideEl(s, i) {
+    var sl = h("div", { cls: "slide" });
+    if (s.type === "title") {
+      sl.classList.add("title-slide");
+      sl.appendChild(h("div", { cls: "logo", role: "img", "aria-label": "CLICX logo" }));
+      sl.appendChild(T("div", "slides." + i + ".kicker", s.kicker, "kicker"));
+      sl.appendChild(T("div", "slides." + i + ".title", s.title, "t"));
+      sl.appendChild(T("div", "slides." + i + ".sub", s.sub, "sub"));
+      sl.appendChild(T("div", "slides." + i + ".date", s.date, "date"));
+      return sl;
+    }
+    sl.appendChild(h("div", { cls: "logo", role: "img", "aria-label": "CLICX logo" }));
+    sl.appendChild(T("div", "slides." + i + ".tracker", s.tracker, "tracker"));
+    sl.appendChild(T("h2", "slides." + i + ".title", s.title, "s-title"));
+    sl.appendChild(T("div", "slides." + i + ".answer", s.answer, "answer"));
+    var body = h("div", { cls: "body" });
+    if (s.type === "summary") {
+      var tb = h("table", { cls: "sum-table" });
+      tb.appendChild(h("thead", null, [h("tr", null, s.table.head.map(function (c, k) {
+        return T("th", "slides." + i + ".table.head." + k, c);
+      }))]));
+      var tbody = h("tbody");
+      s.table.rows.forEach(function (r, k) {
+        tbody.appendChild(h("tr", null, [
+          h("td", { text: String(k + 1), style: "width:36px" }),
+          T("td", "slides." + i + ".table.rows." + k + ".q", r.q),
+          T("td", "slides." + i + ".table.rows." + k + ".a", r.a, "v" + (r.tone === "red" ? " red" : "")),
+          T("td", "slides." + i + ".table.rows." + k + ".why", r.why)
+        ]));
+      });
+      tb.appendChild(tbody);
+      body.appendChild(tb);
+    } else if (s.type === "cards") {
+      body.appendChild(h("div", { cls: "cards" }, s.cards.map(function (c, k) {
+        return h("div", { cls: "card" }, [h("div", { cls: "badge", text: c[0] }), T("h5", "slides." + i + ".cards." + k + ".1", c[1]), T("p", "slides." + i + ".cards." + k + ".2", c[2])]);
+      })));
+    } else {
+      body.appendChild(h("div", { cls: "main" }, s.blocks.map(function (b, j) { return blockEl(b, i, j); })));
+      body.appendChild(insightsPanel(s, i));
+    }
+    sl.appendChild(body);
+    sl.appendChild(T("div", "slides." + i + ".foot", s.foot, "foot"));
+    sl.appendChild(h("div", { cls: "num", text: String(i + 1) }));
+    return sl;
+  }
+
+  // ---------- charts (SVG) ----------
+  var NS = "http://www.w3.org/2000/svg";
+  function S(tag, a, text) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (text != null) e.textContent = text; return e; }
+  function wrap(label, maxChars) {
+    if (label.length <= maxChars) return [label];
+    var words = label.split(" "), a = "", lines = [];
+    words.forEach(function (w) { if ((a + " " + w).trim().length > maxChars && a) { lines.push(a); a = w; } else a = (a + " " + w).trim(); });
+    if (a) lines.push(a);
+    return lines.slice(0, 3);
+  }
+  function colorFor(ch, si, pi) {
+    if (ch.series.length === 1 && ch.pointColors) return COLORS[ch.pointColors[pi]] || COLORS.navy;
+    return COLORS[ch.series[si].color] || COLORS.navy;
+  }
+  function drawChart(block, ch) {
+    var plot = block.querySelector(".plot"), legend = block.querySelector(".legend");
+    plot.innerHTML = ""; legend.innerHTML = "";
+    var W = plot.clientWidth, H = plot.clientHeight;
+    var svg = S("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": ch.title });
+    var showVals = !ch.illustrative;
+    var all = []; ch.series.forEach(function (s) { all = all.concat(s.values.map(Number)); });
+    var max = Math.max.apply(null, all.concat([0.0001])) * 1.12;
+    var n = ch.labels.length, m = ch.series.length;
+    if (ch.type === "hbar") {
+      var lw = ch.labelW || Math.round(W * 0.38), x0 = lw + 8, pw = W - x0 - (showVals ? 48 : 8);
+      var band = H / n, gh = band * (m > 1 ? 0.8 : 0.66), bh = gh / m;
+      svg.appendChild(S("line", { x1: x0, x2: x0, y1: 0, y2: H, stroke: LINE }));
+      ch.labels.forEach(function (lab, i) {
+        var yc = i * band + band / 2, lines = wrap(lab, Math.max(8, Math.floor(lw / 7.2)));
+        var t = S("text", { x: lw, y: yc - (lines.length - 1) * 8 + 5, "text-anchor": "end", "font-size": 13.5, fill: MUTED });
+        lines.forEach(function (ln, k) { t.appendChild(S("tspan", { x: lw, dy: k ? 16 : 0 }, ln)); });
+        svg.appendChild(t);
+        ch.series.forEach(function (s, si) {
+          var v = Number(s.values[i]) || 0, y = i * band + (band - gh) / 2 + si * bh, bw = Math.max(1, v / max * pw);
+          svg.appendChild(S("rect", { x: x0, y: y + 1, width: bw, height: Math.max(1, bh - 2), fill: colorFor(ch, si, i) }));
+          if (showVals) svg.appendChild(S("text", { x: x0 + bw + 5, y: y + bh / 2 + 4.5, "font-size": m > 2 ? 11 : 13, fill: INK }, fmt(v, ch.fmt)));
+        });
+      });
+    } else if (ch.type === "vbar") {
+      var lh = 40, top = showVals ? 20 : 4, ph = H - lh - top;
+      var bandW = W / n, gw = bandW * (m > 1 ? 0.8 : 0.6), bw2 = gw / m;
+      svg.appendChild(S("line", { x1: 0, x2: W, y1: top + ph, y2: top + ph, stroke: LINE }));
+      ch.labels.forEach(function (lab, i) {
+        var xc = i * bandW + bandW / 2, lines = wrap(lab, Math.max(6, Math.floor(bandW / 7)));
+        var t = S("text", { x: xc, y: top + ph + 17, "text-anchor": "middle", "font-size": 13, fill: MUTED });
+        lines.slice(0, 2).forEach(function (ln, k) { t.appendChild(S("tspan", { x: xc, dy: k ? 15 : 0 }, ln)); });
+        svg.appendChild(t);
+        ch.series.forEach(function (s, si) {
+          var v = Number(s.values[i]) || 0, bhh = Math.max(1, v / max * ph), x = i * bandW + (bandW - gw) / 2 + si * bw2;
+          svg.appendChild(S("rect", { x: x + 1, y: top + ph - bhh, width: Math.max(1, bw2 - 2), height: bhh, fill: colorFor(ch, si, i) }));
+          if (showVals) svg.appendChild(S("text", { x: x + bw2 / 2, y: top + ph - bhh - 5, "text-anchor": "middle", "font-size": m > 1 && bw2 < 34 ? 11 : 13, fill: INK }, fmt(v, ch.fmt)));
+        });
+      });
+    } else if (ch.type === "donut") {
+      var vals = ch.series[0].values.map(Number), tot = vals.reduce(function (a, b) { return a + b; }, 0) || 1;
+      var cx = W / 2, cy = H / 2, r = Math.min(W, H) / 2 - 6, ri = r * 0.62, ang = -Math.PI / 2;
+      vals.forEach(function (v, i) {
+        var a2 = ang + v / tot * Math.PI * 2, large = a2 - ang > Math.PI ? 1 : 0;
+        var d = ["M", cx + r * Math.cos(ang), cy + r * Math.sin(ang), "A", r, r, 0, large, 1, cx + r * Math.cos(a2), cy + r * Math.sin(a2),
+          "L", cx + ri * Math.cos(a2), cy + ri * Math.sin(a2), "A", ri, ri, 0, large, 0, cx + ri * Math.cos(ang), cy + ri * Math.sin(ang), "Z"].join(" ");
+        svg.appendChild(S("path", { d: d, fill: COLORS[(ch.pointColors || [])[i]] || COLORS.navy }));
+        var mid = (ang + a2) / 2, rr = (r + ri) / 2;
+        if (showVals) svg.appendChild(S("text", { x: cx + rr * Math.cos(mid), y: cy + rr * Math.sin(mid) + 5, "text-anchor": "middle", "font-size": 15, "font-weight": 700, fill: "#FFFFFF" }, Math.round(v / tot * 100) + "%"));
+        ang = a2;
+      });
+      if (ch.center) {
+        svg.appendChild(S("text", { x: cx, y: cy + 4, "text-anchor": "middle", "font-size": 32, "font-weight": 700, fill: COLORS.navy }, ch.center[0]));
+        svg.appendChild(S("text", { x: cx, y: cy + 26, "text-anchor": "middle", "font-size": 13, fill: MUTED }, ch.center[1]));
+      }
+    }
+    plot.appendChild(svg);
+    if (ch.legend) {
+      var items = ch.type === "donut" ? ch.labels.map(function (l, i) { return [l, COLORS[ch.pointColors[i]]]; })
+        : ch.series.map(function (s) { return [s.name, COLORS[s.color]]; });
+      items.forEach(function (it) { legend.appendChild(h("span", null, [h("i", { style: "background:" + it[1] }), it[0]])); });
+    }
+  }
+
+  // ---------- render ----------
+  var ro = new ResizeObserver(function (entries) {
+    entries.forEach(function (en) { en.target.style.setProperty("--s", en.target.clientWidth / 1280); });
+  });
+  function renderSlide(i, frame) {
+    var s = state.slides[i];
+    frame.innerHTML = "";
+    var sl = slideEl(s, i);
+    frame.appendChild(sl);
+    (s.blocks || []).forEach(function (b, j) {
+      if (b.kind === "chart") drawChart(sl.querySelectorAll(".main > .block")[j], b);
+    });
+    if (editing) sl.querySelectorAll("[data-path]").forEach(function (el) { el.setAttribute("contenteditable", "true"); });
+  }
+  function renderAll() {
+    deck.innerHTML = "";
+    state.slides.forEach(function (s, i) {
+      var frame = h("article", { cls: "frame", "aria-label": "Slide " + (i + 1) });
+      deck.appendChild(frame);
+      frame.style.setProperty("--s", (frame.clientWidth || 1280) / 1280);
+      ro.observe(frame);
+      renderSlide(i, frame);
+    });
+    refreshBar();
+  }
+
+  // ---------- number editor ----------
+  var overlay = null;
+  function openEditor(i, j) {
+    var ch = state.slides[i].blocks[j], pct = isPct(ch.fmt);
+    var work = JSON.parse(JSON.stringify(ch));
+    var head = h("tr", null, [h("th", { text: "Label" })].concat(work.series.map(function (s, si) {
+      return h("th", null, [h("input", { type: "text", id: "ser-" + si, value: s.name, "aria-label": "Series name", oninput: function (e) { work.series[si].name = e.target.value; } })]);
+    })));
+    var rows = work.labels.map(function (lab, li) {
+      return h("tr", null, [h("td", null, [h("input", { type: "text", id: "lab-" + li, value: lab, "aria-label": "Label", oninput: function (e) { work.labels[li] = e.target.value; } })])]
+        .concat(work.series.map(function (s, si) {
+          var v = Number(s.values[li]);
+          return h("td", null, [h("input", { type: "number", step: "any", id: "val-" + li + "-" + si, value: pct ? +(v * 100).toFixed(2) : v, "aria-label": "Value",
+            oninput: function (e) { var x = parseFloat(e.target.value); work.series[si].values[li] = isNaN(x) ? 0 : (pct ? x / 100 : x); } })]);
+        })));
+    });
+    var chk = h("input", { type: "checkbox", id: "illus-chk" }); chk.checked = !!work.illustrative;
+    chk.addEventListener("change", function () { work.illustrative = chk.checked; });
+    var dlg = h("div", { cls: "dialog", role: "dialog", "aria-modal": "true", "aria-label": "Edit chart numbers" }, [
+      h("h2", { text: ch.title }),
+      h("p", { text: pct ? "Enter values as percentages, for example 41 for 41%." : "Enter values as plain numbers." }),
+      h("div", { cls: "grid-wrap" }, [h("table", null, [h("thead", null, [head]), h("tbody", null, rows)])]),
+      h("label", { cls: "chk", for: "illus-chk" }, [chk, "Show as illustrative (data not yet available)"]),
+      h("div", { cls: "row" }, [
+        h("button", { cls: "btn", type: "button", text: "Cancel", onclick: closeEditor }),
+        h("button", { cls: "btn primary", type: "button", text: "Apply to chart", onclick: function () {
+          state.slides[i].blocks[j] = work; closeEditor(); renderSlide(i, deck.children[i]); markDirty(); say("Chart updated. Save changes to keep it.");
+        } })
+      ])
+    ]);
+    overlay = h("div", { cls: "overlay", onclick: function (e) { if (e.target === overlay) closeEditor(); } }, [dlg]);
+    document.body.appendChild(overlay);
+    var first = dlg.querySelector("input"); if (first) first.focus();
+  }
+  function closeEditor() { if (overlay) { overlay.remove(); overlay = null; } }
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeEditor(); });
+
+  // ---------- save ----------
+  function buildDocument() {
+    var reset = (document.head.querySelector("style") || { textContent: "" }).textContent;
+    var json = JSON.stringify(state).replace(/</g, "\\u003c");
+    var content = "<title>" + document.title + "</title>\n" +
+      '<meta name="claude:viewport-fit-sides" content="cover">\n' +
+      document.getElementById("page-style").outerHTML + "\n" +
+      '<div id="root"></div>\n' +
+      '<script type="application/json" id="deck-data">' + json + "<\/script>\n" +
+      '<script id="deck-app">' + document.getElementById("deck-app").textContent + "<\/script>";
+    return '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>' +
+      reset + "</style></head><body>" + content + "</body></html>";
+  }
+  var artifactApi = null;
+  if (window.claude && typeof window.claude.use === "function") {
+    window.claude.use("artifact").then(function (a) { artifactApi = a; }).catch(function () { artifactApi = null; });
+  }
+  function save() {
+    if (saving) return;
+    if (!artifactApi) { say("Saving isn't available in this view. Open the page on claude.ai while signed in to save changes.", true); return; }
+    saving = true; refreshBar(); say("Saving…");
+    artifactApi.publish(buildDocument()).then(function () {
+      saving = false; dirty = false; saved = JSON.parse(JSON.stringify(state)); refreshBar(); say("Saved.");
+    }).catch(function (err) {
+      saving = false; refreshBar();
+      var code = err && (err.code || err.name);
+      if (code === "conflict") say("Someone else saved first, so the page reloaded to their version. Make your change again.", true);
+      else if (code === "not_granted" || code === "not_writer") say("You can view this page but not save changes. Ask the owner for edit access.", true);
+      else say("Couldn't save: " + ((err && err.message) || "unknown error") + ". Your changes are still on screen; try Save changes again.", true);
+    });
+  }
+  function discard() {
+    state = JSON.parse(JSON.stringify(saved)); dirty = false; closeEditor(); renderAll(); say("Changes discarded.");
+  }
+
+  renderAll();
+})();
+</script>
