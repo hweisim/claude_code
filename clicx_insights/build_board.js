@@ -98,7 +98,7 @@ function stat(s, x, y, w, big, label, color = C.accent1) {
 const SRC = "Source: CLICX product and payment segments, 1 Oct 2026 (1.50M customers with an account)";
 pres.addSection({ title: "Board summary" });
 {
-  const s = qSlide("Board summary", "BOARD SUMMARY  (1/2)  |  WHAT EXISTING CUSTOMERS DO",
+  const s = qSlide("Board summary", "BOARD SUMMARY  (1/3)  |  WHAT EXISTING CUSTOMERS DO",
     "Do our 1.5 million existing customers actually use CLICX?",
     "Only 1 in 6 do. Most never put money in, and paying users fell 29% since August. Putting money in and getting a loan are what turn sign-ups into users",
     SRC);
@@ -127,7 +127,58 @@ pres.addSection({ title: "Board summary" });
   ], undefined, undefined, undefined, undefined, "What drives usage");
 }
 {
-  const s = qSlide("Board summary", "BOARD SUMMARY  (2/2)  |  WHAT WE WILL DO",
+  const s = qSlide("Board summary", "BOARD SUMMARY  (2/3)  |  HOW PRODUCTS CONNECT",
+    "How are money in, loans and payments connected?",
+    "Tightly: a customer who has any one of them is 2.5–3.7x more likely to have the other two. But only 35% of accounts ever get money in, so most customers never start the chain",
+    "x = times more likely than the average customer. Ladder % = share of the step before. Source: CLICX product and payment segments, 1 Oct 2026 (1.50M accounts); registration funnel from CLICX 5-Year Business Plan");
+  // Connection matrix
+  s.addText("Has one product: how likely are the others?", { x: 0.5, y: 2.4, w: 4.5, h: 0.32, fontSize: 13, bold: true, color: C.text2, margin: 0, isTextBox: true, objectName: "Matrix title" });
+  const H = (t) => ({ text: t, options: { bold: true, color: "FFFFFF", fill: { color: NAVY }, fontSize: 10.5, align: "center" } });
+  const rowH = (t) => ({ text: t, options: { bold: true, fontSize: 11, color: NAVY } });
+  const base = (t) => ({ text: t, options: { fontSize: 12, bold: true, color: TXT, align: "center", fill: { color: "F2F4F7" } } });
+  const dash = { text: "–", options: { fontSize: 12, color: MUTED, align: "center" } };
+  const lift = (pct, x) => {
+    const strong = x >= 3.5;
+    return { text: [{ text: pct, options: { fontSize: 15, bold: true, breakLine: true } }, { text: x + " more likely", options: { fontSize: 9.5 } }],
+      options: { color: "FFFFFF", align: "center", fill: { color: strong ? NAVY : BLUE } } };
+  };
+  const rows = [
+    [H("If the customer…"), H("…% who put money in"), H("…% with a loan"), H("…% who paid in Oct")],
+    [rowH("All customers (average)"), base("35%"), base("11%"), base("7.8%")],
+    [rowH("Has put money in (525K)"), dash, lift("27%", "2.5x"), lift("22%", "2.8x")],
+    [rowH("Has a loan (164K)"), lift("87%", "2.5x"), dash, lift("28.5%", "3.7x")],
+    [rowH("Paid in Oct (117K)"), lift("99%", "2.8x"), lift("40%", "3.6x"), dash],
+  ];
+  s.addTable(rows, { x: 0.5, y: 2.8, w: 4.5, colW: [1.35, 1.05, 1.05, 1.05], fontFace: "Arial", border: { type: "solid", pt: 1.5, color: "FFFFFF" },
+    valign: "middle", rowH: [0.5, 0.5, 0.85, 0.85, 0.85], margin: [0.04, 0.06, 0.04, 0.06], objectName: "Connection matrix" });
+
+  // Engagement ladder (shapes)
+  const lx = 5.25;
+  s.addText("How far customers climb, thousand", { x: lx, y: 2.4, w: 3.65, h: 0.32, fontSize: 13, bold: true, color: C.text2, margin: 0, isTextBox: true, objectName: "Ladder title" });
+  const steps = [["Registered", 2100, ""], ["Account opened", 1500, "71%"], ["Money in", 525, "35%"], ["Paying (Oct)", 117, "22%"], ["2+ products", 51, "44%"]];
+  const labW = 1.15, maxW = 1.5, rh = 0.62;
+  steps.forEach((st, k) => {
+    const y = 2.85 + k * rh, bw = Math.max(0.06, st[1] / 2100 * maxW);
+    s.addText(st[0], { x: lx, y, w: labW, h: 0.45, fontSize: 11, color: C.text1, align: "right", valign: "middle", margin: 0, isTextBox: true, objectName: `Ladder label ${k}` });
+    s.addShape(pres.shapes.RECTANGLE, { x: lx + labW + 0.1, y: y + 0.05, w: bw, h: 0.35, fill: { color: k >= 3 ? C.accent1 : C.text2 }, line: { type: "none" }, objectName: `Ladder bar ${k}` });
+    s.addText([
+      { text: st[1].toLocaleString("en-US"), options: { fontSize: 12, bold: true, color: C.text1 } },
+      ...(st[2] ? [{ text: "  " + st[2], options: { fontSize: 10, color: MUTED } }] : []),
+    ], { x: lx + labW + 0.15 + bw, y, w: 3.65 - labW - 0.15 - bw, h: 0.45, valign: "middle", margin: 0, isTextBox: true, objectName: `Ladder value ${k}` });
+  });
+  const yy = 2.85 + steps.length * rh;
+  s.addText("Main bank", { x: lx, y: yy, w: labW, h: 0.5, fontSize: 11, color: C.text1, align: "right", valign: "middle", margin: 0, isTextBox: true, objectName: "Ladder label main" });
+  s.addShape(pres.shapes.RECTANGLE, { x: lx + labW + 0.1, y: yy + 0.05, w: 2.4, h: 0.4, fill: { color: C.background2 }, line: { color: GREY, width: 1, dashType: "dash" }, objectName: "Ladder main placeholder" });
+  s.addText("Not measured yet", { x: lx + labW + 0.1, y: yy + 0.05, w: 2.4, h: 0.4, fontSize: 10, bold: true, color: C.accent5, align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: "Ladder main text" });
+
+  insights(s, [
+    ["Each product pulls in the others", "Holding one makes the other two 2.5–3.7x more likely. Borrowers and payers are the most connected"],
+    ["The chain breaks at step one", "Only 35% of accounts ever get money in, yet 99% of payers have. Money in comes first"],
+    ["Main-bank status isn't tracked", "Main bank = regular income in and regular payments out. Add an income flag to track it"],
+  ], undefined, undefined, undefined, undefined, "What it means");
+}
+{
+  const s = qSlide("Board summary", "BOARD SUMMARY  (3/3)  |  WHAT WE WILL DO",
     "What can we do in the next 90 days, and what do we need from the board?",
     "Six actions aimed at customers we already have: get money in, bring loan payments into the app, and keep payers from dropping off",
     SRC);
