@@ -98,7 +98,7 @@ function stat(s, x, y, w, big, label, color = C.accent1) {
 const SRC = "Source: CLICX product and payment segments, 1 Oct 2026 (1.50M customers with an account)";
 pres.addSection({ title: "Board summary" });
 {
-  const s = qSlide("Board summary", "BOARD SUMMARY  (1/3)  |  WHAT EXISTING CUSTOMERS DO",
+  const s = qSlide("Board summary", "BOARD SUMMARY  (1/4)  |  WHAT EXISTING CUSTOMERS DO",
     "Do our 1.5 million existing customers actually use CLICX?",
     "Only 1 in 6 do. Most never put money in, and paying users fell 29% since August. Putting money in and getting a loan are what turn sign-ups into users",
     SRC);
@@ -127,30 +127,36 @@ pres.addSection({ title: "Board summary" });
   ], undefined, undefined, undefined, undefined, "What drives usage");
 }
 {
-  const s = qSlide("Board summary", "BOARD SUMMARY  (2/3)  |  HOW PRODUCTS CONNECT",
+  const s = qSlide("Board summary", "BOARD SUMMARY  (2/4)  |  HOW PRODUCTS CONNECT",
     "How are money in, loans and payments connected?",
     "Tightly: a customer who has any one of them is 2.5–3.7x more likely to have the other two. But only 35% of accounts ever get money in, so most customers never start the chain",
-    "x = times more likely than the average customer. Ladder % = share of the step before. Source: CLICX product and payment segments, 1 Oct 2026 (1.50M accounts); registration funnel from CLICX 5-Year Business Plan");
+    "x = times as likely as the average customer. Balance rows use current balance; a 100-baht cut is not in the data yet. Ladder % = share of the step before; main bank = regular income in and payments out. Source: CLICX product and payment segments, 1 Oct 2026 (1.50M accounts); registration funnel from CLICX 5-Year Business Plan");
   // Connection matrix
   s.addText("Has one product: how likely are the others?", { x: 0.5, y: 2.4, w: 4.5, h: 0.32, fontSize: 13, bold: true, color: C.text2, margin: 0, isTextBox: true, objectName: "Matrix title" });
   const H = (t) => ({ text: t, options: { bold: true, color: "FFFFFF", fill: { color: NAVY }, fontSize: 10.5, align: "center" } });
   const rowH = (t) => ({ text: t, options: { bold: true, fontSize: 11, color: NAVY } });
   const base = (t) => ({ text: t, options: { fontSize: 12, bold: true, color: TXT, align: "center", fill: { color: "F2F4F7" } } });
   const dash = { text: "–", options: { fontSize: 12, color: MUTED, align: "center" } };
-  const lift = (pct, x) => {
-    const strong = x >= 3.5;
-    return { text: [{ text: pct, options: { fontSize: 15, bold: true, breakLine: true } }, { text: x + " more likely", options: { fontSize: 9.5 } }],
-      options: { color: "FFFFFF", align: "center", fill: { color: strong ? NAVY : BLUE } } };
+  const lift = (pct, x, fs = 15) => {
+    const v = parseFloat(x);
+    if (v < 1.5) return { text: [{ text: pct, options: { fontSize: fs, bold: true, breakLine: true } }, { text: v < 1 ? x + " as likely" : "about average", options: { fontSize: 9.5 } }],
+      options: { color: v < 1 ? RED : TXT, align: "center", fill: { color: "F2F4F7" } } };
+    return { text: [{ text: pct, options: { fontSize: fs, bold: true, breakLine: true } }, { text: x + " more likely", options: { fontSize: 9.5 } }],
+      options: { color: "FFFFFF", align: "center", fill: { color: v >= 3.5 ? NAVY : BLUE } } };
   };
+  const subH = (t) => ({ text: t, options: { fontSize: 10, color: NAVY, indentLevel: 1 } });
+  const all = { text: "all", options: { fontSize: 10, color: MUTED, align: "center" } };
   const rows = [
     [H("If the customer…"), H("…% who put money in"), H("…% with a loan"), H("…% who paid in Oct")],
     [rowH("All customers (average)"), base("35%"), base("11%"), base("7.8%")],
     [rowH("Has put money in (525K)"), dash, lift("27%", "2.5x"), lift("22%", "2.8x")],
+    [subH("↳ Balance 1K+ today (71K)"), all, lift("12%", "1.1x", 13), lift("35%", "4.5x", 13)],
+    [subH("↳ Balance 20K+ today (29K)"), all, lift("4%", "0.4x", 13), lift("22%", "2.8x", 13)],
     [rowH("Has a loan (164K)"), lift("87%", "2.5x"), dash, lift("28.5%", "3.7x")],
     [rowH("Paid in Oct (117K)"), lift("99%", "2.8x"), lift("40%", "3.6x"), dash],
   ];
   s.addTable(rows, { x: 0.5, y: 2.8, w: 4.5, colW: [1.35, 1.05, 1.05, 1.05], fontFace: "Arial", border: { type: "solid", pt: 1.5, color: "FFFFFF" },
-    valign: "middle", rowH: [0.5, 0.5, 0.85, 0.85, 0.85], margin: [0.04, 0.06, 0.04, 0.06], objectName: "Connection matrix" });
+    valign: "middle", rowH: [0.46, 0.42, 0.6, 0.55, 0.55, 0.6, 0.6], margin: [0.04, 0.06, 0.04, 0.06], objectName: "Connection matrix" });
 
   // Engagement ladder (shapes)
   const lx = 5.25;
@@ -173,12 +179,34 @@ pres.addSection({ title: "Board summary" });
 
   insights(s, [
     ["Each product pulls in the others", "Holding one makes the other two 2.5–3.7x more likely. Borrowers and payers are the most connected"],
+    ["Savers pay, but rarely borrow", "35% of customers with 1K+ pay with CLICX (4.5x), but only 4% with 20K+ have a loan. They need a different offer"],
     ["The chain breaks at step one", "Only 35% of accounts ever get money in, yet 99% of payers have. Money in comes first"],
-    ["Main-bank status isn't tracked", "Main bank = regular income in and regular payments out. Add an income flag to track it"],
   ], undefined, undefined, undefined, undefined, "What it means");
 }
 {
-  const s = qSlide("Board summary", "BOARD SUMMARY  (3/3)  |  WHAT WE WILL DO",
+  const s = qSlide("Board summary", "BOARD SUMMARY  (3/4)  |  BALANCE AND USE",
+    "Does how much money customers keep with us change what else they do?",
+    "Yes. Payments peak among customers keeping 1K–20K (44% pay), while big savers (20K+) pay less and rarely borrow. The 1.14M with a zero balance barely use anything",
+    "Balance = current total balance, 1 Oct 2026. Zero and under-1K figures are estimates from rounded shares in the source; 1K+ figures are exact. A 100-baht cut is not in the data yet. Source: CLICX product and payment segments");
+  const bands = ["Zero", "Under 1K", "1K–20K", "20K+"];
+  s.addChart(pres.charts.BAR, [
+    { name: "Has a CLICX loan", labels: bands, values: [0.066, 0.28, 0.18, 0.04] },
+    { name: "Paid with CLICX in Oct", labels: bands, values: [0.018, 0.25, 0.44, 0.22] },
+  ], { x: 0.5, y: 2.35, w: 5.3, h: 4.35, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle("What customers do, by how much they keep with us, %"),
+    chartColors: [NAVY, CYAN], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11, dataLabelFormatCode: "0%",
+    showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 50, valAxisMaxVal: 0.52, catAxisLabelFontSize: 11, objectName: "Use by balance band" });
+  s.addChart(pres.charts.BAR, [{ name: "Customers, K", labels: bands, values: [1142, 288, 42, 29] }], {
+    x: 5.9, y: 2.35, w: 3.0, h: 4.35, barDir: "bar", ...AX, ...quiet(), ...chartTitle("Where customers sit, thousand"),
+    chartColors: [RED, GREY, BLUE, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 11,
+    dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 40, valAxisMaxVal: 1450, catAxisOrientation: "maxMin", catAxisLabelFontSize: 11, objectName: "Customers by balance band" });
+  insights(s, [
+    ["Small balances follow loans", "28% of customers holding under 1K have a loan, the highest of any group"],
+    ["1K–20K is the everyday sweet spot", "44% pay with CLICX, 6x the average. Grow this group from the 288K holding under 1K"],
+    ["Big savers want a savings home", "20K+ customers rarely borrow (4%). Offer savings and rewards, not loans"],
+  ], undefined, undefined, undefined, undefined, "What it means");
+}
+{
+  const s = qSlide("Board summary", "BOARD SUMMARY  (4/4)  |  WHAT WE WILL DO",
     "What can we do in the next 90 days, and what do we need from the board?",
     "Six actions aimed at customers we already have: get money in, bring loan payments into the app, and keep payers from dropping off",
     SRC);
