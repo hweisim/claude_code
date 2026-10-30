@@ -103,10 +103,10 @@ pres.addSection({ title: "Board summary" });
     "Only 1 in 6 do. Most never put money in, and paying users fell 29% since August. Putting money in and getting a loan are what turn sign-ups into users",
     SRC);
   const c = { x: 0.5, y: 2.35, h: 4.35 };
-  s.addChart(pres.charts.BAR, [{ name: "Customers, K", labels: ["Uses nothing yet", "Borrows only", "Pays only", "Borrows and pays", "Saves only (20K+)", "Saves and more"], values: [1248, 117, 66, 47, 19, 5] }], {
+  s.addChart(pres.charts.BAR, [{ name: "Customers, K", labels: ["Zero balance, no use", "Money only, under 1K", "Money only, 1K–20K", "Borrows only", "Pays only", "Borrows and pays", "Saves only (20K+)", "Saves and more"], values: [1058, 166, 20, 117, 66, 47, 22, 5] }], {
     x: c.x, y: c.y, w: 2.9, h: c.h, barDir: "bar", ...AX, ...quiet(), ...chartTitle("What they hold, thousand customers"),
-    chartColors: [RED, NAVY, NAVY, BLUE, NAVY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10,
-    dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 40, valAxisMaxVal: 1600, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "Product holding" });
+    chartColors: [RED, CYAN, CYAN, NAVY, NAVY, BLUE, NAVY, NAVY], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10,
+    dataLabelFormatCode: "#,##0", showLegend: false, barGapWidthPct: 35, valAxisMaxVal: 1400, catAxisOrientation: "maxMin", catAxisLabelFontSize: 10, objectName: "Product holding" });
   s.addChart(pres.charts.DOUGHNUT, [{ name: "Customers", labels: ["Never put money in (976K)", "Put money in (525K)"], values: [976, 525] }], {
     x: 3.45, y: c.y, w: 2.6, h: c.h, ...AX, ...chartTitle("Have they put money in?"),
     chartColors: [RED, BLUE], holeSize: 60, showPercent: true, showValue: false, dataLabelColor: "FFFFFF", dataLabelFontSize: 12,
