@@ -103,7 +103,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 1: diagnosis
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("1 / 2  |  WHAT WE KNOW", { placeholder: "tracker" });
+  s.addText("1 / 3  |  WHAT WE KNOW", { placeholder: "tracker" });
   s.addText("Partners gave us scale fast, but only 15% of customers are active, and loans are both our hook and our constraint", { placeholder: "title" });
   s.addText(SRC, { placeholder: "foot" });
   // governing question banner
@@ -171,71 +171,100 @@ pres.addSection({ title: "Storyline" });
   });
 }
 
-// ---------- Slide 2: resolution
+// ---------- Slide 2: from answers to initiatives
+const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2.14M customers, Sep 2026); pools overlap";
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("2 / 2  |  WHAT WE WILL DO", { placeholder: "tracker" });
-  s.addText("Two engines and three ranked bets turn sign-ups into a profitable base; we need the board's call on risk, budget and data", { placeholder: "title" });
-  s.addText("Loan book targets from the CLICX 5-Year Business Plan (end-2029). Card and wealth value still to be sized. Icons: Font Awesome (open licence). " + SRC, { placeholder: "foot" });
-  const MW = 8.4, x0 = 0.5;
-  // Engines
-  s.addText("ENGINES  ·  serve every product", { x: x0, y: 1.5, w: MW, h: 0.26, fontSize: 10, bold: true, color: MUTED, charSpacing: 1, margin: 0, isTextBox: true, objectName: "Engines label" });
-  const eng = [["partners", "Acquire through AIS and OR", "Only 3.7% of AIS's base has joined; put bill pay and top-up in the app", [["logo_ais.png", 2.74], ["logo_or.png", 1.93]]],
-    ["activate", "Activate: first deposit, first loan", "1.8M customers are idle; money in and a loan are what keep people active", null]];
-  eng.forEach((e, i) => {
-    const w = (MW - 0.15) / 2, x = x0 + i * (w + 0.15), y = 1.8, h = 1.15;
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Engine ${i}` });
-    s.addShape(pres.shapes.OVAL, { x: x + 0.15, y: y + 0.25, w: 0.6, h: 0.6, fill: { color: BLUE }, line: { type: "none" }, objectName: `Engine icon bg ${i}` });
-    s.addImage({ path: IC(e[0] + ".png"), x: x + 0.29, y: y + 0.39, w: 0.32, h: 0.32, altText: e[1] + " icon", objectName: `Engine icon ${i}` });
-    s.addText(e[1], { x: x + 0.9, y: y + 0.12, w: w - 1.05, h: 0.34, fontSize: 12.5, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Engine title ${i}` });
-    s.addText(e[2], { x: x + 0.9, y: y + 0.48, w: w - (e[3] ? 2.25 : 1.05), h: 0.58, fontSize: 10, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: `Engine text ${i}` });
-    if (e[3]) { let lx = x + w - 0.15; e[3].slice().reverse().forEach(([f, ar], k) => { const hh = 0.22, ww = hh * ar; lx -= ww; s.addImage({ path: IC(f), x: lx, y: y + 0.66, w: ww, h: hh, altText: "Partner logo", objectName: `Engine logo ${i}-${k}` }); lx -= 0.06; }); }
+  s.addText("2 / 3  |  WHAT WE WILL DO", { placeholder: "tracker" });
+  s.addText("Our answers point to four initiatives, in priority order, built on two engines and one fix to how we approve loans", { placeholder: "title" });
+  s.addText(POOL_NOTE + ". Icons: Font Awesome (open licence). " + SRC, { placeholder: "foot" });
+  // Foundation row: engines + enabler
+  s.addText("FOUNDATION  ·  serves every initiative", { x: 0.5, y: 1.5, w: 12.33, h: 0.26, fontSize: 10, bold: true, color: MUTED, charSpacing: 1, margin: 0, isTextBox: true, objectName: "Foundation label" });
+  const fnd = [["partners", "Acquire through AIS and OR", "Only 3.7% of AIS's base has joined", "Q1", [["logo_ais.png", 2.74], ["logo_or.png", 1.93]]],
+    ["activate", "Activate: first deposit, first loan", "1.8M idle; money in and a loan keep people active", "Q3", null],
+    ["enabler", "Fix approvals and risk", "Gig workers: 90%+ apply, 5–7% approved; 20% early default", "Q4", null]];
+  const fw = (12.33 - 0.3) / 3;
+  fnd.forEach((f, i) => {
+    const x = 0.5 + i * (fw + 0.15), y = 1.8, h = 1.0;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: fw, h, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Foundation ${i}` });
+    s.addShape(pres.shapes.OVAL, { x: x + 0.15, y: y + 0.2, w: 0.58, h: 0.58, fill: { color: i === 2 ? NAVY : BLUE }, line: { type: "none" }, objectName: `Foundation icon bg ${i}` });
+    s.addImage({ path: IC(f[0] + ".png"), x: x + 0.29, y: y + 0.34, w: 0.3, h: 0.3, altText: f[1] + " icon", objectName: `Foundation icon ${i}` });
+    s.addText(f[1], { x: x + 0.88, y: y + 0.12, w: fw - 1.5, h: 0.34, fontSize: 12, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Foundation title ${i}` });
+    s.addText(f[3], { x: x + fw - 0.55, y: y + 0.12, w: 0.42, h: 0.26, fontSize: 9, bold: true, color: BLUE, align: "right", margin: 0, isTextBox: true, objectName: `Foundation from ${i}` });
+    s.addText(f[2], { x: x + 0.88, y: y + 0.48, w: fw - (f[4] ? 2.15 : 1.05), h: 0.45, fontSize: 9.5, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: `Foundation text ${i}` });
+    if (f[4]) { let lx = x + fw - 0.15; f[4].slice().reverse().forEach(([fl, ar], k) => { const hh = 0.2, ww = hh * ar; lx -= ww; s.addImage({ path: IC(fl), x: lx, y: y + 0.62, w: ww, h: hh, altText: "Partner logo", objectName: `Foundation logo ${i}-${k}` }); lx -= 0.06; }); }
   });
-  // Bets
-  s.addText("BETS  ·  ranked by value and readiness", { x: x0, y: 3.1, w: MW, h: 0.26, fontSize: 10, bold: true, color: MUTED, charSpacing: 1, margin: 0, isTextBox: true, objectName: "Bets label" });
-  const bets = [
-    ["lend", "1", "Proxy-income loans for the underserved", "1.45M underserved applicants; 90%+ of gig workers apply, 5–7% approved", "25.4B THB", "retail loan book by 2029", "Fix first: approval rules and the 20% early default"],
-    ["sme", "2", "SME cash-flow loans for merchants", "293K merchants, 245K already applied; they save and spend more", "12.2B THB", "SME loan book by 2029", "Ready: lead list in hand"],
-    ["card", "3", "Digital credit card for office workers", "700K office workers, borrow most (11%); 239K AIS Serenade", "To size", "card revenue by 2029", "Ready: partner perks with AIS and OR"],
+  // Initiatives row
+  s.addText("INITIATIVES  ·  in priority order", { x: 0.5, y: 2.95, w: 12.33, h: 0.26, fontSize: 10, bold: true, color: MUTED, charSpacing: 1, margin: 0, isTextBox: true, objectName: "Initiatives label" });
+  const ini = [
+    ["P1", "salary", "Salary-Bridged Financing", "Q2 · Q3", "Everyone comes for a loan, and salaried workers get approved most (11%)", "607K", "salaried and wage earners · 28% of base", "Corporate crew · SME staffer · Helper"],
+    ["P2", "card", "Credit Card & Apple Pay", "Q3 · Q5", "Salary earners borrow and pay most; 158K proven borrowers and 239K AIS Serenade members", "984K", "salary earners and business owners · 46%", "Salary earners · Business owners"],
+    ["P3", "insure", "Insurance e-Brokerage", "Q2 · Q4", "Riders and blue-collar workers rarely get a loan; insurance keeps them with us", "836K", "riders, blue- and white-collar workers · 39%", "Riders · Blue collars · White collars"],
+    ["P4", "invest", "Digital Investment", "Q2 · Q3", "Tech-savvy people join most (8.5%); savers hold 5.5B THB", "533K", "tech-savvy customers · 25%", "Aspiring wealth · Tech savvy"],
   ];
-  const bw = (MW - 0.3) / 3;
-  bets.forEach((b, i) => {
-    const x = x0 + i * (bw + 0.15), y = 3.4, h = 3.38;
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: bw, h, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Bet ${i}` });
-    s.addShape(pres.shapes.OVAL, { x: x + 0.15, y: y + 0.15, w: 0.56, h: 0.56, fill: { color: CYAN }, line: { type: "none" }, objectName: `Bet icon bg ${i}` });
-    s.addImage({ path: IC(b[0] + ".png"), x: x + 0.28, y: y + 0.28, w: 0.3, h: 0.3, altText: b[2] + " icon", objectName: `Bet icon ${i}` });
-    s.addText("#" + b[1], { x: x + bw - 0.7, y: y + 0.15, w: 0.55, h: 0.4, fontSize: 20, bold: true, color: BLUE, align: "right", margin: 0, isTextBox: true, objectName: `Bet rank ${i}` });
-    s.addText(b[2], { x: x + 0.15, y: y + 0.8, w: bw - 0.3, h: 0.5, fontSize: 12, bold: true, color: NAVY, margin: 0, valign: "top", isTextBox: true, objectName: `Bet title ${i}` });
-    s.addText(b[3], { x: x + 0.15, y: y + 1.32, w: bw - 0.3, h: 0.62, fontSize: 9.5, color: MUTED, margin: 0, valign: "top", isTextBox: true, objectName: `Bet why ${i}` });
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.15, y: y + 1.98, w: bw - 0.3, h: 0.78, rectRadius: 0.06, fill: { color: STAT_BG }, line: { type: "none" }, objectName: `Bet value box ${i}` });
-    s.addText(b[4], { x: x + 0.25, y: y + 2.0, w: bw - 0.5, h: 0.42, fontSize: 20, bold: true, color: b[4] === "To size" ? GREY : BLUE, margin: 0, valign: "middle", isTextBox: true, objectName: `Bet value ${i}` });
-    s.addText(b[5], { x: x + 0.25, y: y + 2.42, w: bw - 0.5, h: 0.28, fontSize: 9.5, color: TXT, margin: 0, isTextBox: true, objectName: `Bet value label ${i}` });
-    s.addText(b[6], { x: x + 0.15, y: y + 2.84, w: bw - 0.3, h: 0.46, fontSize: 9.5, bold: true, color: i === 0 ? NAVY : CYAN, margin: 0, valign: "top", isTextBox: true, objectName: `Bet readiness ${i}` });
+  const iw = (12.33 - 0.45) / 4;
+  ini.forEach((c, i) => {
+    const x = 0.5 + i * (iw + 0.15), y = 3.25, h = 3.15;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: iw, h, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Initiative ${i}` });
+    s.addShape(pres.shapes.OVAL, { x: x + 0.15, y: y + 0.15, w: 0.56, h: 0.56, fill: { color: CYAN }, line: { type: "none" }, objectName: `Initiative icon bg ${i}` });
+    s.addImage({ path: IC(c[1] + ".png"), x: x + 0.28, y: y + 0.28, w: 0.3, h: 0.3, altText: c[2] + " icon", objectName: `Initiative icon ${i}` });
+    s.addShape(pres.shapes.OVAL, { x: x + iw - 0.66, y: y + 0.17, w: 0.5, h: 0.5, fill: { color: BLUE }, line: { type: "none" }, objectName: `Priority badge ${i}` });
+    s.addText(c[0], { x: x + iw - 0.66, y: y + 0.17, w: 0.5, h: 0.5, fontSize: 12, bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: `Priority ${i}` });
+    s.addText(c[2], { x: x + 0.15, y: y + 0.8, w: iw - 0.3, h: 0.36, fontSize: 13, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Initiative name ${i}` });
+    s.addText([{ text: c[3] + "  ", options: { bold: true, color: BLUE } }, { text: c[4], options: { color: MUTED } }],
+      { x: x + 0.15, y: y + 1.2, w: iw - 0.3, h: 0.78, fontSize: 9.5, margin: 0, valign: "top", isTextBox: true, objectName: `Initiative why ${i}` });
+    s.addText([{ text: "FOR  ", options: { bold: true, color: CYAN, fontSize: 8.5, charSpacing: 1 } }, { text: c[7], options: { color: NAVY, bold: true, fontSize: 9.5 } }],
+      { x: x + 0.15, y: y + 1.68, w: iw - 0.3, h: 0.32, margin: 0, valign: "middle", isTextBox: true, objectName: `Initiative persona ${i}` });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.15, y: y + 2.05, w: iw - 0.3, h: 0.95, rectRadius: 0.06, fill: { color: STAT_BG }, line: { type: "none" }, objectName: `Pool box ${i}` });
+    s.addText("PROSPECTS IN OUR BASE", { x: x + 0.25, y: y + 2.1, w: iw - 0.5, h: 0.2, fontSize: 8, bold: true, color: MUTED, charSpacing: 1, margin: 0, isTextBox: true, objectName: `Pool head ${i}` });
+    s.addText(c[5], { x: x + 0.25, y: y + 2.3, w: iw - 0.5, h: 0.38, fontSize: 20, bold: true, color: BLUE, margin: 0, valign: "middle", isTextBox: true, objectName: `Pool ${i}` });
+    s.addText(c[6], { x: x + 0.25, y: y + 2.68, w: iw - 0.5, h: 0.28, fontSize: 9, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: `Pool label ${i}` });
   });
-  // Right panel: asks, later, won't play
-  const px = 9.05, pw = 3.78;
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: px, y: 1.5, w: pw, h: 5.28, rectRadius: 0.08, fill: { color: C.text2 }, line: { type: "none" }, objectName: "Asks panel" });
-  s.addText([
-    { text: "WHAT WE ASK THE BOARD", options: { bold: true, fontSize: 10, color: C.accent6, charSpacing: 1, breakLine: true } },
-    { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "1  Risk appetite", options: { bold: true, fontSize: 13, color: "FFFFFF", breakLine: true } },
-    { text: "Limits for test-and-learn lending to the underserved", options: { fontSize: 11, color: "DCE6EF", breakLine: true } },
-    { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "2  Budget shift", options: { bold: true, fontSize: 13, color: "FFFFFF", breakLine: true } },
-    { text: "Move part of sign-up spend into activation", options: { fontSize: 11, color: "DCE6EF", breakLine: true } },
-    { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "3  One scorecard", options: { bold: true, fontSize: 13, color: "FFFFFF", breakLine: true } },
-    { text: "Active, funded customers next to the performing loan book; one definition per metric", options: { fontSize: 11, color: "DCE6EF", breakLine: true } },
-    { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "4  Data", options: { bold: true, fontSize: 13, color: "FFFFFF", breakLine: true } },
-    { text: "Balances, revenue and credit losses per customer in the data room", options: { fontSize: 11, color: "DCE6EF", breakLine: true } },
-    { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "NEXT WAVE (2028)", options: { bold: true, fontSize: 10, color: C.accent6, charSpacing: 1, breakLine: true } },
-    { text: "Wealth for 643K savers on 5.5B THB", options: { fontSize: 11, color: "FFFFFF", breakLine: true } },
-    { text: " ", options: { fontSize: 8, breakLine: true } },
-    { text: "WHERE WE WON'T PLAY", options: { bold: true, fontSize: 10, color: C.accent6, charSpacing: 1, breakLine: true } },
-    { text: "Branch lending · secured home and car loans · prime wealth needing RMs · revolving cash cards", options: { fontSize: 11, color: "FFFFFF" } },
-  ], { x: px + 0.2, y: 1.65, w: pw - 0.4, h: 5.0, valign: "top", margin: 0, isTextBox: true, objectName: "Asks text" });
+  s.addText([{ text: "BOARD ASKS  ", options: { bold: true, color: C.accent1, charSpacing: 1, fontSize: 9.5 } },
+    { text: "Risk appetite for underserved lending  ·  Shift sign-up budget to activation  ·  One scorecard  ·  Balances, revenue and losses in the data room", options: { fontSize: 10.5, color: TXT } }],
+    { x: 0.5, y: 6.47, w: 12.33, h: 0.3, margin: 0, valign: "middle", isTextBox: true, objectName: "Board asks" });
+}
+
+// ---------- Slide 3: prioritization table (connects to business cases)
+{
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
+  s.addText("3 / 3  |  PRIORITIZATION", { placeholder: "tracker" });
+  s.addText("Prioritization for upcoming initiatives: the customers are already in our base; financials follow the business cases", { placeholder: "title" });
+  s.addText(POOL_NOTE + ". xx = to be sized; figures to be filled in once business cases are complete. Icons: Font Awesome (open licence)", { placeholder: "foot" });
+  const cols = [["Upcoming initiatives", "in priority order", 0.5, 3.0], ["Persona", "target archetypes", 3.6, 3.15], ["Prospect customers", "in existing CLICX base", 6.85, 2.15],
+    ["Key financial outcome", "annual revenue", 9.1, 1.95], ["Payback & IRR", "break-even point", 11.15, 1.68]];
+  cols.forEach((c, k) => s.addText([{ text: c[0], options: { bold: true, fontSize: 12, color: NAVY, breakLine: true } }, { text: c[1], options: { fontSize: 9.5, color: MUTED } }],
+    { x: c[2], y: 1.5, w: c[3], h: 0.5, margin: 0, valign: "bottom", isTextBox: true, objectName: `Head ${k}` }));
+  s.addShape(pres.shapes.LINE, { x: 0.5, y: 2.08, w: 12.33, h: 0, line: { color: NAVY, width: 1.5 }, objectName: "Header rule" });
+  const rows = [
+    ["P1", "Salary-Bridged Financing", [["p_corp", "Corporate crew"], ["p_sme", "SME staffer"], ["p_helper", "Personal helper"]], "607K", "salaried & wage earners · 28%", "Loan outstanding per year"],
+    ["P2", "Credit Card & Apple Pay", [["p_earner", "Salary earners"], ["p_owner", "Business owners"]], "984K", "salary earners & owners · 46%", "by year xx"],
+    ["P3", "Insurance e-Brokerage", [["p_rider", "Riders / drivers"], ["p_blue", "Blue collars"], ["p_white", "White collars"]], "836K", "riders, blue & white collars · 39%", "by year xx"],
+    ["P4", "Digital Investment", [["p_wealth", "Aspiring wealth"], ["p_tech", "Tech savvy"]], "533K", "tech-savvy customers · 25%", "by year xx"],
+  ];
+  const rh = 1.1, y0 = 2.15;
+  rows.forEach((r, k) => {
+    const y = y0 + k * rh;
+    if (k) s.addShape(pres.shapes.LINE, { x: 0.5, y, w: 12.33, h: 0, line: { color: LGREY, width: 0.75 }, objectName: `Row rule ${k}` });
+    s.addShape(pres.shapes.OVAL, { x: 0.5, y: y + 0.3, w: 0.48, h: 0.48, fill: { color: BLUE }, line: { type: "none" }, objectName: `P badge ${k}` });
+    s.addText(r[0], { x: 0.5, y: y + 0.3, w: 0.48, h: 0.48, fontSize: 12, bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: `P text ${k}` });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 1.1, y: y + 0.3, w: 2.35, h: 0.48, rectRadius: 0.24, fill: { color: "FFFFFF" }, line: { color: BLUE, width: 1.25, dashType: "dash" }, objectName: `Initiative pill ${k}` });
+    s.addText(r[1], { x: 1.1, y: y + 0.3, w: 2.35, h: 0.48, fontSize: 12, bold: true, color: BLUE, align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: `Initiative name ${k}` });
+    r[2].forEach((p, j) => {
+      const px = 3.6 + (j % 2) * 1.6, py = y + (r[2].length > 2 ? 0.12 : 0.35) + Math.floor(j / 2) * 0.46;
+      s.addShape(pres.shapes.OVAL, { x: px, y: py, w: 0.38, h: 0.38, fill: { color: j % 2 ? BLUE : CYAN }, line: { type: "none" }, objectName: `Persona icon bg ${k}-${j}` });
+      s.addImage({ path: IC(p[0] + ".png"), x: px + 0.09, y: py + 0.09, w: 0.2, h: 0.2, altText: p[1] + " icon", objectName: `Persona icon ${k}-${j}` });
+      s.addText(p[1], { x: px + 0.45, y: py, w: 1.1, h: 0.38, fontSize: 10, color: NAVY, bold: true, margin: 0, valign: "middle", isTextBox: true, objectName: `Persona ${k}-${j}` });
+    });
+    if (r[2].length === 2) { /* keep two personas on one line, centred vertically */ }
+    s.addText([{ text: r[3], options: { fontSize: 22, bold: true, color: CYAN, breakLine: true } }, { text: r[4], options: { fontSize: 9.5, color: TXT } }],
+      { x: 6.85, y: y + 0.12, w: 2.15, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: `Prospects ${k}` });
+    s.addText([{ text: "THB xx M", options: { fontSize: 20, bold: true, color: GREY, breakLine: true } }, { text: r[5], options: { fontSize: 9.5, color: MUTED } }],
+      { x: 9.1, y: y + 0.12, w: 1.95, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: `Financial ${k}` });
+    s.addText([{ text: "xx years", options: { fontSize: 20, bold: true, color: GREY, breakLine: true } }, { text: "break-even · IRR xx%", options: { fontSize: 9.5, color: MUTED } }],
+      { x: 11.15, y: y + 0.12, w: 1.68, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: `Payback ${k}` });
+  });
+  s.addShape(pres.shapes.LINE, { x: 0.5, y: y0 + 4 * rh, w: 12.33, h: 0, line: { color: LGREY, width: 0.75 }, objectName: "Bottom rule" });
 }
 
 (async () => {
