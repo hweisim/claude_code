@@ -126,10 +126,11 @@ pres.addSection({ title: "Summary" });
   // Q1 full width
   qTitle(1, "Do all current CLICX customers come from captive consortium customers?", 0.5, 1.42, 12.3);
   statBox(0.5, 1.8, 3.4, 1.05, "96%", "of customers come from AIS, KTB or OR", 1);
-  const p1 = [["Krungthai (KTB)", 0.88, "88%", "1.6M", BLUE], ["AIS", 0.67, "67%", "1.2M", CYAN], ["OR", 0.40, "40%", "725K", NAVY], ["Non-consortium", 0.04, "4%", "51K", GREY]];
+  const p1 = [["Krungthai (KTB)", 0.88, "88%", "1.6M", BLUE, "logo_ktb.jpeg", 2.58], ["AIS", 0.67, "67%", "1.2M", CYAN, "logo_ais.png", 2.74], ["OR", 0.40, "40%", "725K", NAVY, "logo_or.png", 1.93], ["Non-consortium", 0.04, "4%", "51K", GREY]];
   p1.forEach((p, k) => {
     const x = 4.15 + k * 2.18, w = 1.98;
-    s.addText(p[0], { x, y: 1.85, w, h: 0.26, fontSize: 11, color: MUTED, margin: 0, isTextBox: true, objectName: `Q1 partner ${k}` });
+    if (p[5]) s.addImage({ path: __dirname + "/icons/" + p[5], x, y: 1.83, h: 0.28, w: 0.28 * p[6], altText: p[0] + " logo", objectName: `Q1 logo ${k}` });
+    else s.addText(p[0], { x, y: 1.85, w, h: 0.26, fontSize: 11, color: MUTED, margin: 0, isTextBox: true, objectName: `Q1 partner ${k}` });
     s.addText([{ text: p[2], options: { fontSize: 22, bold: true, color: p[4] === GREY ? MUTED : p[4] } }, { text: "  " + p[3], options: { fontSize: 12, color: TXT } }],
       { x, y: 2.12, w, h: 0.4, margin: 0, valign: "middle", isTextBox: true, objectName: `Q1 partner value ${k}` });
     s.addShape(pres.shapes.RECTANGLE, { x, y: 2.62, w, h: 0.1, fill: { color: "E3E8EE" }, line: { type: "none" }, objectName: `Q1 track ${k}` });
@@ -169,27 +170,49 @@ pres.addSection({ title: "Summary" });
   s.addText("450K KTB rejects applied to us; 51K got our loan", { x: R + 2.4, y: r3 + 1.55, w: 3.6, h: 0.3, fontSize: 9.5, color: MUTED, margin: 0, isTextBox: true, objectName: "Q5 note" });
 }
 {
-  const s = qSlide("Summary", "2 / 2  |  STRATEGY TO PRODUCT",
-    "What should we build in 2027 based on these answers?",
-    "Six strategies, each tied to a product and a customer pool we already have: grow through partners, lend smarter to the underserved, and launch SME loans, a card and wealth products",
-    "Customer pools from Data for Strategy 2027. Revenue and conversion targets are still to be set. " + SRC);
-  const H = (t) => ({ text: t, options: { bold: true, color: "FFFFFF", fill: { color: NAVY }, fontSize: 11 } });
-  const q = (t) => ({ text: t, options: { bold: true, fontSize: 10.5, color: BLUE, align: "center" } });
-  const st = (n, t) => ({ text: [{ text: n + "  ", options: { bold: true, color: CYAN, fontSize: 12 } }, { text: t, options: { bold: true, color: NAVY, fontSize: 11.5 } }] });
-  const c = (t) => ({ text: t, options: { fontSize: 10.5, color: TXT } });
-  const pr = (t) => ({ text: t, options: { fontSize: 11, bold: true, color: CYAN } });
-  const big = (n, t) => ({ text: [{ text: n, options: { bold: true, fontSize: 13, color: NAVY, breakLine: true } }, { text: t, options: { fontSize: 9.5, color: MUTED } }] });
-  const rows = [
-    [H("From"), H("Strategy"), H("Because we found"), H("2027 product"), H("Who, and how many")],
-    [q("Q1"), st("1", "Grow beyond KTB through AIS and OR"), c("96% come from partners, but only 3.7% of AIS's base has joined"), pr("AIS bill pay and top-up in app; partner rewards (AIS, OR)"), big("0.66M", "of our customers are not AIS yet")],
-    [q("Q2, Q3"), st("2", "Lend smarter to the underserved"), c("82% of applicants are underserved; 90%+ of gig workers apply, 5–7% approved"), pr("Proxy-income loans; deposit-backed starter loan"), big("1.45M", "underserved loan applicants")],
-    [q("Q3"), st("3", "Turn merchants into SME borrowers"), c("Merchants save most (20%) and spend; 84% already applied for a loan"), pr("SME cash-flow loans"), big("293K", "merchants; 245K already applied")],
-    [q("Q3"), st("4", "Give office workers a first card"), c("Office workers borrow most (11%) and hold 3.2B THB"), pr("Digital credit card with AIS and PTT perks"), big("700K", "office workers; 239K AIS Serenade")],
-    [q("Q3, Q4"), st("5", "Give savers a wealth home"), c("Working seniors and seniors hold most of our 5.5B THB"), pr("Savings pockets, then mutual funds"), big("643K", "working seniors and seniors")],
-    [q("Q4, Q5"), st("6", "Activate idle and KTB-rejected customers"), c("88% of borrowers are active vs 4% with no money in; 450K KTB rejects applied"), pr("First-deposit bonus; Paotang reject referral"), big("1.8M", "idle customers; 1.9M KTB rejects a year")],
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Summary" });
+  s.addText("2 / 2  |  STRATEGY TO PRODUCT", { placeholder: "tracker" });
+  s.addText("What should we build in 2027 based on these answers?", { placeholder: "title" });
+  s.addText("Customer pools from Data for Strategy 2027 and the Data Room. Revenue and conversion targets are still to be set. Icons: Font Awesome (open licence)", { placeholder: "foot" });
+  const cards = [
+    { icon: "partners", from: "Q1", title: "Grow beyond KTB through AIS and OR", why: "96% come from partners, but only 3.7% of AIS's base has joined",
+      product: "AIS bill pay and top-up in app; partner rewards", big: "0.66M", pool: "not AIS customers yet", logos: [["logo_ais.png", 2.74], ["logo_or.png", 1.93]] },
+    { icon: "lend", from: "Q2 · Q3", title: "Lend smarter to the underserved", why: "82% of applicants are underserved; 90%+ of gig workers apply, 5–7% approved",
+      product: "Proxy-income loans; deposit-backed starter loan", big: "1.45M", pool: "underserved loan applicants" },
+    { icon: "sme", from: "Q3", title: "Turn merchants into SME borrowers", why: "Merchants save most (20%) and spend; 84% already applied for a loan",
+      product: "SME cash-flow loans", big: "293K", pool: "merchants; 245K already applied" },
+    { icon: "card", from: "Q3", title: "Give office workers a first card", why: "Office workers borrow most (11%) and hold 3.2B THB; 239K are AIS Serenade members",
+      product: "Digital credit card with AIS and PTT perks", big: "700K", pool: "office workers", logos: [["logo_ais.png", 2.74], ["logo_or.png", 1.93]] },
+    { icon: "wealth", from: "Q3 · Q4", title: "Give savers a wealth home", why: "Working seniors and seniors hold most of our 5.5B THB deposits",
+      product: "Savings pockets, then mutual funds", big: "643K", pool: "working seniors and seniors" },
+    { icon: "activate", from: "Q4 · Q5", title: "Activate idle and KTB-rejected customers", why: "88% of borrowers are active vs 4% with no money in; 450K KTB rejects applied",
+      product: "First-deposit bonus; Paotang reject referral", big: "1.8M", pool: "idle customers; 1.9M KTB rejects a year", logos: [["logo_ktb.jpeg", 2.58]] },
   ];
-  s.addTable(rows, { x: 0.5, y: 2.35, w: 12.33, colW: [0.8, 2.75, 3.6, 3.0, 2.18], fontFace: "Arial", border: { type: "solid", pt: 0.75, color: LGREY },
-    valign: "middle", rowH: [0.38, 0.66, 0.66, 0.66, 0.66, 0.66, 0.66], margin: [0.04, 0.08, 0.04, 0.08], objectName: "Strategy table" });
+  const cw = 3.99, ch = 2.6, gx = 0.18, gy = 0.15, x0 = 0.5, y0 = 1.45;
+  cards.forEach((c, i) => {
+    const x = x0 + (i % 3) * (cw + gx), y = y0 + Math.floor(i / 3) * (ch + gy), n = i + 1;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: cw, h: ch, rectRadius: 0.1, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Card ${n}` });
+    s.addShape(pres.shapes.OVAL, { x: x + 0.2, y: y + 0.2, w: 0.62, h: 0.62, fill: { color: i % 2 ? BLUE : CYAN }, line: { type: "none" }, objectName: `Icon circle ${n}` });
+    s.addImage({ path: __dirname + "/icons/" + c.icon + ".png", x: x + 0.34, y: y + 0.34, w: 0.34, h: 0.34, altText: c.title + " icon", objectName: `Icon ${n}` });
+    s.addText([{ text: String(n) + "  ", options: { color: CYAN, bold: true } }, { text: c.title, options: { color: NAVY, bold: true } }],
+      { x: x + 0.95, y: y + 0.18, w: cw - 1.75, h: 0.66, fontSize: 13, valign: "middle", margin: 0, isTextBox: true, objectName: `Title ${n}` });
+    s.addText(c.from, { x: x + cw - 0.8, y: y + 0.2, w: 0.65, h: 0.26, fontSize: 9, bold: true, color: BLUE, align: "right", margin: 0, isTextBox: true, objectName: `From ${n}` });
+    s.addText(c.why, { x: x + 0.2, y: y + 0.92, w: cw - 0.4, h: 0.42, fontSize: 10, color: MUTED, valign: "top", margin: 0, isTextBox: true, objectName: `Why ${n}` });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.2, y: y + 1.4, w: cw - 0.4, h: 0.48, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { type: "none" }, objectName: `Product box ${n}` });
+    s.addText([{ text: "2027 PRODUCT  ", options: { fontSize: 8.5, bold: true, color: MUTED, charSpacing: 1 } }, { text: c.product, options: { fontSize: 11, bold: true, color: CYAN } }],
+      { x: x + 0.32, y: y + 1.4, w: cw - 0.64, h: 0.48, valign: "middle", margin: 0, isTextBox: true, objectName: `Product ${n}` });
+    s.addText(c.big, { x: x + 0.2, y: y + 1.95, w: 1.2, h: 0.55, fontSize: 26, bold: true, color: BLUE, valign: "middle", margin: 0, isTextBox: true, objectName: `Big ${n}` });
+    const lw = c.logos ? c.logos.reduce((a, [f, ar]) => a + 0.24 * ar + 0.08, 0) + 0.1 : 0;
+    s.addText(c.pool, { x: x + 1.42, y: y + 1.95, w: cw - 1.62 - lw, h: 0.55, fontSize: 10.5, color: TXT, valign: "middle", margin: 0, isTextBox: true, objectName: `Pool ${n}` });
+    if (c.logos) {
+      let lx = x + cw - 0.2;
+      c.logos.slice().reverse().forEach(([f, ar], k) => {
+        const h = 0.24, w = h * ar; lx -= w;
+        s.addImage({ path: __dirname + "/icons/" + f, x: lx, y: y + 2.1, w, h, altText: f.replace("logo_", "").split(".")[0].toUpperCase() + " logo", objectName: `Logo ${n}-${k}` });
+        lx -= 0.08;
+      });
+    }
+  });
 }
 
 (async () => {
