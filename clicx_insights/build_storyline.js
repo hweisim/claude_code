@@ -138,12 +138,12 @@ pres.addSection({ title: "Storyline" });
   let x = 0.5;
   panel(x, y1, W3, h1, 1, "How much do we rely on the consortium, and how?", "96% come from partners and 90% sign up through partner channels", "96%", "of customers are AIS, KTB or OR customers", 1);
   bars(x + 1.82, y1 + 1.2, W3 - 2.0, [["Paotang", 0.80, "80%", BLUE], ["myAIS", 0.06, "6%", CYAN], ["Dipchip", 0.04, "4%", CYAN], ["NDID", 0.10, "10%", GREY]], 1, { head: "Sign-up channel", lw: 0.7, rh: 0.21 });
-  s.addText("Only 3.7% of AIS's base has joined", { x: x + 1.82, y: y1 + 2.06, w: W3 - 2.0, h: 0.18, fontSize: 8, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "AIS headroom" });
+  s.addText("73% of payers came via AIS or OR", { x: x + 1.82, y: y1 + 2.06, w: W3 - 2.0, h: 0.18, fontSize: 8, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "AIS headroom" });
   // 2 targets
   x = 0.5 + W3 + G;
   panel(x, y1, W3, h1, 2, "Are we reaching the customers we planned?", "Yes: 40% have no regular income and 82% of applicants are underserved", "40%", "are self-employed, with no regular income", 2);
   bars(x + 1.82, y1 + 1.25, W3 - 2.0, [["Self-employed", 0.40, "40%", CYAN], ["White-collar", 0.38, "38%", BLUE], ["Blue-collar", 0.22, "22%", NAVY]], 2, { head: "Customers by type of work" });
-  s.addText("Joined: tech-savvy 8.5%, multi-bank 2.4%", { x: x + 1.82, y: y1 + 2.06, w: W3 - 2.0, h: 0.18, fontSize: 8, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Target note" });
+  s.addText("Joined: tech-savvy 8.5%, multi 2.4%", { x: x + 1.82, y: y1 + 2.06, w: W3 - 2.0, h: 0.18, fontSize: 8, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Target note" });
   // 3 activity
   x = 0.5 + 2 * (W3 + G);
   panel(x, y1, W3, h1, 3, "What do customers use, and what drives activity?", "Everyone comes for a loan; money in and a loan drive activity", "84–92%", "of every job type applies for a loan", 3);
@@ -164,8 +164,8 @@ pres.addSection({ title: "Storyline" });
   x = 0.5 + W2 + G;
   panel(x, y2, W2, h2, 5, "What value do we create for each shareholder?", "We reach customers KTB doesn't, and bring AIS and OR new customers and spend", "81%", "of our 164K borrowers never had a KTB Jai-pump loan", 5);
   const sh = [["logo_ktb.jpeg", 2.58, "65% of CLICX depositors are not active with KTB; 1.1M shared customers were KTB-inactive"],
-    ["logo_ais.png", 2.74, "0.6M CLICX customers not on AIS yet; of AIS-linked, 52% are prepaid"],
-    ["logo_or.png", 1.93, "173K active customers without BLUE+; 1,327 new BLUE+ members"]];
+    ["logo_ais.png", 2.74, "0.6M CLICX customers not on AIS yet; ฿47M paid to AIS in Oct, down 40% after the promotion"],
+    ["logo_or.png", 1.93, "฿19M paid to OR in Oct; 173K active customers without BLUE+"]];
   sh.forEach((r, k) => {
     const yy = y2 + 1.0 + k * 0.42;
     s.addImage({ path: IC(r[0]), x: x + 1.85, y: yy + 0.06, h: 0.22, w: 0.22 * r[1], altText: "Partner logo", objectName: `Value logo ${k}` });
@@ -176,9 +176,9 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 2: what we know, payments
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("2 / 4  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
-  s.addText("Partners start the payment habit, but promotions alone don't keep it; AIS prepaid and OR are the biggest gaps", { placeholder: "title" });
-  s.addText("Ever partner = paid AIS or PTT OR this month or before. Per-payer and category figures cover Scan and Pay to other merchants. Source: Partner Payment Story v1 (1.51M customers, data as of 31 Oct 2026)", { placeholder: "foot" });
+  s.addText("2 / 4  |  WHAT WE KNOW: USAGE AND PAYMENTS", { placeholder: "tracker" });
+  s.addText("Use follows life stage and payments follow steady income; promotions alone don't build the habit, and AIS prepaid is the biggest gap", { placeholder: "title" });
+  s.addText("Depositor = balance over ฿100; saver = Save Max/More over ฿10K. Ever partner = paid AIS or PTT OR. Category figures cover Scan and Pay to other merchants. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026). Full tables in appendix A1–A2", { placeholder: "foot" });
   const panel = (x, y, w, h, tag, q, ans, big, bigLbl, n) => {
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Pay panel ${n}` });
     s.addText([{ text: tag + "  ", options: { color: CYAN, bold: true } }, { text: q, options: { color: MUTED } }],
@@ -203,20 +203,20 @@ pres.addSection({ title: "Storyline" });
   const W = 4.01, G = 0.15, H = 2.48, ys = [1.5, 4.1];
   const xs = [0.5, 0.5 + W + G, 0.5 + 2 * (W + G)];
   const bx = (i) => xs[i % 3] + 1.78, by = (i) => ys[Math.floor(i / 3)] + 1.18, bw = W - 1.95;
-  // 1 partners drive payments
-  panel(xs[0], ys[0], W, H, "Q1", "Do partners drive payments too?", "Yes: 73% of October payers came through AIS or OR", "67%", "of ฿408M October spend comes from them", 1);
-  bars(bx(0), by(0) - 0.08, bw, [["Jun", 0.57, "57%", GREY], ["Jul", 0.67, "67%", GREY], ["Aug", 0.70, "70%", BLUE], ["Sep", 0.73, "73%", BLUE], ["Oct", 0.73, "73%", CYAN]], 1, { head: "Ever-partner share of payers", lw: 0.4, vw: 0.45, rh: 0.24 });
+  // 1 holding by age
+  panel(xs[0], ys[0], W, H, "Q3", "What do customers hold, by age?", "80% hold nothing; teens pay, 20–59s borrow, 60+ save", "79.5%", "of customers hold no active product", 1);
+  bars(bx(0), by(0), bw, [["Teens: pay only", 0.096 / 0.2, "9.6%", CYAN], ["20–29: borrow", 0.073 / 0.2, "7.3%", BLUE], ["60–69: deposit", 0.142 / 0.2, "14.2%", NAVY]], 1, { head: "Main product for each age group", lw: 1.05, vw: 0.48, rh: 0.27 });
+  s.addText("No loans under 20 or over 59 (age limits)", { x: bx(0), y: by(0) + 0.84, w: bw, h: 0.2, fontSize: 8, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Age note" });
   // 2 what they pay for
   panel(xs[1], ys[0], W, H, "Q3", "What do customers pay for?", "Mostly everyday Scan and Pay, not partner bills", "฿408M", "paid in October, +11% vs August", 2);
   bars(bx(1), by(1), bw, [["Scan & Pay", 0.84, "84%", CYAN], ["AIS", 0.11, "11%", BLUE, "logo_ais.png", 2.74], ["OR", 0.05, "5%", NAVY, "logo_or.png", 1.93]], 2, { head: "Share of October spend", lw: 0.72, vw: 0.42, rh: 0.3 });
-  // 3 promotion
-  panel(xs[2], ys[0], W, H, "Q3", "Did the payment promotion build a habit?", "Partly: a third of payers left, but those who stayed pay more", "59.9K", "paid only in August and never came back", 3);
-  bars(bx(2), by(2), bw, [["Aug", 1.0, "164K", GREY], ["Sep", 0.80, "130K", BLUE], ["Oct", 0.77, "127K", BLUE]], 3, { head: "Customers paying each month", lw: 0.4, vw: 0.5, rh: 0.26 });
-  s.addText("Stayers: ฿2.1K → ฿3.0K each", { x: bx(2), y: by(2) + 0.82, w: bw, h: 0.22, fontSize: 9, bold: true, color: CYAN, margin: 0, isTextBox: true, objectName: "Stayers spend" });
-  // 4 partner value
-  panel(xs[0], ys[1], W, H, "Q5", "What do partners get from CLICX payments?", "฿66M a month, but AIS payments fell 40% after the promotion", "฿66M", "paid to AIS and OR in October", 4);
-  bars(bx(3), by(3), bw, [["AIS", 46.7 / 77.7, "฿47M", BLUE, "logo_ais.png", 2.74], ["OR", 19.1 / 77.7, "฿19M", NAVY, "logo_or.png", 1.93]], 4, { head: "Paid in October", lw: 0.62, vw: 0.5, rh: 0.32 });
-  s.addText("August: AIS ฿78M, OR ฿23M", { x: bx(3), y: by(3) + 0.7, w: bw, h: 0.22, fontSize: 9, color: MUTED, margin: 0, isTextBox: true, objectName: "Aug partner spend" });
+  // 3 who pays
+  panel(xs[2], ys[0], W, H, "Q3", "Who pays with CLICX?", "Merchants and salaried pay most; blue-collar and gig workers least", "8.4%", "of all customers paid in October", 3);
+  bars(bx(2), by(2) - 0.06, bw, [["Online merchant", 0.102 / 0.12, "10.2%", CYAN], ["Salaried", 0.094 / 0.12, "9.4%", CYAN], ["Freelance", 0.073 / 0.12, "7.3%", GREY], ["Rider", 0.071 / 0.12, "7.1%", NAVY], ["Blue-collar", 0.064 / 0.12, "6.4%", NAVY]], 3, { head: "% who paid in October, by job", lw: 0.95, vw: 0.48, rh: 0.21 });
+  // 4 promotion
+  panel(xs[0], ys[1], W, H, "Q3", "Did the payment promotion build a habit?", "Partly: a third of payers left, but those who stayed pay more", "59.9K", "paid only in August and never came back", 4);
+  bars(bx(3), by(3), bw, [["Aug", 1.0, "164K", GREY], ["Sep", 0.80, "130K", BLUE], ["Oct", 0.77, "127K", BLUE]], 4, { head: "Customers paying each month", lw: 0.4, vw: 0.5, rh: 0.26 });
+  s.addText("Stayers: ฿2.1K → ฿3.0K each", { x: bx(3), y: by(3) + 0.82, w: bw, h: 0.22, fontSize: 9, bold: true, color: CYAN, margin: 0, isTextBox: true, objectName: "Stayers spend" });
   // 5 biggest gaps
   panel(xs[1], ys[1], W, H, "Q1", "Where are the biggest payment gaps?", "AIS prepaid customers, and OR customers who don't pay", "516.5K", "AIS prepaid customers; +22K payers a month at the postpaid rate", 5);
   bars(bx(4), by(4) - 0.05, bw, [["Postpaid", 0.128 / 0.14, "12.8%", NAVY], ["Prepaid", 0.084 / 0.14, "8.4%", CYAN], ["OR", 0.113 / 0.14, "11.3%", BLUE], ["Not OR", 0.074 / 0.14, "7.4%", GREY]], 5, { head: "% who paid in October", lw: 0.62, vw: 0.5, rh: 0.25 });
@@ -297,7 +297,7 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
     ["P1", "salary", "Salary-Bridged Financing", "Corporate & SME staff · Helpers", "Salaried workers get approved most (11%)", "607K", "salaried and wage earners · 28%"],
     ["P2", "card", "Credit Card & Apple Pay", "Salary earners · Business owners", "Payers repay other banks' cards and loans: 26% of spend, ฿4.3K each", "984K", "salary earners and owners · 46%"],
     ["P3", "insure", "Insurance e-Brokerage", "Riders · Blue & white collars", "Riders rarely get a loan; insurance keeps them", "836K", "riders, blue and white collars · 39%"],
-    ["P4", "invest", "Digital Investment", "Aspiring wealth · Tech savvy", "10% of payment spend goes to crypto, gold and stocks; savers hold 5.5B THB", "533K", "tech-savvy customers · 25%"],
+    ["P4", "invest", "Digital Investment", "Tech savvy · 50+ savers", "10% of payment spend goes to crypto, gold and stocks; savers hold 5.5B THB", "533K", "tech-savvy customers · 25%"],
   ];
   const cw = (RW - 0.12) / 2, chh = 1.5;
   ini.forEach((c, i) => {
@@ -331,7 +331,7 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
     ["P1", "Salary-Bridged Financing", [["p_corp", "Corporate crew"], ["p_sme", "SME staffer"], ["p_helper", "Personal helper"]], "607K", "salaried & wage earners · 28%", "Loan outstanding per year"],
     ["P2", "Credit Card & Apple Pay", [["p_earner", "Salary earners"], ["p_owner", "Business owners"]], "984K", "salary earners & owners · 46%", "by year xx"],
     ["P3", "Insurance e-Brokerage", [["p_rider", "Riders / drivers"], ["p_blue", "Blue collars"], ["p_white", "White collars"]], "836K", "riders, blue & white collars · 39%", "by year xx"],
-    ["P4", "Digital Investment", [["p_wealth", "Aspiring wealth"], ["p_tech", "Tech savvy"]], "533K", "tech-savvy customers · 25%", "by year xx"],
+    ["P4", "Digital Investment", [["p_wealth", "50+ savers"], ["p_tech", "Tech savvy"]], "533K", "tech-savvy customers · 25%", "by year xx"],
   ];
   const rh = 1.1, y0 = 2.15;
   rows.forEach((r, k) => {
@@ -356,6 +356,72 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
       { x: 11.15, y: y + 0.12, w: 1.68, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: `Payback ${k}` });
   });
   s.addShape(pres.shapes.LINE, { x: 0.5, y: y0 + 4 * rh, w: 12.33, h: 0, line: { color: LGREY, width: 0.75 }, objectName: "Bottom rule" });
+}
+
+// ---------- Appendix A1, A2: full tables
+const heat = (s, head, rows, colW, base, opts) => {
+  const ABOVE = "CDEAE7", BELOW = "F4DCDC";
+  const hdr = head.map((h) => ({ text: h, options: { bold: true, fontSize: 9.5, color: NAVY, align: "right", valign: "bottom", border: [{ type: "none" }, { type: "none" }, { pt: 1.25, color: NAVY }, { type: "none" }] } }));
+  hdr[0].options.align = "left";
+  const body = rows.map((r, ri) => {
+    const last = ri === rows.length - 1;
+    return r.map((v, ci) => {
+      const o = { fontSize: 10, color: TXT, align: ci === 0 ? "left" : "right", bold: ci === 0 || last, border: last ? [{ pt: 1.25, color: NAVY }, { type: "none" }, { type: "none" }, { type: "none" }] : [{ type: "none" }, { type: "none" }, { pt: 0.5, color: "E3E8EE" }, { type: "none" }] };
+      if (ci === 0 || ci < (opts.dataFrom || 1)) return { text: String(v), options: o };
+      const small = typeof v === "string" && v.endsWith("*");
+      const num = parseFloat(v);
+      const b = opts.baseFor(ri, ci);
+      if (small) { o.color = GREY; return { text: v, options: o }; }
+      if (!opts.noColor || !opts.noColor(ci)) {
+        if (b > 0 && num >= b * 1.15) o.fill = { color: ABOVE };
+        else if (num <= b * 0.85) o.fill = { color: BELOW };
+      }
+      return { text: (opts.fmt || ((x) => x.toFixed(1) + "%"))(num), options: o };
+    });
+  });
+  s.addTable([hdr, ...body], { x: 0.5, y: opts.y || 2.05, w: 12.33, colW, fontFace: "Arial", rowH: [0.62, ...rows.map(() => 0.42)], margin: [0.03, 0.08, 0.03, 0.08], valign: "middle", objectName: opts.name });
+};
+pres.addSection({ title: "Appendix" });
+{
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
+  s.addText("APPENDIX A1  |  WHO PAYS · AGE × JOB · % PAID IN OCTOBER", { placeholder: "tracker" });
+  s.addText("Merchants and salaried customers pay most; blue-collar and gig workers pay least, at every age", { placeholder: "title" });
+  s.addText("Shaded: 15%+ above (teal) or below (rose) all customers, 8.4%. * fewer than 1,000 customers, not shaded. Salaried = corporate + government. Data as of 31 Oct 2026", { placeholder: "foot" });
+  const head = ["Age (customers)", "Salaried\n575.4K", "Blue collar\n224.1K", "Offline merchant\n148.9K", "Online merchant\n94.8K", "Freelance\n217.6K", "Wage earner\n104.7K", "Rider\n58.3K", "Agriculture\n55.6K", "Other / unknown\n28.1K", "All\n1.51M"];
+  const rows = [
+    ["10–19 (10.9K)", "6.6*", "5.7*", "15.2*", 14.0, 11.5, 11.4, "9.0*", "14.6*", 21.2, 14.3],
+    ["20–29 (395.3K)", 8.5, 6.0, 8.4, 9.5, 6.8, 7.2, 5.6, 6.5, 9.7, 7.6],
+    ["30–39 (580.3K)", 9.8, 7.0, 9.9, 10.6, 7.5, 7.4, 7.1, 6.7, 9.4, 8.8],
+    ["40–49 (369.3K)", 9.7, 6.3, 10.2, 10.5, 7.5, 6.8, 8.2, 6.6, 9.9, 8.7],
+    ["50–59 (126.5K)", 8.8, 5.3, 9.6, 9.7, 7.3, 6.1, 8.6, 6.6, 11.0, 8.1],
+    ["60–69 (22.2K)", 7.5, "3.3*", 8.0, 7.0, 8.1, 6.5, "9.0*", 5.3, 11.7, 8.0],
+    ["70+ (2.9K)", "6.5*", "8.3*", "14.5*", "8.9*", "11.7*", "10.4*", "18.2*", "8.3*", "10.3*", 10.4],
+    ["All (1.51M)", 9.4, 6.4, 9.7, 10.2, 7.3, 7.1, 7.1, 6.6, 11.5, 8.4],
+  ];
+  s.addText([{ text: "STABLE INCOME", options: { bold: true, color: MUTED } }], { x: 2.05, y: 1.72, w: 2.1, h: 0.26, fontSize: 9.5, align: "center", charSpacing: 1, margin: 0, isTextBox: true, objectName: "Stable label" });
+  s.addText([{ text: "UNSTABLE INCOME", options: { bold: true, color: CYAN } }], { x: 4.15, y: 1.72, w: 6.3, h: 0.26, fontSize: 9.5, align: "center", charSpacing: 1, margin: 0, isTextBox: true, objectName: "Unstable label" });
+  heat(s, head, rows, [1.55, 1.05, 1.05, 1.1, 1.1, 1.05, 1.05, 1.0, 1.05, 1.15, 1.18], 8.4, { y: 2.0, name: "Who pays table", baseFor: () => 8.4 });
+}
+{
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
+  s.addText("APPENDIX A2  |  PRODUCT SEGMENTS BY AGE · SHARE OF EACH AGE GROUP", { placeholder: "tracker" });
+  s.addText("Teens just pay, 20–59s borrow, and customers 60+ save; 80% of every age group hold nothing active", { placeholder: "title" });
+  s.addText("Rows add to 100%. Shaded: 15%+ above (teal) or below (rose) all customers; No segment not shaded. Saver = Save Max/More over ฿10K; depositor = other balance over ฿100. No loans under 20 or over 59 (age limits). Groups 60+ are small (25.1K). As of 31 Oct 2026", { placeholder: "foot" });
+  const head = ["Age", "Customers", "Borrower only", "Borrower + transactor", "Depositor + borrower", "Depositor + transactor", "Depositor only", "Saver", "Transactor only", "No segment"];
+  const rows = [
+    ["10–19", "10.9K", 0.0, 0.0, 0.0, 4.6, 6.0, 0.7, 9.6, 79.2],
+    ["20–29", "395.3K", 7.3, 2.6, 1.0, 1.5, 1.3, 0.5, 2.8, 82.9],
+    ["30–39", "580.3K", 7.1, 3.1, 1.4, 2.0, 2.5, 1.1, 2.6, 80.1],
+    ["40–49", "369.3K", 6.8, 2.7, 1.8, 2.3, 4.4, 2.0, 2.4, 77.5],
+    ["50–59", "126.5K", 5.9, 1.5, 2.0, 3.0, 7.7, 3.8, 2.2, 73.9],
+    ["60–69", "22.2K", 0.0, 0.0, 0.0, 4.4, 14.2, 9.4, 2.2, 69.8],
+    ["70+", "2.9K", 0.0, 0.0, 0.0, 5.4, 18.7, 15.0, 3.1, 57.7],
+    ["All", "1.51M", 6.8, 2.7, 1.4, 2.1, 3.3, 1.5, 2.6, 79.5],
+  ];
+  const all = rows[rows.length - 1];
+  s.addText("BORROWER", { x: 2.95, y: 1.72, w: 2.6, h: 0.26, fontSize: 9.5, bold: true, color: MUTED, align: "center", charSpacing: 1, margin: 0, isTextBox: true, objectName: "Borrower label" });
+  s.addText("DEPOSITOR OR SAVER", { x: 5.55, y: 1.72, w: 5.2, h: 0.26, fontSize: 9.5, bold: true, color: CYAN, align: "center", charSpacing: 1, margin: 0, isTextBox: true, objectName: "Depositor label" });
+  heat(s, head, rows, [1.0, 1.2, 1.25, 1.35, 1.3, 1.35, 1.3, 1.25, 1.3, 1.03], 0, { y: 2.0, name: "Segments by age table", dataFrom: 2, baseFor: (ri, ci) => parseFloat(all[ci]), noColor: (ci) => ci === 9 || false });
 }
 
 (async () => {
