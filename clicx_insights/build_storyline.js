@@ -103,7 +103,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 1: diagnosis
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("1 / 3  |  WHAT WE KNOW", { placeholder: "tracker" });
+  s.addText("1 / 4  |  WHAT WE KNOW: CUSTOMERS", { placeholder: "tracker" });
   s.addText("Partners gave us scale fast, but only 15% of customers are active, and loans are both our hook and our constraint", { placeholder: "title" });
   s.addText(SRC, { placeholder: "foot" });
   // governing question banner
@@ -171,11 +171,64 @@ pres.addSection({ title: "Storyline" });
   });
 }
 
+// ---------- Slide 2: what we know, payments
+{
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
+  s.addText("2 / 4  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
+  s.addText("Partners start the payment habit, but promotions alone don't keep it; AIS prepaid and OR are the biggest gaps", { placeholder: "title" });
+  s.addText("Ever partner = paid AIS or PTT OR this month or before. Per-payer and category figures cover Scan and Pay to other merchants. Source: Partner Payment Story v1 (1.51M customers, data as of 31 Oct 2026)", { placeholder: "foot" });
+  const panel = (x, y, w, h, tag, q, ans, big, bigLbl, n) => {
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Pay panel ${n}` });
+    s.addText([{ text: tag + "  ", options: { color: CYAN, bold: true } }, { text: q, options: { color: MUTED } }],
+      { x: x + 0.18, y: y + 0.1, w: w - 0.36, h: 0.26, fontSize: 10, margin: 0, valign: "middle", isTextBox: true, objectName: `Pay q ${n}` });
+    s.addText(ans, { x: x + 0.18, y: y + 0.36, w: w - 0.36, h: 0.5, fontSize: 12, bold: true, color: NAVY, margin: 0, valign: "top", isTextBox: true, objectName: `Pay ans ${n}` });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.18, y: y + 0.92, w: 1.45, h: h - 1.07, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: `Pay stat box ${n}` });
+    s.addText(big, { x: x + 0.26, y: y + 0.98, w: 1.32, h: 0.5, fontSize: big.length > 5 ? 20 : 24, bold: true, color: BLUE, margin: 0, valign: "middle", isTextBox: true, objectName: `Pay stat ${n}` });
+    s.addText(bigLbl, { x: x + 0.26, y: y + 1.48, w: 1.32, h: h - 1.6, fontSize: 9, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: `Pay stat lbl ${n}` });
+  };
+  const bars = (x, y, w, rows, n, o = {}) => {
+    const lw = o.lw || 0.9, vw = o.vw || 0.62, bw = w - lw - vw - 0.06, rh = o.rh || 0.26;
+    if (o.head) s.addText(o.head, { x, y: y - 0.24, w, h: 0.22, fontSize: 8.5, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: `Pay bars head ${n}` });
+    rows.forEach((r, k) => {
+      const yy = y + k * rh;
+      if (r[4]) s.addImage({ path: IC(r[4]), x, y: yy + 0.04, h: 0.18, w: 0.18 * r[5], altText: r[0] + " logo", objectName: `Pay logo ${n}-${k}` });
+      else s.addText(r[0], { x, y: yy, w: lw, h: rh, fontSize: 9, color: TXT, margin: 0, valign: "middle", isTextBox: true, objectName: `Pay label ${n}-${k}` });
+      s.addShape(pres.shapes.RECTANGLE, { x: x + lw, y: yy + rh * 0.3, w: bw, h: rh * 0.4, fill: { color: "E3E8EE" }, line: { type: "none" }, objectName: `Pay track ${n}-${k}` });
+      s.addShape(pres.shapes.RECTANGLE, { x: x + lw, y: yy + rh * 0.3, w: Math.max(0.03, bw * r[1]), h: rh * 0.4, fill: { color: r[3] }, line: { type: "none" }, objectName: `Pay bar ${n}-${k}` });
+      s.addText(r[2], { x: x + lw + bw + 0.05, y: yy, w: vw, h: rh, fontSize: 9, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Pay val ${n}-${k}` });
+    });
+  };
+  const W = 4.01, G = 0.15, H = 2.48, ys = [1.5, 4.1];
+  const xs = [0.5, 0.5 + W + G, 0.5 + 2 * (W + G)];
+  const bx = (i) => xs[i % 3] + 1.78, by = (i) => ys[Math.floor(i / 3)] + 1.18, bw = W - 1.95;
+  // 1 partners drive payments
+  panel(xs[0], ys[0], W, H, "Q1", "Do partners drive payments too?", "Yes: 73% of October payers came through AIS or OR", "67%", "of ฿408M October spend comes from them", 1);
+  bars(bx(0), by(0) - 0.08, bw, [["Jun", 0.57, "57%", GREY], ["Jul", 0.67, "67%", GREY], ["Aug", 0.70, "70%", BLUE], ["Sep", 0.73, "73%", BLUE], ["Oct", 0.73, "73%", CYAN]], 1, { head: "Ever-partner share of payers", lw: 0.4, vw: 0.45, rh: 0.24 });
+  // 2 what they pay for
+  panel(xs[1], ys[0], W, H, "Q3", "What do customers pay for?", "Mostly everyday Scan and Pay, not partner bills", "฿408M", "paid in October, +11% vs August", 2);
+  bars(bx(1), by(1), bw, [["Scan & Pay", 0.84, "84%", CYAN], ["AIS", 0.11, "11%", BLUE, "logo_ais.png", 2.74], ["OR", 0.05, "5%", NAVY, "logo_or.png", 1.93]], 2, { head: "Share of October spend", lw: 0.72, vw: 0.42, rh: 0.3 });
+  // 3 promotion
+  panel(xs[2], ys[0], W, H, "Q4", "Did the payment promotion build a habit?", "Partly: a third of payers left, but those who stayed pay more", "59.9K", "paid only in August and never came back", 3);
+  bars(bx(2), by(2), bw, [["Aug", 1.0, "164K", GREY], ["Sep", 0.80, "130K", BLUE], ["Oct", 0.77, "127K", BLUE]], 3, { head: "Customers paying each month", lw: 0.4, vw: 0.5, rh: 0.26 });
+  s.addText("Stayers: ฿2.1K → ฿3.0K each", { x: bx(2), y: by(2) + 0.82, w: bw, h: 0.22, fontSize: 9, bold: true, color: CYAN, margin: 0, isTextBox: true, objectName: "Stayers spend" });
+  // 4 partner value
+  panel(xs[0], ys[1], W, H, "Q5", "What do partners get from CLICX payments?", "฿66M a month, but AIS payments fell 40% after the promotion", "฿66M", "paid to AIS and OR in October", 4);
+  bars(bx(3), by(3), bw, [["AIS", 46.7 / 77.7, "฿47M", BLUE, "logo_ais.png", 2.74], ["OR", 19.1 / 77.7, "฿19M", NAVY, "logo_or.png", 1.93]], 4, { head: "Paid in October", lw: 0.62, vw: 0.5, rh: 0.32 });
+  s.addText("August: AIS ฿78M, OR ฿23M", { x: bx(3), y: by(3) + 0.7, w: bw, h: 0.22, fontSize: 9, color: MUTED, margin: 0, isTextBox: true, objectName: "Aug partner spend" });
+  // 5 biggest gaps
+  panel(xs[1], ys[1], W, H, "Q4", "Where are the biggest payment gaps?", "AIS prepaid customers, and OR customers who don't pay", "516.5K", "AIS prepaid customers; +22K payers a month at the postpaid rate", 5);
+  bars(bx(4), by(4) - 0.05, bw, [["Postpaid", 0.128 / 0.14, "12.8%", NAVY], ["Prepaid", 0.084 / 0.14, "8.4%", CYAN], ["OR", 0.113 / 0.14, "11.3%", BLUE], ["Not OR", 0.074 / 0.14, "7.4%", GREY]], 5, { head: "% who paid in October", lw: 0.62, vw: 0.5, rh: 0.25 });
+  // 6 product leads
+  panel(xs[2], ys[1], W, H, "P2 · P4", "What do non-partner payers spend on?", "Repaying other banks and investing: leads for a card and investment", "26%", "of their spend repays other banks' cards and loans, ฿4.3K each", 6);
+  bars(bx(5), by(5) - 0.05, bw, [["Repay banks", 0.26 / 0.3, "26%", NAVY], ["Crypto, gold, stocks", 0.10 / 0.3, "10%", CYAN], ["Local shops", 0.25 / 0.3, "25%", GREY]], 6, { head: "Share of their spend", lw: 1.15, vw: 0.38, rh: 0.27 });
+  s.addText("Partner payers: 20%, 9%, 27%", { x: bx(5), y: by(5) + 0.78, w: bw, h: 0.22, fontSize: 9, color: MUTED, margin: 0, isTextBox: true, objectName: "Partner comparison" });
+}
+
 // ---------- Slide 2: what we will do, in two parts
 const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2.14M customers, Sep 2026); pools overlap";
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("2 / 3  |  WHAT WE WILL DO", { placeholder: "tracker" });
+  s.addText("3 / 4  |  WHAT WE WILL DO", { placeholder: "tracker" });
   s.addText("We will grow in two ways: keep acquiring through our partners, and activate the 1.8M customers we already have", { placeholder: "title" });
   s.addText(POOL_NOTE + ". Icons: Font Awesome (open licence). " + SRC, { placeholder: "foot" });
   const pill = (x, y, w, n, t, col, obj) => {
@@ -194,7 +247,7 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
   s.addText("New customers from partner bases  ·  from Q1, Q2, Q5", { x: LX, y: 1.97, w: LW, h: 0.24, fontSize: 9.5, color: MUTED, margin: 0, isTextBox: true, objectName: "Part 1 sub" });
   const acq = [
     ["logo_ais.png", 2.74, "3.7%", "of AIS's ~32M base joined", "Sign up through myAIS and AIS shops; put bill pay and top-up in the app"],
-    ["logo_or.png", 1.93, "7.4%", "of OR's base joined, the best rate", "Use BLUE+ and fuel offers; 173K active customers have no BLUE+ yet"],
+    ["logo_or.png", 1.93, "7.4%", "of OR's base joined, the best rate", "OR customers pay 1.5× more; 344K didn't pay in Oct. Use BLUE+ and fuel offers"],
     ["logo_ktb.jpeg", 2.58, "1.9M", "turned down by Jai-pump a year", "Work the Paotang reject list: 24% apply; focus on under-40s and riders"],
   ];
   acq.forEach((a, k) => {
@@ -222,29 +275,27 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
   // ---- Part 2: activate current customers
   const RX = 4.6, RW = 8.23;
   pill(RX, 1.5, RW, "2", "ACTIVATE CURRENT CLICX CUSTOMERS", CYAN, "Part 2 pill");
-  s.addText("Turn the customers we already have into active, paying users  ·  from Q3, Q4", { x: RX, y: 1.97, w: RW, h: 0.24, fontSize: 9.5, color: MUTED, margin: 0, isTextBox: true, objectName: "Part 2 sub" });
-  // idle stat + levers band
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: 2.28, w: 2.0, h: 0.98, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Idle box" });
-  s.addText([{ text: "1.8M", options: { bold: true, fontSize: 26, color: BLUE, breakLine: true } }, { text: "idle: 694K no product, 1.1M not active", options: { fontSize: 9, color: TXT } }],
-    { x: RX + 0.12, y: 2.3, w: 1.8, h: 0.94, margin: 0, valign: "middle", isTextBox: true, objectName: "Idle stat" });
-  const lev = [["deposit.png", "Get money in first", "51% active with money in vs 4% without"],
-    ["enabler.png", "Fix approvals and risk", "Gig workers: 5–7% approved; 20% early default"],
-    ["habit.png", "Build a payment habit", "Two ways to pay stop half as often"]];
-  const lw2 = (RW - 2.15 - 0.2) / 3;
+  s.addText("1.8M idle customers (694K no product, 1.1M not active) to turn into active, paying users  ·  from Q3, Q4", { x: RX, y: 1.97, w: RW, h: 0.24, fontSize: 9.5, color: MUTED, margin: 0, isTextBox: true, objectName: "Part 2 sub" });
+  // four activation levers
+  const lev = [["deposit.png", "Get money in first", "51% active with money in vs 4% without", BLUE],
+    ["enabler.png", "Fix approvals and risk", "Gig workers: 5–7% approved; 20% early default", NAVY],
+    ["prepaid.png", "Push AIS prepaid", "516.5K prepaid: 8.4% pay vs 12.8% postpaid; top-up first", CYAN],
+    ["reward.png", "Reward the second month", "59.9K paid only in the promotion month; keep AIS and OR promos as the way in", BLUE]];
+  const lw2 = (RW - 0.3) / 4;
   lev.forEach((l, k) => {
-    const x = RX + 2.15 + k * (lw2 + 0.1);
+    const x = RX + k * (lw2 + 0.1);
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 2.28, w: lw2, h: 0.98, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Lever ${k}` });
-    circIcon(x + 0.12, 2.4, 0.4, l[0], k === 1 ? NAVY : BLUE, l[1] + " icon", `Lever icon ${k}`);
-    s.addText(l[1], { x: x + 0.6, y: 2.36, w: lw2 - 0.68, h: 0.3, fontSize: 10.5, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Lever title ${k}` });
-    s.addText(l[2], { x: x + 0.12, y: 2.84, w: lw2 - 0.22, h: 0.38, fontSize: 9, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: `Lever text ${k}` });
+    circIcon(x + 0.1, 2.36, 0.38, l[0], l[3], l[1] + " icon", `Lever icon ${k}`);
+    s.addText(l[1], { x: x + 0.55, y: 2.34, w: lw2 - 0.6, h: 0.42, fontSize: 10, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Lever title ${k}` });
+    s.addText(l[2], { x: x + 0.1, y: 2.8, w: lw2 - 0.18, h: 0.44, fontSize: 8.5, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: `Lever text ${k}` });
   });
   // initiatives P1-P4 (2x2)
   s.addText("PRODUCTS FOR CUSTOMERS ALREADY IN OUR BASE  ·  in priority order", { x: RX, y: 3.36, w: RW, h: 0.24, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1, margin: 0, isTextBox: true, objectName: "Initiatives label" });
   const ini = [
     ["P1", "salary", "Salary-Bridged Financing", "Corporate & SME staff · Helpers", "Salaried workers get approved most (11%)", "607K", "salaried and wage earners · 28%"],
-    ["P2", "card", "Credit Card & Apple Pay", "Salary earners · Business owners", "158K proven borrowers; 239K AIS Serenade", "984K", "salary earners and owners · 46%"],
+    ["P2", "card", "Credit Card & Apple Pay", "Salary earners · Business owners", "Payers repay other banks' cards and loans: 26% of spend, ฿4.3K each", "984K", "salary earners and owners · 46%"],
     ["P3", "insure", "Insurance e-Brokerage", "Riders · Blue & white collars", "Riders rarely get a loan; insurance keeps them", "836K", "riders, blue and white collars · 39%"],
-    ["P4", "invest", "Digital Investment", "Aspiring wealth · Tech savvy", "Tech-savvy join most; savers hold 5.5B THB", "533K", "tech-savvy customers · 25%"],
+    ["P4", "invest", "Digital Investment", "Aspiring wealth · Tech savvy", "10% of payment spend goes to crypto, gold and stocks; savers hold 5.5B THB", "533K", "tech-savvy customers · 25%"],
   ];
   const cw = (RW - 0.12) / 2, chh = 1.5;
   ini.forEach((c, i) => {
@@ -266,7 +317,7 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
 // ---------- Slide 3: prioritization table (connects to business cases)
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("3 / 3  |  PRIORITIZATION", { placeholder: "tracker" });
+  s.addText("4 / 4  |  PRIORITIZATION", { placeholder: "tracker" });
   s.addText("Prioritization for upcoming initiatives: the customers are already in our base; financials follow the business cases", { placeholder: "title" });
   s.addText(POOL_NOTE + ". xx = to be sized; figures to be filled in once business cases are complete. Icons: Font Awesome (open licence)", { placeholder: "foot" });
   const cols = [["Upcoming initiatives", "in priority order", 0.5, 3.0], ["Persona", "target archetypes", 3.6, 3.15], ["Prospect customers", "in existing CLICX base", 6.85, 2.15],
