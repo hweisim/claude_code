@@ -136,12 +136,14 @@ pres.addSection({ title: "Storyline" });
   const W3 = 4.01, G = 0.15, y1 = 2.05, h1 = 2.3, y2 = 4.48, h2 = 2.3;
   // 1 consortium
   let x = 0.5;
-  panel(x, y1, W3, h1, 1, "How dependent are we on the consortium?", "96% come from partners; AIS is the biggest untapped base", "96%", "of customers are AIS, KTB or OR customers", 1);
-  bars(x + 1.82, y1 + 1.25, W3 - 2.0, [["KTB", 0.47, "4.7%", BLUE, "logo_ktb.jpeg", 2.58], ["AIS", 0.37, "3.7%", CYAN, "logo_ais.png", 2.74], ["OR", 0.74, "7.4%", NAVY, "logo_or.png", 1.93]], 1, { head: "% of partner base on CLICX", lw: 0.62 });
+  panel(x, y1, W3, h1, 1, "How much do we rely on the consortium, and how?", "96% come from partners and 90% sign up through partner channels", "96%", "of customers are AIS, KTB or OR customers", 1);
+  bars(x + 1.82, y1 + 1.2, W3 - 2.0, [["Paotang", 0.80, "80%", BLUE], ["myAIS", 0.06, "6%", CYAN], ["Dipchip", 0.04, "4%", CYAN], ["NDID", 0.10, "10%", GREY]], 1, { head: "Sign-up channel", lw: 0.7, rh: 0.21 });
+  s.addText("Only 3.7% of AIS's base has joined", { x: x + 1.82, y: y1 + 2.06, w: W3 - 2.0, h: 0.18, fontSize: 8, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "AIS headroom" });
   // 2 targets
   x = 0.5 + W3 + G;
-  panel(x, y1, W3, h1, 2, "Are we winning the customers we planned?", "Yes for tech-savvy and underserved; not yet for multi-bank", "82%", "of loan applicants are underserved, as planned", 2);
-  bars(x + 1.82, y1 + 1.25, W3 - 2.0, [["Tech-savvy", 0.85, "8.5%", CYAN], ["Average", 0.38, "3.8%", GREY], ["Multi-bank", 0.24, "2.4%", NAVY]], 2, { head: "% of each group who joined" });
+  panel(x, y1, W3, h1, 2, "Are we reaching the customers we planned?", "Yes: 40% have no regular income and 82% of applicants are underserved", "40%", "are self-employed, with no regular income", 2);
+  bars(x + 1.82, y1 + 1.25, W3 - 2.0, [["Self-employed", 0.40, "40%", CYAN], ["White-collar", 0.38, "38%", BLUE], ["Blue-collar", 0.22, "22%", NAVY]], 2, { head: "Customers by type of work" });
+  s.addText("Joined: tech-savvy 8.5%, multi-bank 2.4%", { x: x + 1.82, y: y1 + 2.06, w: W3 - 2.0, h: 0.18, fontSize: 8, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Target note" });
   // 3 activity
   x = 0.5 + 2 * (W3 + G);
   panel(x, y1, W3, h1, 3, "What do customers use, and what drives activity?", "Everyone comes for a loan; money in and a loan drive activity", "84–92%", "of every job type applies for a loan", 3);
@@ -160,9 +162,9 @@ pres.addSection({ title: "Storyline" });
     { x: x + 4.12, y: y2 + 1.02, w: W2 - 4.4, h: h2 - 1.25, valign: "top", margin: 0, paraSpaceAfter: 2, isTextBox: true, objectName: "Economics gap text" });
   // 5 shareholders
   x = 0.5 + W2 + G;
-  panel(x, y2, W2, h2, 5, "What value do we create for each shareholder?", "We recover KTB's lapsed and rejected customers, and bring AIS and OR new customers and spend", "1.1M", "shared customers were inactive with KTB", 5);
-  const sh = [["logo_ktb.jpeg", 2.58, "450K people KTB's Jai-pump turned down applied to us; 51K got a loan"],
-    ["logo_ais.png", 2.74, "0.66M CLICX customers to convert to AIS; THB 261K top-up fees saved"],
+  panel(x, y2, W2, h2, 5, "What value do we create for each shareholder?", "We reach customers KTB doesn't, and bring AIS and OR new customers and spend", "81%", "of our 164K borrowers never had a KTB Jai-pump loan", 5);
+  const sh = [["logo_ktb.jpeg", 2.58, "65% of CLICX depositors are not active with KTB; 1.1M shared customers were KTB-inactive"],
+    ["logo_ais.png", 2.74, "0.6M CLICX customers not on AIS yet; of AIS-linked, 52% are prepaid"],
     ["logo_or.png", 1.93, "173K active customers without BLUE+; 1,327 new BLUE+ members"]];
   sh.forEach((r, k) => {
     const yy = y2 + 1.0 + k * 0.42;
@@ -208,7 +210,7 @@ pres.addSection({ title: "Storyline" });
   panel(xs[1], ys[0], W, H, "Q3", "What do customers pay for?", "Mostly everyday Scan and Pay, not partner bills", "฿408M", "paid in October, +11% vs August", 2);
   bars(bx(1), by(1), bw, [["Scan & Pay", 0.84, "84%", CYAN], ["AIS", 0.11, "11%", BLUE, "logo_ais.png", 2.74], ["OR", 0.05, "5%", NAVY, "logo_or.png", 1.93]], 2, { head: "Share of October spend", lw: 0.72, vw: 0.42, rh: 0.3 });
   // 3 promotion
-  panel(xs[2], ys[0], W, H, "Q4", "Did the payment promotion build a habit?", "Partly: a third of payers left, but those who stayed pay more", "59.9K", "paid only in August and never came back", 3);
+  panel(xs[2], ys[0], W, H, "Q3", "Did the payment promotion build a habit?", "Partly: a third of payers left, but those who stayed pay more", "59.9K", "paid only in August and never came back", 3);
   bars(bx(2), by(2), bw, [["Aug", 1.0, "164K", GREY], ["Sep", 0.80, "130K", BLUE], ["Oct", 0.77, "127K", BLUE]], 3, { head: "Customers paying each month", lw: 0.4, vw: 0.5, rh: 0.26 });
   s.addText("Stayers: ฿2.1K → ฿3.0K each", { x: bx(2), y: by(2) + 0.82, w: bw, h: 0.22, fontSize: 9, bold: true, color: CYAN, margin: 0, isTextBox: true, objectName: "Stayers spend" });
   // 4 partner value
@@ -216,10 +218,10 @@ pres.addSection({ title: "Storyline" });
   bars(bx(3), by(3), bw, [["AIS", 46.7 / 77.7, "฿47M", BLUE, "logo_ais.png", 2.74], ["OR", 19.1 / 77.7, "฿19M", NAVY, "logo_or.png", 1.93]], 4, { head: "Paid in October", lw: 0.62, vw: 0.5, rh: 0.32 });
   s.addText("August: AIS ฿78M, OR ฿23M", { x: bx(3), y: by(3) + 0.7, w: bw, h: 0.22, fontSize: 9, color: MUTED, margin: 0, isTextBox: true, objectName: "Aug partner spend" });
   // 5 biggest gaps
-  panel(xs[1], ys[1], W, H, "Q4", "Where are the biggest payment gaps?", "AIS prepaid customers, and OR customers who don't pay", "516.5K", "AIS prepaid customers; +22K payers a month at the postpaid rate", 5);
+  panel(xs[1], ys[1], W, H, "Q1", "Where are the biggest payment gaps?", "AIS prepaid customers, and OR customers who don't pay", "516.5K", "AIS prepaid customers; +22K payers a month at the postpaid rate", 5);
   bars(bx(4), by(4) - 0.05, bw, [["Postpaid", 0.128 / 0.14, "12.8%", NAVY], ["Prepaid", 0.084 / 0.14, "8.4%", CYAN], ["OR", 0.113 / 0.14, "11.3%", BLUE], ["Not OR", 0.074 / 0.14, "7.4%", GREY]], 5, { head: "% who paid in October", lw: 0.62, vw: 0.5, rh: 0.25 });
   // 6 product leads
-  panel(xs[2], ys[1], W, H, "P2 · P4", "What do non-partner payers spend on?", "Repaying other banks and investing: leads for a card and investment", "26%", "of their spend repays other banks' cards and loans, ฿4.3K each", 6);
+  panel(xs[2], ys[1], W, H, "Q4", "What do non-partner payers spend on?", "Repaying other banks and investing: leads for a card and investment", "26%", "of their spend repays other banks' cards and loans, ฿4.3K each", 6);
   bars(bx(5), by(5) - 0.05, bw, [["Repay banks", 0.26 / 0.3, "26%", NAVY], ["Crypto, gold, stocks", 0.10 / 0.3, "10%", CYAN], ["Local shops", 0.25 / 0.3, "25%", GREY]], 6, { head: "Share of their spend", lw: 1.15, vw: 0.38, rh: 0.27 });
   s.addText("Partner payers: 20%, 9%, 27%", { x: bx(5), y: by(5) + 0.78, w: bw, h: 0.22, fontSize: 9, color: MUTED, margin: 0, isTextBox: true, objectName: "Partner comparison" });
 }
