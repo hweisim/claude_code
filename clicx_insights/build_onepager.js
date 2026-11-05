@@ -94,47 +94,102 @@ function stat(s, x, y, w, big, label, color = C.accent1) {
 }
 
 // =====================================================================
-// One-page summary: five key questions, one chart each
+// Two-slide summary: customer landscape, then strategy to product
+const SRC = "Source: Data for Strategy 2027 (Nov 2026); CLICX payment segments (1 Oct 2026); CLICX data as of Sep 2026; AIS, KTB, OR data as of Apr 2026";
 pres.addSection({ title: "Summary" });
 {
-  const s = qSlide("Summary", "ONE-PAGE SUMMARY  |  DATA FOR STRATEGY 2027",
-    "What have our first 2.1 million customers taught us for 2027?",
-    "Partners bring in almost everyone and we reached our targets. Our customers are ready leads for 2027 products, but only 15% are active, and a loan is what makes them active",
-    "Source: Data for Strategy 2027 (Nov 2026); CLICX data as of Sep 2026; AIS, KTB, OR data as of Apr 2026. Monthly active = transacted in Sep 2026");
-  const cols = [
-    { q: "Do our customers come from our partners?", a: "Almost all: 96%",
-      title: "% of customers also with partner", type: "hbar", labels: ["KTB", "AIS", "OR"], values: [0.88, 0.67, 0.40], fmt: "0%", max: 1.15, colors: [NAVY, BLUE, CYAN],
-      next: "Grow AIS: only 3.7% of its base has joined" },
-    { q: "Are we winning the people we targeted?", a: "Mostly",
-      title: "% of each group who joined", type: "hbar", labels: ["Tech-savvy", "Gen Z 23–29", "Average", "Multi-bank"], values: [0.085, 0.066, 0.038, 0.024], fmt: "0.0%", max: 0.11, colors: [CYAN, CYAN, LGREY, GREY],
-      next: "82% of loan applicants are underserved, as planned. Win multi-bank users next" },
-    { q: "Which customers lead to 2027 products?", a: "Three lead pools",
-      title: "Lead pools, thousand customers", type: "hbar", labels: ["Office workers (card)", "Savers (wealth)", "Merchants (SME)"], values: [700, 643, 293], fmt: "#,##0", max: 900, colors: [NAVY, BLUE, CYAN],
-      next: "Set 2027 targets for each product. 5.5B THB of deposits to build on" },
-    { q: "Why are most customers inactive?", a: "Loans drive activity",
-      title: "% active each month", type: "hbar", labels: ["Borrowers", "Money in, no loan", "No money in"], values: [0.88, 0.51, 0.04], fmt: "0%", max: 1.15, colors: [CYAN, BLUE, GREY],
-      next: "Activate 1.8M idle customers with a first deposit and a first loan" },
-    { q: "Do we take customers from KTB?", a: "No, we recover them",
-      title: "Turned down by KTB's Jai-pump, thousand", type: "col", labels: ["Rejected", "Applied to us", "Got our loan"], values: [1900, 450, 51], fmt: "#,##0", max: 2350, colors: [GREY, BLUE, CYAN],
-      next: "1.1M shared customers were KTB-inactive. Work the reject list before True" },
-  ];
-  const cw = 2.35, gap = 0.145, top = 2.3;
-  cols.forEach((c, i) => {
-    const x = 0.5 + i * (cw + gap);
-    s.addShape(pres.shapes.RECTANGLE, { x, y: top, w: cw, h: 4.45, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Col ${i + 1}` });
-    s.addShape(pres.shapes.OVAL, { x: x + 0.15, y: top + 0.15, w: 0.36, h: 0.36, fill: { color: C.text2 }, line: { type: "none" }, objectName: `Badge ${i + 1}` });
-    s.addText(String(i + 1), { x: x + 0.15, y: top + 0.15, w: 0.36, h: 0.36, fontSize: 12, bold: true, color: C.background1, align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: `Badge num ${i + 1}` });
-    s.addText(c.q, { x: x + 0.6, y: top + 0.1, w: cw - 0.72, h: 0.62, fontSize: 12, bold: true, color: C.text2, valign: "middle", margin: 0, isTextBox: true, objectName: `Question ${i + 1}` });
-    s.addText(c.a, { x: x + 0.15, y: top + 0.8, w: cw - 0.3, h: 0.36, fontSize: 14, bold: true, color: C.accent2, margin: 0, isTextBox: true, objectName: `Answer ${i + 1}` });
-    s.addChart(pres.charts.BAR, [{ name: c.title, labels: c.labels, values: c.values }], {
-      x: x + 0.05, y: top + 1.2, w: cw - 0.1, h: 2.45, barDir: c.type === "col" ? "col" : "bar", ...AX, ...quiet(), ...chartTitle(c.title), titleFontSize: 10,
-      chartColors: c.colors, showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: c.fmt,
-      showLegend: false, barGapWidthPct: 45, valAxisMaxVal: c.max, catAxisOrientation: c.type === "col" ? "minMax" : "maxMin", catAxisLabelFontSize: 9, objectName: `Chart ${i + 1}` });
-    s.addText([
-      { text: "NEXT  ", options: { bold: true, fontSize: 9.5, color: C.accent1, charSpacing: 1 } },
-      { text: c.next, options: { fontSize: 10.5, color: C.text1 } },
-    ], { x: x + 0.15, y: top + 3.72, w: cw - 0.3, h: 0.68, valign: "top", margin: 0, isTextBox: true, objectName: `Next ${i + 1}` });
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Summary" });
+  s.addText("1 / 2  |  CURRENT CUSTOMER LANDSCAPE", { placeholder: "tracker" });
+  s.addText("What does our current customer landscape look like?", { placeholder: "title" });
+  s.addText("Source: Data Room; Data for Strategy 2027 (Nov 2026). CLICX data as of Sep 2026; AIS, KTB, OR data as of Apr 2026", { placeholder: "foot" });
+  const STAT_BG = "E5F1F0";
+  const qTitle = (n, t, x, y, w) => s.addText([{ text: "Q" + n + "  ", options: { color: CYAN, bold: true } }, { text: t, options: { color: NAVY, bold: true } }],
+    { x, y, w, h: 0.32, fontSize: 13.5, margin: 0, valign: "middle", isTextBox: true, objectName: "Q" + n + " title" });
+  const statBox = (x, y, w, h, big, label, n) => {
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.12, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Q" + n + " stat box" });
+    s.addText(big, { x: x + 0.18, y: y + 0.08, w: w - 0.3, h: 0.62, fontSize: 34, bold: true, color: BLUE, margin: 0, valign: "middle", isTextBox: true, objectName: "Q" + n + " stat" });
+    s.addText(label, { x: x + 0.18, y: y + 0.7, w: w - 0.3, h: h - 0.78, fontSize: 11, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: "Q" + n + " stat label" });
+  };
+  // horizontal bar rows: [label, fraction 0-1, value text, color]
+  const bars = (x, y, w, rows, n, opt = {}) => {
+    const lw = opt.lw || 1.45, vw = opt.vw || 0.95, bw = w - lw - vw - 0.1, rh = opt.rh || 0.3;
+    rows.forEach((r, k) => {
+      const yy = y + k * rh;
+      s.addText(r[0], { x, y: yy, w: lw, h: rh, fontSize: 10.5, color: TXT, margin: 0, valign: "middle", isTextBox: true, objectName: `Q${n} bar label ${k}` });
+      s.addShape(pres.shapes.RECTANGLE, { x: x + lw, y: yy + rh * 0.3, w: bw, h: rh * 0.4, fill: { color: "E3E8EE" }, line: { type: "none" }, objectName: `Q${n} track ${k}` });
+      s.addShape(pres.shapes.RECTANGLE, { x: x + lw, y: yy + rh * 0.3, w: Math.max(0.03, bw * r[1]), h: rh * 0.4, fill: { color: r[3] }, line: { type: "none" }, objectName: `Q${n} bar ${k}` });
+      s.addText(r[2], { x: x + lw + bw + 0.1, y: yy, w: vw, h: rh, fontSize: 10.5, bold: true, color: r[3] === GREY ? MUTED : NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Q${n} bar value ${k}` });
+    });
+  };
+  const sub = (t, x, y, w, n) => s.addText(t, { x, y, w, h: 0.24, fontSize: 10, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: `Q${n} subhead` });
+
+  // Q1 full width
+  qTitle(1, "Do all current CLICX customers come from captive consortium customers?", 0.5, 1.42, 12.3);
+  statBox(0.5, 1.8, 3.4, 1.05, "96%", "of customers come from AIS, KTB or OR", 1);
+  const p1 = [["Krungthai (KTB)", 0.88, "88%", "1.6M", BLUE], ["AIS", 0.67, "67%", "1.2M", CYAN], ["OR", 0.40, "40%", "725K", NAVY], ["Non-consortium", 0.04, "4%", "51K", GREY]];
+  p1.forEach((p, k) => {
+    const x = 4.15 + k * 2.18, w = 1.98;
+    s.addText(p[0], { x, y: 1.85, w, h: 0.26, fontSize: 11, color: MUTED, margin: 0, isTextBox: true, objectName: `Q1 partner ${k}` });
+    s.addText([{ text: p[2], options: { fontSize: 22, bold: true, color: p[4] === GREY ? MUTED : p[4] } }, { text: "  " + p[3], options: { fontSize: 12, color: TXT } }],
+      { x, y: 2.12, w, h: 0.4, margin: 0, valign: "middle", isTextBox: true, objectName: `Q1 partner value ${k}` });
+    s.addShape(pres.shapes.RECTANGLE, { x, y: 2.62, w, h: 0.1, fill: { color: "E3E8EE" }, line: { type: "none" }, objectName: `Q1 track ${k}` });
+    s.addShape(pres.shapes.RECTANGLE, { x, y: 2.62, w: Math.max(0.04, w * p[1]), h: 0.1, fill: { color: p[4] }, line: { type: "none" }, objectName: `Q1 bar ${k}` });
   });
+
+  // Row 2: Q2 and Q3
+  const L = 0.5, R = 6.83, PW = 6.0, r2 = 3.05, r3 = 5.0;
+  qTitle(2, "Are the personas who come to CLICX the ones we planned?", L, r2, PW);
+  statBox(L, r2 + 0.4, 2.2, 1.4, "82%", "of loan applicants are underserved, our planned target", 2);
+  sub("% of each group who joined CLICX", L + 2.4, r2 + 0.4, 3.6, 2);
+  bars(L + 2.4, r2 + 0.65, 3.6, [["Tech-savvy", 0.085 / 0.1, "8.5%", CYAN], ["Gen Z, 23–29", 0.066 / 0.1, "6.6%", CYAN], ["Average", 0.038 / 0.1, "3.8%", GREY], ["Multi-bank", 0.024 / 0.1, "2.4%", NAVY]], 2, { lw: 1.15, vw: 0.5 });
+
+  qTitle(3, "Do different personas come for the same or different products?", R, r2, PW);
+  statBox(R, r2 + 0.4, 2.2, 1.4, "84–92%", "of every job type applies for a loan: the same entry point", 3);
+  s.addText([{ text: "■ ", options: { color: NAVY } }, { text: "got a loan   ", options: { color: MUTED } }, { text: "■ ", options: { color: CYAN } }, { text: "keeps money in", options: { color: MUTED } }],
+    { x: R + 2.4, y: r2 + 0.4, w: 3.6, h: 0.24, fontSize: 10, bold: true, margin: 0, isTextBox: true, objectName: "Q3 legend" });
+  [["Office worker", 0.11, 0.18], ["Merchant", 0.07, 0.20], ["Blue-collar", 0.07, 0.12], ["Rider / driver", 0.05, 0.13]].forEach((r, k) => {
+    const y = r3 - 1.3 + k * 0.3, x = R + 2.4, lw = 1.1, bw = 1.6;
+    s.addText(r[0], { x, y, w: lw, h: 0.3, fontSize: 10.5, color: TXT, margin: 0, valign: "middle", isTextBox: true, objectName: `Q3 label ${k}` });
+    s.addShape(pres.shapes.RECTANGLE, { x: x + lw, y: y + 0.05, w: bw * r[1] / 0.22, h: 0.09, fill: { color: NAVY }, line: { type: "none" }, objectName: `Q3 loan ${k}` });
+    s.addShape(pres.shapes.RECTANGLE, { x: x + lw, y: y + 0.16, w: bw * r[2] / 0.22, h: 0.09, fill: { color: CYAN }, line: { type: "none" }, objectName: `Q3 save ${k}` });
+    s.addText(Math.round(r[1] * 100) + "% · " + Math.round(r[2] * 100) + "%", { x: x + lw + bw + 0.08, y, w: 0.82, h: 0.3, fontSize: 10, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Q3 value ${k}` });
+  });
+
+  // Row 3: Q4 and Q5
+  qTitle(4, "Is the persona different for active vs inactive customers?", L, r3, PW);
+  statBox(L, r3 + 0.4, 2.2, 1.4, "88%", "of borrowers are active each month. Age and job barely change it", 4);
+  sub("% active each month, by what they hold", L + 2.4, r3 + 0.4, 3.6, 4);
+  bars(L + 2.4, r3 + 0.65, 3.6, [["Borrowers", 0.88, "88%", CYAN], ["Money in, no loan", 0.51, "51%", BLUE], ["No money in", 0.04, "4%", GREY]], 4, { lw: 1.35, vw: 0.5 });
+  s.addText("1.8M idle: 694K with no product, 1.1M not using theirs", { x: L + 2.4, y: r3 + 1.55, w: 3.6, h: 0.3, fontSize: 9.5, color: MUTED, margin: 0, isTextBox: true, objectName: "Q4 note" });
+
+  qTitle(5, "Does CLICX cannibalize KTB customers or products?", R, r3, PW);
+  statBox(R, r3 + 0.4, 2.2, 1.4, "64%", "of the 1.6M customers we share with KTB were inactive with KTB (1.1M)", 5);
+  sub("CLICX borrowers and KTB's Jai-pump loan", R + 2.4, r3 + 0.4, 3.6, 5);
+  bars(R + 2.4, r3 + 0.65, 3.6, [["All CLICX borrowers", 1, "164K", GREY], ["No Jai-pump loan ever", 0.81, "133K (81%)", BLUE], ["Rejected by Jai-pump", 0.14, "23K (14%)", NAVY]], 5, { lw: 1.55, vw: 0.85 });
+  s.addText("450K KTB rejects applied to us; 51K got our loan", { x: R + 2.4, y: r3 + 1.55, w: 3.6, h: 0.3, fontSize: 9.5, color: MUTED, margin: 0, isTextBox: true, objectName: "Q5 note" });
+}
+{
+  const s = qSlide("Summary", "2 / 2  |  STRATEGY TO PRODUCT",
+    "What should we build in 2027 based on these answers?",
+    "Six strategies, each tied to a product and a customer pool we already have: grow through partners, lend smarter to the underserved, and launch SME loans, a card and wealth products",
+    "Customer pools from Data for Strategy 2027. Revenue and conversion targets are still to be set. " + SRC);
+  const H = (t) => ({ text: t, options: { bold: true, color: "FFFFFF", fill: { color: NAVY }, fontSize: 11 } });
+  const q = (t) => ({ text: t, options: { bold: true, fontSize: 10.5, color: BLUE, align: "center" } });
+  const st = (n, t) => ({ text: [{ text: n + "  ", options: { bold: true, color: CYAN, fontSize: 12 } }, { text: t, options: { bold: true, color: NAVY, fontSize: 11.5 } }] });
+  const c = (t) => ({ text: t, options: { fontSize: 10.5, color: TXT } });
+  const pr = (t) => ({ text: t, options: { fontSize: 11, bold: true, color: CYAN } });
+  const big = (n, t) => ({ text: [{ text: n, options: { bold: true, fontSize: 13, color: NAVY, breakLine: true } }, { text: t, options: { fontSize: 9.5, color: MUTED } }] });
+  const rows = [
+    [H("From"), H("Strategy"), H("Because we found"), H("2027 product"), H("Who, and how many")],
+    [q("Q1"), st("1", "Grow beyond KTB through AIS and OR"), c("96% come from partners, but only 3.7% of AIS's base has joined"), pr("AIS bill pay and top-up in app; partner rewards (AIS, OR)"), big("0.66M", "of our customers are not AIS yet")],
+    [q("Q2, Q3"), st("2", "Lend smarter to the underserved"), c("82% of applicants are underserved; 90%+ of gig workers apply, 5–7% approved"), pr("Proxy-income loans; deposit-backed starter loan"), big("1.45M", "underserved loan applicants")],
+    [q("Q3"), st("3", "Turn merchants into SME borrowers"), c("Merchants save most (20%) and spend; 84% already applied for a loan"), pr("SME cash-flow loans"), big("293K", "merchants; 245K already applied")],
+    [q("Q3"), st("4", "Give office workers a first card"), c("Office workers borrow most (11%) and hold 3.2B THB"), pr("Digital credit card with AIS and PTT perks"), big("700K", "office workers; 239K AIS Serenade")],
+    [q("Q3, Q4"), st("5", "Give savers a wealth home"), c("Working seniors and seniors hold most of our 5.5B THB"), pr("Savings pockets, then mutual funds"), big("643K", "working seniors and seniors")],
+    [q("Q4, Q5"), st("6", "Activate idle and KTB-rejected customers"), c("88% of borrowers are active vs 4% with no money in; 450K KTB rejects applied"), pr("First-deposit bonus; Paotang reject referral"), big("1.8M", "idle customers; 1.9M KTB rejects a year")],
+  ];
+  s.addTable(rows, { x: 0.5, y: 2.35, w: 12.33, colW: [0.8, 2.75, 3.6, 3.0, 2.18], fontFace: "Arial", border: { type: "solid", pt: 0.75, color: LGREY },
+    valign: "middle", rowH: [0.38, 0.66, 0.66, 0.66, 0.66, 0.66, 0.66], margin: [0.04, 0.08, 0.04, 0.08], objectName: "Strategy table" });
 }
 
 (async () => {
