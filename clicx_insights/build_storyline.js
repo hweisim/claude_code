@@ -242,8 +242,8 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 3: what we know, who holds what
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("3 / 5  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE BY PERSONA", { placeholder: "tracker" });
-  s.addText("Products follow life stage and job: 30–49s borrow, 60+ save, salaried borrow and merchants save", { placeholder: "title" });
+  s.addText("3 / 5  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE BY AGE AND JOB", { placeholder: "tracker" });
+  s.addText("Age and job shape what people use: people in their 30s and 40s borrow, those over 60 save; salaried workers borrow, business owners save", { placeholder: "title" });
   s.addText("Share of each group's customers; a customer can hold several. By age: product segments, 31 Oct 2026 (borrow = any loan; save = balance over ฿100 or Save Max/More; pay = in-app payments). By job: Data for Strategy 2027, Sep 2026 (save = balance over ฿0). * under 11K customers", { placeholder: "foot" });
   const pw = (12.33 - 0.15) / 2, py = 1.6, ph = 5.18;
   const ser = (labels, b, sv, p) => [{ name: "Borrow", labels, values: b }, { name: "Save", labels, values: sv }, { name: "Pay", labels, values: p }];
@@ -274,7 +274,7 @@ pres.addSection({ title: "Storyline" });
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("4 / 5  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
-  s.addText("Payments start through partners but fade after promotions; steady earners pay most, and AIS prepaid is the biggest gap", { placeholder: "title" });
+  s.addText("AIS and OR deals get people paying, but many stop after the deal; regular earners pay most, few AIS prepaid users pay", { placeholder: "title" });
   s.addText("Paid = paid with CLICX in October 2026. Partner customers = ever paid AIS or PTT OR in that month or before. Up to +22K payers a month assumes prepaid customers pay at the postpaid rate. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026)", { placeholder: "foot" });
   const cw = (12.33 - 0.3) / 3, top = 1.5, ch = 5.28;
   const cols = [
