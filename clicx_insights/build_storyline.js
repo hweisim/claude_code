@@ -179,7 +179,7 @@ pres.addSection({ title: "Storyline" });
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("2 / 5  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE", { placeholder: "tracker" });
   s.addText("Only 1 in 5 customers holds a product; among them, borrowers lead (53%) and just 21K both borrow and save with us", { placeholder: "title" });
-  s.addText("Box size = number of customers; persona = biggest age and job groups in each segment. Bal > ฿0 = balance above ฿0 but not over ฿100, with no loan or payment. Slide 5's 1.8M inactive counts all 2.14M sign-ups; both give ~310K active. Core saver = Save Max/More over ฿10K; emerging saver = other balance over ฿100. Product segment data, 31 Oct 2026", { placeholder: "foot" });
+  s.addText("Box size = number of customers; persona = biggest age and job groups in each segment. Bal > ฿0 = balance above ฿0 but not over ฿100, with no loan or payment. Slide 5's 1.8M inactive counts all 2.14M sign-ups; both give ~310K active. Core saver = Save Max/More over ฿20K; emerging saver = other balance over ฿100. Product segment data, 31 Oct 2026", { placeholder: "foot" });
   const TOTAL = 1507.4, ZERO = 1061.3, MONEY = 136.7, ACT = 309.4;
   const X0 = 0.5, W = 8.95;
   // whole base strip: no product (฿0 / money in) and with a product
@@ -577,7 +577,7 @@ const heat = (s, head, rows, colW, base, opts) => {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
   s.addText("APPENDIX A4  |  PRODUCT SEGMENTS BY AGE · SHARE OF EACH AGE GROUP", { placeholder: "tracker" });
   s.addText("Teens just pay, 20–59s borrow, and customers 60+ save; 80% of every age group hold nothing active", { placeholder: "title" });
-  s.addText("Rows add to 100%. Shaded: 15%+ above (teal) or below (rose) all customers; No segment not shaded. Core saver = Save Max/More over ฿10K; emerging saver = other balance over ฿100. No loans under 20 or over 59 (age limits). Groups 60+ are small (25.1K). As of 31 Oct 2026", { placeholder: "foot" });
+  s.addText("Rows add to 100%. Shaded: 15%+ above (teal) or below (rose) all customers; No segment not shaded. Core saver = Save Max/More over ฿20K; emerging saver = other balance over ฿100. No loans under 20 or over 59 (age limits). Groups 60+ are small (25.1K). As of 31 Oct 2026", { placeholder: "foot" });
   const head = ["Age", "Customers", "Borrower only", "Borrower + transactor", "Emerging saver + borrower", "Emerging saver + transactor", "Emerging saver only", "Core saver", "Transactor only", "No segment"];
   const rows = [
     ["10–19", "10.9K", 0.0, 0.0, 0.0, 4.6, 6.0, 0.7, 9.6, 79.2],
