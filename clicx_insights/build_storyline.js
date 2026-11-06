@@ -103,7 +103,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 1: diagnosis
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("1 / 4  |  WHAT WE KNOW: CUSTOMERS", { placeholder: "tracker" });
+  s.addText("1 / 5  |  WHAT WE KNOW: CUSTOMERS", { placeholder: "tracker" });
   s.addText("Partners gave us scale fast, but only 15% of customers are active, and loans are both our hook and our constraint", { placeholder: "title" });
   s.addText(SRC, { placeholder: "foot" });
   // governing question banner
@@ -176,7 +176,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 2: what we know, payments
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("2 / 4  |  WHAT WE KNOW: USAGE AND PAYMENTS", { placeholder: "tracker" });
+  s.addText("2 / 5  |  WHAT WE KNOW: USAGE AND PAYMENTS", { placeholder: "tracker" });
   s.addText("Use follows life stage and payments follow steady income; promotions alone don't build the habit, and AIS prepaid is the biggest gap", { placeholder: "title" });
   s.addText("Depositor = balance over ฿100; saver = Save Max/More over ฿10K. Ever partner = paid AIS or PTT OR. Category figures cover Scan and Pay to other merchants. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026). Full tables in appendix A1–A2", { placeholder: "foot" });
   const panel = (x, y, w, h, tag, q, ans, big, bigLbl, n) => {
@@ -230,7 +230,7 @@ pres.addSection({ title: "Storyline" });
 const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2.14M customers, Sep 2026); pools overlap";
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("3 / 4  |  WHAT WE WILL DO", { placeholder: "tracker" });
+  s.addText("3 / 5  |  WHAT WE WILL DO", { placeholder: "tracker" });
   s.addText("We will grow in two ways: keep acquiring through our partners, and activate the 1.8M customers we already have", { placeholder: "title" });
   s.addText(POOL_NOTE + ". Icons: Font Awesome (open licence). " + SRC, { placeholder: "foot" });
   const pill = (x, y, w, n, t, col, obj) => {
@@ -319,7 +319,7 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
 // ---------- Slide 3: prioritization table (connects to business cases)
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("4 / 4  |  PRIORITIZATION", { placeholder: "tracker" });
+  s.addText("4 / 5  |  PRIORITIZATION", { placeholder: "tracker" });
   s.addText("Prioritization for upcoming initiatives: the customers are already in our base; financials follow the business cases", { placeholder: "title" });
   s.addText(POOL_NOTE + ". xx = to be sized; figures to be filled in once business cases are complete. Icons: Font Awesome (open licence)", { placeholder: "foot" });
   const cols = [["Upcoming initiatives", "in priority order", 0.5, 3.0], ["Persona", "target archetypes", 3.6, 3.15], ["Prospect customers", "in existing CLICX base", 6.85, 2.15],
@@ -357,6 +357,81 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
   });
   s.addShape(pres.shapes.LINE, { x: 0.5, y: y0 + 4 * rh, w: 12.33, h: 0, line: { color: LGREY, width: 0.75 }, objectName: "Bottom rule" });
 }
+
+// ---------- Slide 5: customer overview by age and occupation, segment actions, next steps
+{
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
+  s.addText("5 / 5  |  CUSTOMER SEGMENTS AND NEXT STEPS", { placeholder: "tracker" });
+  s.addText("Most customers are 20–49; salaried and merchants engage most, gig and blue-collar least, so we act segment by segment", { placeholder: "title" });
+  s.addText("1.51M customers as of 31 Oct 2026. Paid = paid with CLICX in October; teal = 15%+ above the 8.4% average, rose = 15%+ below. Salaried = corporate + government. Segments overlap. Source: payment-by-age and occupation files; Partner Payment Story v1", { placeholder: "foot" });
+  const UP = "CDEAE7", DOWN = "F4DCDC", AVG = 8.4;
+  const chip = (x, y, v, obj) => {
+    const fill = v >= AVG * 1.15 ? UP : v <= AVG * 0.85 ? DOWN : "FFFFFF";
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: y + 0.03, w: 0.52, h: 0.2, rectRadius: 0.05, fill: { color: fill }, line: { type: "none" }, objectName: obj + " chip" });
+    s.addText(v.toFixed(1) + "%", { x, y: y + 0.03, w: 0.52, h: 0.2, fontSize: 9, bold: true, color: NAVY, align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: obj });
+  };
+  const listPanel = (x, y, w, h, title, rows, max, n) => {
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: n + " panel" });
+    s.addText(title, { x: x + 0.15, y: y + 0.1, w: w - 0.3, h: 0.3, fontSize: 12, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: n + " title" });
+    const lw = rows.lw, bw = w - lw - 1.35 - 0.15;
+    s.addText("Customers", { x: x + 0.15 + lw, y: y + 0.42, w: bw + 0.6, h: 0.2, fontSize: 8.5, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: n + " col1" });
+    s.addText("Paid", { x: x + w - 0.67, y: y + 0.42, w: 0.52, h: 0.2, fontSize: 8.5, bold: true, color: MUTED, align: "center", margin: 0, isTextBox: true, objectName: n + " col2" });
+    rows.data.forEach((r, k) => {
+      const yy = y + 0.66 + k * rows.rh;
+      s.addText(r[0], { x: x + 0.15, y: yy, w: lw, h: 0.26, fontSize: 9.5, color: TXT, bold: !!r[3], margin: 0, valign: "middle", isTextBox: true, objectName: `${n} label ${k}` });
+      s.addShape(pres.shapes.RECTANGLE, { x: x + 0.15 + lw, y: yy + 0.07, w: Math.max(0.03, bw * r[1] / max), h: 0.13, fill: { color: r[3] ? CYAN : BLUE }, line: { type: "none" }, objectName: `${n} bar ${k}` });
+      s.addText(r[1] >= 1000 ? (r[1] / 1000).toFixed(2) + "M" : r[1].toFixed(r[1] < 100 ? 1 : 0) + "K", { x: x + 0.15 + lw + Math.max(0.03, bw * r[1] / max) + 0.05, y: yy, w: 0.6, h: 0.26, fontSize: 9, color: TXT, margin: 0, valign: "middle", isTextBox: true, objectName: `${n} value ${k}` });
+      chip(x + w - 0.67, yy, r[2], `${n} paid ${k}`);
+    });
+  };
+  const top = 1.5, H = 5.28;
+  // Age panel
+  listPanel(0.5, top, 3.0, H, "By age", { lw: 0.55, rh: 0.42, data: [
+    ["10–19", 10.9, 14.3], ["20–29", 395.3, 7.6], ["30–39", 580.3, 8.8, true], ["40–49", 369.3, 8.7], ["50–59", 126.5, 8.1], ["60–69", 22.2, 8.0], ["70+", 2.9, 10.4]] }, 580.3, "Age");
+  s.addText([{ text: "89%", options: { bold: true, fontSize: 18, color: BLUE, breakLine: true } }, { text: "are aged 20–49; 80% of all customers hold no active product", options: { fontSize: 9, color: TXT } }],
+    { x: 0.65, y: top + 3.75, w: 2.7, h: 1.35, margin: 0, valign: "top", isTextBox: true, objectName: "Age takeaway" });
+  // Occupation panel
+  listPanel(3.62, top, 3.4, H, "By occupation", { lw: 1.05, rh: 0.42, data: [
+    ["Salaried", 575.4, 9.4, true], ["Blue collar", 224.1, 6.4], ["Freelance", 217.6, 7.3], ["Offline merchant", 148.9, 9.7], ["Wage earner", 104.7, 7.1],
+    ["Online merchant", 94.8, 10.2], ["Rider", 58.3, 7.1], ["Agriculture", 55.6, 6.6], ["Other / unknown", 28.1, 11.5]] }, 575.4, "Occupation");
+  s.addText([{ text: "44%", options: { bold: true, fontSize: 18, color: BLUE, breakLine: true } }, { text: "work without a regular wage (freelance, gig, blue-collar, farm), and pay least", options: { fontSize: 9, color: TXT } }],
+    { x: 3.77, y: top + 4.55, w: 3.1, h: 0.68, margin: 0, valign: "top", isTextBox: true, objectName: "Occupation takeaway" });
+
+  // Actions by segment
+  const AX0 = 7.17, AW = 5.66;
+  s.addText("WHAT TO DO, BY SEGMENT", { x: AX0, y: top, w: AW, h: 0.26, fontSize: 10, bold: true, color: MUTED, charSpacing: 1, margin: 0, isTextBox: true, objectName: "Actions label" });
+  const seg = [
+    ["p_corp", "Salaried workers", "575K · pay 9.4% · approved most for loans", "Pre-approved salary-bridged loans and a card (P1, P2)"],
+    ["p_sme", "Merchants", "244K · pay 9.7–10.2% · save most", "Take QR payments in, then offer SME cash-flow loans"],
+    ["p_blue", "Gig, blue-collar and farm", "660K · pay 6.4–7.3% · often turned down", "Savings and insurance first (P3), then a small starter loan"],
+    ["p_tech", "Young adults, 20–29", "395K · pay 7.6% · 83% hold nothing", "First-deposit bonus and Scan and Pay rewards"],
+    ["p_wealth", "Savers, 50+", "152K · saving rises with age", "Savings tiers, then investment (P4)"],
+  ];
+  const rh = 0.62;
+  seg.forEach((g, k) => {
+    const y = top + 0.32 + k * (rh + 0.06);
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: AX0, y, w: AW, h: rh, rectRadius: 0.06, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Seg ${k}` });
+    s.addShape(pres.shapes.OVAL, { x: AX0 + 0.12, y: y + 0.12, w: 0.38, h: 0.38, fill: { color: k === 2 ? NAVY : CYAN }, line: { type: "none" }, objectName: `Seg icon bg ${k}` });
+    s.addImage({ path: IC(g[0] + ".png"), x: AX0 + 0.21, y: y + 0.21, w: 0.2, h: 0.2, altText: g[1] + " icon", objectName: `Seg icon ${k}` });
+    s.addText([{ text: g[1], options: { bold: true, fontSize: 10.5, color: NAVY, breakLine: true } }, { text: g[2], options: { fontSize: 8.5, color: MUTED } }],
+      { x: AX0 + 0.6, y: y + 0.04, w: 2.15, h: rh - 0.08, margin: 0, valign: "middle", isTextBox: true, objectName: `Seg who ${k}` });
+    s.addText([{ text: "→  ", options: { bold: true, color: CYAN } }, { text: g[3], options: { bold: true, color: BLUE } }],
+      { x: AX0 + 2.8, y: y + 0.04, w: AW - 2.9, h: rh - 0.08, fontSize: 10, margin: 0, valign: "middle", isTextBox: true, objectName: `Seg action ${k}` });
+  });
+  // Next steps
+  const ny = top + 0.32 + 5 * (rh + 0.06) + 0.06, nh = top + H - ny;
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: AX0, y: ny, w: AW, h: nh, rectRadius: 0.08, fill: { color: C.text2 }, line: { type: "none" }, objectName: "Next steps box" });
+  s.addText("NEXT STEPS", { x: AX0 + 0.15, y: ny + 0.08, w: 2, h: 0.24, fontSize: 9.5, bold: true, color: C.accent6, charSpacing: 1, margin: 0, isTextBox: true, objectName: "Next label" });
+  const steps = [["30 days", "Name an owner and target per segment; add revenue and credit losses to the data room"],
+    ["60 days", "Run three pilots with control groups: deposit bonus, salary pre-approval, savings for gig workers"],
+    ["90 days", "Scale what works into the 2027 plan; align saver and depositor definitions"]];
+  const sw = (AW - 0.3 - 0.2) / 3;
+  steps.forEach((t, k) => {
+    s.addText([{ text: t[0], options: { bold: true, fontSize: 11, color: "FFFFFF", breakLine: true } }, { text: t[1], options: { fontSize: 9, color: "DCE6EF" } }],
+      { x: AX0 + 0.15 + k * (sw + 0.1), y: ny + 0.36, w: sw, h: nh - 0.44, margin: 0, valign: "top", isTextBox: true, objectName: `Step ${k}` });
+  });
+}
+
 
 // ---------- Appendix A1, A2: full tables
 const heat = (s, head, rows, colW, base, opts) => {
