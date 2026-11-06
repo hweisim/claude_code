@@ -179,23 +179,27 @@ pres.addSection({ title: "Storyline" });
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("2 / 5  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE", { placeholder: "tracker" });
   s.addText("Only 1 in 5 customers holds a product; among them, borrowers lead (53%) and just 21K both borrow and save with us", { placeholder: "title" });
-  s.addText("Box size is in proportion to the number of customers; counts rounded. Both bases give ~310K active customers: the 1.8M inactive on slide 5 counts all 2.14M sign-ups, 1.20M here counts the 1.51M in the product data. Core saver = Save Max/More over ฿10K; emerging saver = other balance over ฿100; transactor = pays in the app", { placeholder: "foot" });
-  const TOTAL = 1507.4, NONE = 1198.0, ACT = 308.0;
+  s.addText("Box size = number of customers; persona = biggest age and job groups in each segment. Money in = balance above ฿0 but too small to count as saving. Slide 5's 1.8M inactive counts all 2.14M sign-ups; both give ~310K active. Core saver = Save Max/More over ฿10K; emerging saver = other balance over ฿100. Product segment data, 31 Oct 2026", { placeholder: "foot" });
+  const TOTAL = 1507.4, ZERO = 1061.3, MONEY = 136.7, ACT = 309.4;
   const X0 = 0.5, W = 8.95;
-  // whole base strip
-  const sy = 1.95, sh = 0.42, aw = W * ACT / TOTAL;
-  s.addText("2.14M sign-ups (Sep 2026)  →  1.51M in the product data (31 Oct 2026)  →  308K hold a product", { x: X0, y: 1.7, w: W, h: 0.22, fontSize: 9, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Strip label" });
-  s.addText([{ text: "No active product  ", options: { bold: true } }, { text: "1.20M · 79.5%" }], { x: X0, y: sy, w: W - aw, h: sh, fontSize: 10.5, color: "FFFFFF", fill: { color: GREY }, margin: 7, valign: "middle", isTextBox: true, objectName: "Strip none" });
-  s.addText([{ text: "308K · 20.5%", options: { bold: true } }], { x: X0 + W - aw, y: sy, w: aw, h: sh, fontSize: 10, color: "FFFFFF", align: "center", fill: { color: CYAN }, line: { color: "FFFFFF", width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip active" });
+  // whole base strip: no product (฿0 / money in) and with a product
+  const sy = 1.95, sh = 0.5, aw = W * ACT / TOTAL, zw = W * ZERO / TOTAL, mw = W * MONEY / TOTAL;
+  s.addText("2.14M sign-ups (Sep 2026)  →  1.51M in the product data (31 Oct 2026)  →  309K hold a product", { x: X0, y: 1.7, w: W, h: 0.22, fontSize: 9, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Strip label" });
+  s.addText([{ text: "No product, ฿0 balance  ", options: { bold: true } }, { text: "1.06M · 70%" }, { text: "   same age and job mix as the base", options: { fontSize: 9, color: "E9EDF1" } }],
+    { x: X0, y: sy, w: zw, h: sh, fontSize: 10.5, color: "FFFFFF", fill: { color: GREY }, margin: 7, valign: "middle", isTextBox: true, objectName: "Strip zero" });
+  s.addText([{ text: "137K · 9%", options: { bold: true, fontSize: 9.5, breakLine: true } }, { text: "money in", options: { fontSize: 8.5 } }],
+    { x: X0 + zw, y: sy, w: mw, h: sh, color: TXT, align: "center", fill: { color: "C5CDD6" }, line: { color: "FFFFFF", width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip money" });
+  s.addText([{ text: "309K · 20.5%", options: { bold: true, breakLine: true } }, { text: "hold a product", options: { fontSize: 8.5 } }],
+    { x: X0 + W - aw, y: sy, w: aw, h: sh, fontSize: 10, color: "FFFFFF", align: "center", fill: { color: CYAN }, line: { color: "FFFFFF", width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip active" });
   // zoom lines
-  const ty = 2.98, th = 3.72, ly = ty - 0.34;
+  const ty = 3.02, th = 3.68, ly = ty - 0.34;
   s.addShape(pres.shapes.LINE, { x: X0, y: sy + sh, w: W - aw, h: ly - sy - sh, flipH: true, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom left" });
   s.addShape(pres.shapes.LINE, { x: X0 + W, y: sy + sh, w: 0, h: ly - sy - sh, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom right" });
-  // treemap: columns by family, stacked by segment
+  // treemap: columns by family, stacked by segment; [name, K, fill, text colour, persona]
   const fam = [
-    ["Borrowers", 164.0, [["Borrower only", 102.6, NAVY, "FFFFFF"], ["Borrower + transactor", 40.1, "2B5C93", "FFFFFF"], ["Emerging saver + borrower", 21.3, "5A86BE", "FFFFFF"]]],
-    ["Savers", 104.7, [["Emerging saver only", 50.0, CYAN, "FFFFFF"], ["Emerging saver + transactor", 31.5, "4DB8AE", "FFFFFF"], ["Core saver", 23.2, "8FD0C9", TXT]]],
-    ["Payers only", 39.4, [["Transactor only", 39.4, "7F95AD", "FFFFFF"]]],
+    ["Borrowers", 164.478, [["Borrower only", 102.7, NAVY, "FFFFFF", "Mostly salaried, aged 20–39; 6 in 10 keep ฿0 with us"], ["Borrower + transactor", 40.5, "2B5C93", "FFFFFF", "Salaried, aged 30–39"], ["Emerging saver + borrower", 21.3, "5A86BE", "FFFFFF", "Salaried, aged 30–49"]]],
+    ["Savers", 105.4, [["Emerging saver only", 50.3, CYAN, "FFFFFF", "Salaried and merchants, aged 40–59"], ["Emerging saver + transactor", 31.9, "4DB8AE", "FFFFFF", "Salaried and merchants, aged 30–49"], ["Core saver", 23.3, "8FD0C9", TXT, "Salaried, aged 40+"]]],
+    ["Payers only", 39.492, [["Transactor only", 39.492, "7F95AD", "FFFFFF", "Mixed ages; more wage, gig and online sellers"]]],
   ];
   let cx = X0;
   fam.forEach((f, a) => {
@@ -203,11 +207,14 @@ pres.addSection({ title: "Storyline" });
     let cy = ty;
     f[2].forEach((g, b) => {
       const gh = th * g[1] / f[1];
-      const big = gh > 0.9 && cw > 2;
-      const runs = [{ text: g[0], options: { bold: true, fontSize: big ? 13 : 10.5, breakLine: true } },
-        { text: Math.round(g[1]) + "K", options: { bold: true, fontSize: big ? 22 : 12 } },
-        { text: "  " + Math.round(100 * g[1] / ACT) + "%", options: { fontSize: big ? 11 : 9.5 } }];
-      s.addText(runs, { x: cx, y: cy, w: cw, h: gh, color: g[3], fill: { color: g[2] }, line: { color: "FFFFFF", width: 2 }, margin: 7, valign: gh < 0.7 ? "middle" : "top", isTextBox: true, objectName: `Tree ${g[0]}` });
+      const big = gh > 1.2 && cw > 2, small = gh < 0.6;
+      const k = Math.round(g[1]) + "K", pct = Math.round(100 * g[1] / ACT) + "%";
+      const runs = small
+        ? [{ text: g[0] + "  ", options: { bold: true, fontSize: 10 } }, { text: k, options: { bold: true, fontSize: 11 } }, { text: "  " + pct, options: { fontSize: 9, breakLine: true } }, { text: g[4], options: { fontSize: 8.5 } }]
+        : [{ text: g[0], options: { bold: true, fontSize: big ? 13 : 10.5, breakLine: true } },
+           { text: k, options: { bold: true, fontSize: big ? 22 : 13 } }, { text: "  " + pct, options: { fontSize: big ? 11 : 9.5, breakLine: true } },
+           { text: g[4], options: { fontSize: big ? 10 : 8.5 } }];
+      s.addText(runs, { x: cx, y: cy, w: cw, h: gh, color: g[3], fill: { color: g[2] }, line: { color: "FFFFFF", width: 2 }, margin: small ? 4 : 7, valign: small ? "middle" : "top", isTextBox: true, objectName: `Tree ${g[0]}` });
       cy += gh;
     });
     s.addText(a === 2 ? [{ text: "Payers only", options: { bold: true } }] : [{ text: f[0], options: { bold: true } }, { text: "  " + Math.round(f[1]) + "K · " + Math.round(100 * f[1] / ACT) + "%" }],
@@ -216,17 +223,18 @@ pres.addSection({ title: "Storyline" });
   });
   // takeaways
   const RX = 9.7, RW = 3.13;
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: 1.95, w: RW, h: 0.95, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Active stat" });
-  s.addText([{ text: "308K", options: { bold: true, fontSize: 24, color: BLUE, breakLine: true } }, { text: "of the 1.51M in the product data (20%) hold at least one product; 1.20M hold none", options: { fontSize: 9.5, color: TXT } }],
-    { x: RX + 0.15, y: 2.0, w: RW - 0.3, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: "Active stat text" });
-  const tk = [["164K borrowers (53%)", "103K only borrow; just 21K also save with us: cross-sell savings", NAVY],
-    ["105K savers (34%)", "50K emerging savers hold a balance only; 23K core savers hold over ฿10K", CYAN],
-    ["39K payers only (13%)", "Use the app to pay but hold nothing: first target for a savings offer", "7F95AD"]];
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: 1.95, w: RW, h: 0.9, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Active stat" });
+  s.addText([{ text: "309K", options: { bold: true, fontSize: 22, color: BLUE, breakLine: true } }, { text: "of 1.51M (20%) hold a product; another 137K have money in but no product", options: { fontSize: 9, color: TXT } }],
+    { x: RX + 0.15, y: 1.98, w: RW - 0.3, h: 0.84, margin: 0, valign: "middle", isTextBox: true, objectName: "Active stat text" });
+  const tk = [["164K borrowers (53%)", "Mostly salaried 20–39s; 6 in 10 who only borrow keep ฿0 with us: cross-sell savings", NAVY],
+    ["105K savers (34%)", "Older, salaried or merchants; 23K core savers are salaried 40+", CYAN],
+    ["39K payers only (13%)", "3 in 4 already keep a small balance: first target for a savings offer", "7F95AD"],
+    ["137K with money in, no product", "Balance too small to count: a nudge to save more", "C5CDD6"]];
   tk.forEach((t, k) => {
-    const y = 3.05 + k * 1.22;
-    s.addShape(pres.shapes.RECTANGLE, { x: RX, y, w: 0.06, h: 1.05, fill: { color: t[2] }, line: { type: "none" }, objectName: `Takeaway bar ${k}` });
-    s.addText([{ text: t[0], options: { bold: true, fontSize: 11, color: NAVY, breakLine: true } }, { text: t[1], options: { fontSize: 9.5, color: TXT } }],
-      { x: RX + 0.18, y, w: RW - 0.2, h: 1.05, margin: 0, valign: "middle", isTextBox: true, objectName: `Takeaway ${k}` });
+    const y = 3.0 + k * 0.94;
+    s.addShape(pres.shapes.RECTANGLE, { x: RX, y, w: 0.06, h: 0.82, fill: { color: t[2] }, line: { type: "none" }, objectName: `Takeaway bar ${k}` });
+    s.addText([{ text: t[0], options: { bold: true, fontSize: 10.5, color: NAVY, breakLine: true } }, { text: t[1], options: { fontSize: 9, color: TXT } }],
+      { x: RX + 0.18, y, w: RW - 0.2, h: 0.82, margin: 0, valign: "middle", isTextBox: true, objectName: `Takeaway ${k}` });
   });
 }
 
