@@ -103,7 +103,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 1: diagnosis
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("1 / 6  |  WHAT WE KNOW: CUSTOMERS", { placeholder: "tracker" });
+  s.addText("1 / 4  |  WHAT WE KNOW: CUSTOMERS", { placeholder: "tracker" });
   s.addText("Partners gave us scale fast, but only 15% of customers are active, and loans are both our hook and our constraint", { placeholder: "title" });
   s.addText(SRC, { placeholder: "foot" });
   // governing question banner
@@ -176,7 +176,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 2: what we know, products
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("2 / 6  |  WHAT WE KNOW: PRODUCTS", { placeholder: "tracker" });
+  s.addText("2 / 4  |  WHAT WE KNOW: PRODUCTS", { placeholder: "tracker" });
   s.addText("Products follow life stage and job: 30–49s borrow, 60+ save, salaried borrow and merchants save, but 80% hold nothing yet", { placeholder: "title" });
   s.addText("Share of each group's customers; a customer can hold several. By age: product segments, 31 Oct 2026 (borrow = any loan; save = balance over ฿100 or Save Max/More; pay = in-app payments). By job: Data for Strategy 2027, Sep 2026 (save = balance over ฿0). * under 11K customers", { placeholder: "foot" });
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.5, w: 12.33, h: 0.46, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Hold nothing band" });
@@ -210,7 +210,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 3: what we know, payments (3 insights)
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("3 / 6  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
+  s.addText("3 / 4  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
   s.addText("Payments start through partners but fade after promotions; steady earners pay most, and AIS prepaid is the biggest gap", { placeholder: "title" });
   s.addText("Paid = paid with CLICX in October 2026. Up to +22K payers a month assumes prepaid customers pay at the postpaid rate. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026)", { placeholder: "foot" });
   const cw = (12.33 - 0.3) / 3, top = 1.5, ch = 5.28;
@@ -252,9 +252,9 @@ pres.addSection({ title: "Storyline" });
 const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2.14M customers, Sep 2026); pools overlap";
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("4 / 6  |  WHAT WE WILL DO", { placeholder: "tracker" });
-  s.addText("We will grow in two ways: keep acquiring through our partners, and activate the 1.8M customers we already have", { placeholder: "title" });
-  s.addText(POOL_NOTE + ". Icons: Font Awesome (open licence). " + SRC, { placeholder: "foot" });
+  s.addText("4 / 4  |  WHAT WE WILL DO", { placeholder: "tracker" });
+  s.addText("We will grow in two ways: keep acquiring through our partners, and activate the 1.8M inactive customers we already have", { placeholder: "title" });
+  s.addText(POOL_NOTE + ". OR base estimated from its 7.4% join rate. Source: Data Room; Data for Strategy 2027; Partner Payment Story v1. Icons: Font Awesome", { placeholder: "foot" });
   const pill = (x, y, w, n, t, col, obj) => {
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h: 0.42, rectRadius: 0.21, fill: { color: col }, line: { type: "none" }, objectName: obj });
     s.addText([{ text: n + "   ", options: { bold: true, fontSize: 14, color: "FFFFFF" } }, { text: t, options: { bold: true, fontSize: 12.5, color: "FFFFFF", charSpacing: 1 } }],
@@ -275,31 +275,40 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
     ["logo_ktb.jpeg", 2.58, "1.9M", "turned down by Jai-pump a year", "Work the Paotang reject list: 24% apply; focus on under-40s and riders"],
   ];
   acq.forEach((a, k) => {
-    const y = 2.28 + k * 0.92;
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: LX, y, w: LW, h: 0.84, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Acquire ${k}` });
-    s.addImage({ path: IC(a[0]), x: LX + 0.15, y: y + 0.12, h: 0.24, w: 0.24 * a[1], altText: "Partner logo", objectName: `Acquire logo ${k}` });
-    s.addText([{ text: a[2] + "  ", options: { bold: true, fontSize: 15, color: BLUE } }, { text: a[3], options: { fontSize: 9, color: MUTED } }],
-      { x: LX + 1.0, y: y + 0.06, w: LW - 1.1, h: 0.34, margin: 0, valign: "middle", isTextBox: true, objectName: `Acquire stat ${k}` });
-    s.addText(a[4], { x: LX + 0.15, y: y + 0.42, w: LW - 0.3, h: 0.38, fontSize: 9.5, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: `Acquire text ${k}` });
+    const y = 2.28 + k * 0.8;
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: LX, y, w: LW, h: 0.74, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Acquire ${k}` });
+    s.addImage({ path: IC(a[0]), x: LX + 0.15, y: y + 0.09, h: 0.22, w: 0.22 * a[1], altText: "Partner logo", objectName: `Acquire logo ${k}` });
+    s.addText([{ text: a[2] + "  ", options: { bold: true, fontSize: 14, color: BLUE } }, { text: a[3], options: { fontSize: 9, color: MUTED } }],
+      { x: LX + 1.0, y: y + 0.04, w: LW - 1.1, h: 0.32, margin: 0, valign: "middle", isTextBox: true, objectName: `Acquire stat ${k}` });
+    s.addText(a[4], { x: LX + 0.15, y: y + 0.36, w: LW - 0.3, h: 0.36, fontSize: 9, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: `Acquire text ${k}` });
   });
-  // target personas
-  const ty = 2.28 + 3 * 0.92;
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: LX, y: ty, w: LW, h: 0.92, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Target card" });
-  circIcon(LX + 0.15, ty + 0.17, 0.5, "target.png", CYAN, "Target icon", "Target icon");
-  s.addText([{ text: "Who to target", options: { bold: true, fontSize: 11, color: NAVY, breakLine: true } },
-    { text: "Look-alikes of tech-savvy 25–39s (8.5% join) and working Gen Z (6.6%); give multi-bank users a reason to switch (2.4%)", options: { fontSize: 9.5, color: TXT } }],
-    { x: LX + 0.78, y: ty + 0.06, w: LW - 0.9, h: 0.82, margin: 0, valign: "middle", isTextBox: true, objectName: "Target text" });
+  // who to target, with pools from each partner
+  const ty = 2.28 + 3 * 0.8;
+  const th = 1.46;
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: LX, y: ty, w: LW, h: th, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Target card" });
+  circIcon(LX + 0.15, ty + 0.1, 0.34, "target.png", CYAN, "Target icon", "Target icon");
+  s.addText("Who to target, by partner", { x: LX + 0.58, y: ty + 0.1, w: LW - 0.7, h: 0.34, fontSize: 11, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: "Target head" });
+  const tg = [["logo_ais.png", 2.74, "4.9M", "single-bank AIS users; 3.9% joined"],
+    ["logo_ktb.jpeg", 2.58, "3.4M", "KTB Next-only users; 0.3% joined"],
+    ["logo_or.png", 1.93, "~9.1M", "OR customers not yet on CLICX"]];
+  tg.forEach((t, k) => {
+    const yy = ty + 0.5 + k * 0.27;
+    s.addImage({ path: IC(t[0]), x: LX + 0.15, y: yy + 0.04, h: 0.18, w: 0.18 * t[1], altText: "Partner logo", objectName: `Target logo ${k}` });
+    s.addText([{ text: t[2] + "  ", options: { bold: true, fontSize: 10.5, color: BLUE } }, { text: t[3], options: { fontSize: 9, color: TXT } }],
+      { x: LX + 0.72, y: yy, w: LW - 0.8, h: 0.26, margin: 0, valign: "middle", isTextBox: true, objectName: `Target pool ${k}` });
+  });
+  s.addText("Also: tech-savvy 6.3M (8.5% joined), multi-bank 8.2M (2.4%)", { x: LX + 0.15, y: ty + 1.28, w: LW - 0.3, h: 0.18, fontSize: 8.5, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Target across" });
   // board asks (compact)
-  const by = ty + 1.02;
+  const by = ty + th + 0.06;
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: LX, y: by, w: LW, h: 6.75 - by, rectRadius: 0.08, fill: { color: C.text2 }, line: { type: "none" }, objectName: "Asks box" });
   s.addText([{ text: "BOARD ASKS", options: { bold: true, fontSize: 9, color: C.accent6, charSpacing: 1, breakLine: true } },
-    { text: "Risk appetite · budget shift to activation · one scorecard · balances and revenue data", options: { fontSize: 9.5, color: "FFFFFF" } }],
+    { text: "Risk appetite · activation budget · one scorecard · revenue data", options: { fontSize: 9.5, color: "FFFFFF" } }],
     { x: LX + 0.15, y: by + 0.05, w: LW - 0.3, h: 6.75 - by - 0.1, margin: 0, valign: "middle", isTextBox: true, objectName: "Asks text" });
 
   // ---- Part 2: activate current customers
   const RX = 4.6, RW = 8.23;
-  pill(RX, 1.5, RW, "2", "ACTIVATE CURRENT CLICX CUSTOMERS", CYAN, "Part 2 pill");
-  s.addText("1.8M idle customers (694K no product, 1.1M not active) to turn into active, paying users  ·  from Q3, Q4", { x: RX, y: 1.97, w: RW, h: 0.24, fontSize: 9.5, color: MUTED, margin: 0, isTextBox: true, objectName: "Part 2 sub" });
+  pill(RX, 1.5, RW, "2", "ACTIVATE 1.8M INACTIVE CUSTOMERS", CYAN, "Part 2 pill");
+  s.addText("694K with no product + 1.1M with a product they don't use, to turn into active, paying users  ·  from Q3, Q4", { x: RX, y: 1.97, w: RW, h: 0.24, fontSize: 9.5, color: MUTED, margin: 0, isTextBox: true, objectName: "Part 2 sub" });
   // four activation levers
   const lev = [["deposit.png", "Get money in first", "51% active with money in vs 4% without", BLUE],
     ["enabler.png", "Fix approvals and risk", "Gig workers: 5–7% approved; 20% early default", NAVY],
@@ -338,10 +347,11 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
   });
 }
 
-// ---------- Slide 3: prioritization table (connects to business cases)
+pres.addSection({ title: "Appendix" });
+// ---------- Appendix A1: prioritization table (connects to business cases)
 {
-  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("5 / 6  |  PRIORITIZATION", { placeholder: "tracker" });
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
+  s.addText("APPENDIX A1  |  PRIORITIZATION", { placeholder: "tracker" });
   s.addText("Prioritization for upcoming initiatives: the customers are already in our base; financials follow the business cases", { placeholder: "title" });
   s.addText(POOL_NOTE + ". xx = to be sized; figures to be filled in once business cases are complete. Icons: Font Awesome (open licence)", { placeholder: "foot" });
   const cols = [["Upcoming initiatives", "in priority order", 0.5, 3.0], ["Persona", "target archetypes", 3.6, 3.15], ["Prospect customers", "in existing CLICX base", 6.85, 2.15],
@@ -380,10 +390,10 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
   s.addShape(pres.shapes.LINE, { x: 0.5, y: y0 + 4 * rh, w: 12.33, h: 0, line: { color: LGREY, width: 0.75 }, objectName: "Bottom rule" });
 }
 
-// ---------- Slide 5: customer overview by age and occupation, segment actions, next steps
+// ---------- Appendix A2: customer overview by age and occupation, segment actions, next steps
 {
-  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("6 / 6  |  CUSTOMER SEGMENTS AND NEXT STEPS", { placeholder: "tracker" });
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
+  s.addText("APPENDIX A2  |  CUSTOMER SEGMENTS AND NEXT STEPS", { placeholder: "tracker" });
   s.addText("Most customers are 20–49; salaried and merchants engage most, gig and blue-collar least, so we act segment by segment", { placeholder: "title" });
   s.addText("1.51M customers as of 31 Oct 2026. Paid = paid with CLICX in October; teal = 15%+ above the 8.4% average, rose = 15%+ below. Salaried = corporate + government. Segments overlap. Source: payment-by-age and occupation files; Partner Payment Story v1", { placeholder: "foot" });
   const UP = "CDEAE7", DOWN = "F4DCDC", AVG = 8.4;
@@ -478,10 +488,9 @@ const heat = (s, head, rows, colW, base, opts) => {
   });
   s.addTable([hdr, ...body], { x: 0.5, y: opts.y || 2.05, w: 12.33, colW, fontFace: "Arial", rowH: [0.62, ...rows.map(() => 0.42)], margin: [0.03, 0.08, 0.03, 0.08], valign: "middle", objectName: opts.name });
 };
-pres.addSection({ title: "Appendix" });
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
-  s.addText("APPENDIX A1  |  WHO PAYS · AGE × JOB · % PAID IN OCTOBER", { placeholder: "tracker" });
+  s.addText("APPENDIX A3  |  WHO PAYS · AGE × JOB · % PAID IN OCTOBER", { placeholder: "tracker" });
   s.addText("Merchants and salaried customers pay most; blue-collar and gig workers pay least, at every age", { placeholder: "title" });
   s.addText("Shaded: 15%+ above (teal) or below (rose) all customers, 8.4%. * fewer than 1,000 customers, not shaded. Salaried = corporate + government. Data as of 31 Oct 2026", { placeholder: "foot" });
   const head = ["Age (customers)", "Salaried\n575.4K", "Blue collar\n224.1K", "Offline merchant\n148.9K", "Online merchant\n94.8K", "Freelance\n217.6K", "Wage earner\n104.7K", "Rider\n58.3K", "Agriculture\n55.6K", "Other / unknown\n28.1K", "All\n1.51M"];
@@ -501,7 +510,7 @@ pres.addSection({ title: "Appendix" });
 }
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
-  s.addText("APPENDIX A2  |  PRODUCT SEGMENTS BY AGE · SHARE OF EACH AGE GROUP", { placeholder: "tracker" });
+  s.addText("APPENDIX A4  |  PRODUCT SEGMENTS BY AGE · SHARE OF EACH AGE GROUP", { placeholder: "tracker" });
   s.addText("Teens just pay, 20–59s borrow, and customers 60+ save; 80% of every age group hold nothing active", { placeholder: "title" });
   s.addText("Rows add to 100%. Shaded: 15%+ above (teal) or below (rose) all customers; No segment not shaded. Saver = Save Max/More over ฿10K; depositor = other balance over ฿100. No loans under 20 or over 59 (age limits). Groups 60+ are small (25.1K). As of 31 Oct 2026", { placeholder: "foot" });
   const head = ["Age", "Customers", "Borrower only", "Borrower + transactor", "Depositor + borrower", "Depositor + transactor", "Depositor only", "Saver", "Transactor only", "No segment"];
