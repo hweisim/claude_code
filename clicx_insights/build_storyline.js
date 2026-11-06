@@ -212,12 +212,13 @@ pres.addSection({ title: "Storyline" });
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("3 / 4  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
   s.addText("Payments start through partners but fade after promotions; steady earners pay most, and AIS prepaid is the biggest gap", { placeholder: "title" });
-  s.addText("Paid = paid with CLICX in October 2026. Up to +22K payers a month assumes prepaid customers pay at the postpaid rate. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026)", { placeholder: "foot" });
+  s.addText("Paid = paid with CLICX in October 2026. Partner customers = ever paid AIS or PTT OR in that month or before. Up to +22K payers a month assumes prepaid customers pay at the postpaid rate. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026)", { placeholder: "foot" });
   const cw = (12.33 - 0.3) / 3, top = 1.5, ch = 5.28;
   const cols = [
-    { head: "Partners start payments, but promotions don't keep them", big: "73%", lbl: "of October payers came through AIS or OR",
-      chart: { type: "col", t: "Customers paying each month, thousand", labels: ["Aug", "Sep", "Oct"], values: [164, 130, 127], fmt: "#,##0", max: 200, colors: [GREY, BLUE, BLUE] },
-      note: "59.9K paid only in August; those who stayed spend ฿2.1K → ฿3.0K each",
+    { head: "Partners start payments, but promotions don't keep them", big: "73%", lbl: "of October payers came through AIS or OR, making 67% of spend",
+      chart: { type: "col", t: "Partner customers' share of payers and of spend", labels: ["Jun", "Jul", "Aug", "Sep", "Oct"], fmt: "0%", max: 0.9, colors: [NAVY, CYAN],
+        series: [{ name: "Share of payers", values: [0.57, 0.67, 0.70, 0.73, 0.73] }, { name: "Share of spend", values: [0.51, 0.62, 0.66, 0.67, 0.67] }] },
+      note: "Payers fell 164K → 127K since Aug; 59.9K paid only in Aug; stayers spend ฿2.1K → ฿3.0K",
       so: "Keep AIS and OR promotions as the way in; reward the second and third month" },
     { head: "Steady earners pay most, mostly by everyday Scan and Pay", big: "฿408M", lbl: "paid in October; 84% of it Scan and Pay",
       chart: { type: "bar", t: "% who paid in October, by job", labels: ["Online merchant", "Offline merchant", "Salaried", "Freelance", "Rider", "Blue collar"], values: [0.102, 0.097, 0.094, 0.073, 0.071, 0.064], fmt: "0.0%", max: 0.125, colors: [CYAN, CYAN, CYAN, GREY, GREY, NAVY] },
@@ -238,9 +239,10 @@ pres.addSection({ title: "Storyline" });
     s.addText([{ text: c.big, options: { bold: true, fontSize: 20, color: BLUE, breakLine: true } }, { text: c.lbl, options: { fontSize: 10, color: TXT } }],
       { x: x + 0.28, y: top + 0.8, w: cw - 0.56, h: 0.72, valign: "middle", margin: 0, isTextBox: true, objectName: `Pay stat ${i}` });
     const ch2 = c.chart;
-    s.addChart(pres.charts.BAR, [{ name: ch2.t, labels: ch2.labels, values: ch2.values }], { x: x + 0.08, y: top + 1.62, w: cw - 0.16, h: 2.35, barDir: ch2.type, ...AX, ...quiet(), ...chartTitle(ch2.t), titleFontSize: 10.5,
-      chartColors: ch2.colors, showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: ch2.fmt,
-      showLegend: false, barGapWidthPct: 40, valAxisMaxVal: ch2.max, catAxisOrientation: ch2.type === "bar" ? "maxMin" : "minMax", catAxisLabelFontSize: 10, objectName: `Pay chart ${i}` });
+    const multi = !!ch2.series;
+    s.addChart(pres.charts.BAR, multi ? ch2.series.map((x2) => ({ name: x2.name, labels: ch2.labels, values: x2.values })) : [{ name: ch2.t, labels: ch2.labels, values: ch2.values }], { x: x + 0.08, y: top + 1.62, w: cw - 0.16, h: 2.35, barDir: ch2.type, barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle(ch2.t), titleFontSize: 10.5,
+      chartColors: ch2.colors, showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: multi ? 8 : 10, dataLabelFormatCode: ch2.fmt,
+      showLegend: multi, legendPos: "b", legendFontSize: 9, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: ch2.max, catAxisOrientation: ch2.type === "bar" ? "maxMin" : "minMax", catAxisLabelFontSize: 10, objectName: `Pay chart ${i}` });
     s.addText(c.note, { x: x + 0.18, y: top + 4.0, w: cw - 0.36, h: 0.4, fontSize: 9.5, italic: true, color: MUTED, margin: 0, valign: "top", isTextBox: true, objectName: `Pay note ${i}` });
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.16, y: top + 4.45, w: cw - 0.32, h: 0.68, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { type: "none" }, objectName: `Pay so box ${i}` });
     s.addText([{ text: "SO  ", options: { bold: true, color: CYAN, fontSize: 9.5, charSpacing: 1 } }, { text: c.so, options: { color: TXT, fontSize: 10.5 } }],
