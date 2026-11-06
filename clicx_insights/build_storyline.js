@@ -178,7 +178,7 @@ pres.addSection({ title: "Storyline" });
   // Slide 2: what customers hold, product segments sized by customers
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("2 / 5  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE", { placeholder: "tracker" });
-  s.addText("Only 1 in 5 customers holds a product; among them, borrowers lead (53%) and just 21K both borrow and save with us", { placeholder: "title" });
+  s.addText("Only 1 in 5 customers really uses CLICX; about half of them borrow, and just 21K both borrow and save with us", { placeholder: "title" });
   s.addText("Box size = number of customers; persona = biggest age and job groups in each segment. Bal > ฿0 = balance above ฿0 but not over ฿100, with no loan or payment. Slide 5's 1.8M inactive counts all 2.14M sign-ups; both give ~310K active. Core saver = Save Max/More over ฿20K; emerging saver = other balance over ฿100. Product segment data, 31 Oct 2026", { placeholder: "foot" });
   const TOTAL = 1507.4, ZERO = 1061.3, MONEY = 136.7, ACT = 309.4;
   const X0 = 0.5, W = 8.95;
