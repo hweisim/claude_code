@@ -103,7 +103,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 1: diagnosis
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("1 / 4  |  WHAT WE KNOW: CUSTOMERS", { placeholder: "tracker" });
+  s.addText("1 / 4  |  WHAT WE KNOW: CUSTOMER ACQUISITION", { placeholder: "tracker" });
   s.addText("Partners gave us scale fast, but only 15% of customers are active, and loans are both our hook and our constraint", { placeholder: "title" });
   s.addText(SRC, { placeholder: "foot" });
   // governing question banner
@@ -176,7 +176,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 2: what we know, products
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("2 / 4  |  WHAT WE KNOW: PRODUCTS", { placeholder: "tracker" });
+  s.addText("2 / 4  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE", { placeholder: "tracker" });
   s.addText("Products follow life stage and job: 30–49s borrow, 60+ save, salaried borrow and merchants save, but 80% hold nothing yet", { placeholder: "title" });
   s.addText("Share of each group's customers; a customer can hold several. By age: product segments, 31 Oct 2026 (borrow = any loan; save = balance over ฿100 or Save Max/More; pay = in-app payments). By job: Data for Strategy 2027, Sep 2026 (save = balance over ฿0). * under 11K customers", { placeholder: "foot" });
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.5, w: 12.33, h: 0.46, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Hold nothing band" });
