@@ -514,8 +514,8 @@ const heat = (s, head, rows, colW, base, opts) => {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
   s.addText("APPENDIX A4  |  PRODUCT SEGMENTS BY AGE · SHARE OF EACH AGE GROUP", { placeholder: "tracker" });
   s.addText("Teens just pay, 20–59s borrow, and customers 60+ save; 80% of every age group hold nothing active", { placeholder: "title" });
-  s.addText("Rows add to 100%. Shaded: 15%+ above (teal) or below (rose) all customers; No segment not shaded. Saver = Save Max/More over ฿10K; depositor = other balance over ฿100. No loans under 20 or over 59 (age limits). Groups 60+ are small (25.1K). As of 31 Oct 2026", { placeholder: "foot" });
-  const head = ["Age", "Customers", "Borrower only", "Borrower + transactor", "Depositor + borrower", "Depositor + transactor", "Depositor only", "Saver", "Transactor only", "No segment"];
+  s.addText("Rows add to 100%. Shaded: 15%+ above (teal) or below (rose) all customers; No segment not shaded. Core saver = Save Max/More over ฿10K; emerging saver = other balance over ฿100. No loans under 20 or over 59 (age limits). Groups 60+ are small (25.1K). As of 31 Oct 2026", { placeholder: "foot" });
+  const head = ["Age", "Customers", "Borrower only", "Borrower + transactor", "Emerging saver + borrower", "Emerging saver + transactor", "Emerging saver only", "Core saver", "Transactor only", "No segment"];
   const rows = [
     ["10–19", "10.9K", 0.0, 0.0, 0.0, 4.6, 6.0, 0.7, 9.6, 79.2],
     ["20–29", "395.3K", 7.3, 2.6, 1.0, 1.5, 1.3, 0.5, 2.8, 82.9],
@@ -528,7 +528,7 @@ const heat = (s, head, rows, colW, base, opts) => {
   ];
   const all = rows[rows.length - 1];
   s.addText("BORROWER", { x: 2.95, y: 1.72, w: 2.6, h: 0.26, fontSize: 9.5, bold: true, color: MUTED, align: "center", charSpacing: 1, margin: 0, isTextBox: true, objectName: "Borrower label" });
-  s.addText("DEPOSITOR OR SAVER", { x: 5.55, y: 1.72, w: 5.2, h: 0.26, fontSize: 9.5, bold: true, color: CYAN, align: "center", charSpacing: 1, margin: 0, isTextBox: true, objectName: "Depositor label" });
+  s.addText("EMERGING OR CORE SAVER", { x: 5.55, y: 1.72, w: 5.2, h: 0.26, fontSize: 9.5, bold: true, color: CYAN, align: "center", charSpacing: 1, margin: 0, isTextBox: true, objectName: "Depositor label" });
   heat(s, head, rows, [1.0, 1.2, 1.25, 1.35, 1.3, 1.35, 1.3, 1.25, 1.3, 1.03], 0, { y: 2.0, name: "Segments by age table", dataFrom: 2, baseFor: (ri, ci) => parseFloat(all[ci]), noColor: (ci) => ci === 9 || false });
 }
 
@@ -536,8 +536,8 @@ const heat = (s, head, rows, colW, base, opts) => {
   // Appendix A5: customer landscape by product segment, area proportional to customers
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
   s.addText("APPENDIX A5  |  CUSTOMER LANDSCAPE BY PRODUCT SEGMENT", { placeholder: "tracker" });
-  s.addText("Only 1 in 5 customers holds a product; among them, borrowers lead (53%) and just 21K both borrow and keep money with us", { placeholder: "title" });
-  s.addText("Box size is in proportion to the number of customers. 1.51M customers, 31 Oct 2026; counts rounded. Saver = Save Max/More over ฿10K; depositor = other balance over ฿100; transactor = pays in the app", { placeholder: "foot" });
+  s.addText("Only 1 in 5 customers holds a product; among them, borrowers lead (53%) and just 21K both borrow and save with us", { placeholder: "title" });
+  s.addText("Box size is in proportion to the number of customers. 1.51M customers, 31 Oct 2026; counts rounded. Core saver = Save Max/More over ฿10K; emerging saver = other balance over ฿100; transactor = pays in the app", { placeholder: "foot" });
   const TOTAL = 1507.4, NONE = 1198.0, ACT = 308.0;
   const X0 = 0.5, W = 8.95;
   // whole base strip
@@ -551,8 +551,8 @@ const heat = (s, head, rows, colW, base, opts) => {
   s.addShape(pres.shapes.LINE, { x: X0 + W, y: sy + sh, w: 0, h: ly - sy - sh, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom right" });
   // treemap: columns by family, stacked by segment
   const fam = [
-    ["Borrowers", 164.0, [["Borrower only", 102.6, NAVY, "FFFFFF"], ["Borrower + transactor", 40.1, "2B5C93", "FFFFFF"], ["Depositor + borrower", 21.3, "5A86BE", "FFFFFF"]]],
-    ["Depositors and savers", 104.7, [["Depositor only", 50.0, CYAN, "FFFFFF"], ["Depositor + transactor", 31.5, "4DB8AE", "FFFFFF"], ["Saver", 23.2, "8FD0C9", TXT]]],
+    ["Borrowers", 164.0, [["Borrower only", 102.6, NAVY, "FFFFFF"], ["Borrower + transactor", 40.1, "2B5C93", "FFFFFF"], ["Emerging saver + borrower", 21.3, "5A86BE", "FFFFFF"]]],
+    ["Savers", 104.7, [["Emerging saver only", 50.0, CYAN, "FFFFFF"], ["Emerging saver + transactor", 31.5, "4DB8AE", "FFFFFF"], ["Core saver", 23.2, "8FD0C9", TXT]]],
     ["Payers only", 39.4, [["Transactor only", 39.4, "7F95AD", "FFFFFF"]]],
   ];
   let cx = X0;
@@ -577,9 +577,9 @@ const heat = (s, head, rows, colW, base, opts) => {
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: 1.95, w: RW, h: 0.95, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Active stat" });
   s.addText([{ text: "308K", options: { bold: true, fontSize: 24, color: BLUE, breakLine: true } }, { text: "of 1.51M customers (20%) hold at least one product; 1.20M hold none", options: { fontSize: 9.5, color: TXT } }],
     { x: RX + 0.15, y: 2.0, w: RW - 0.3, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: "Active stat text" });
-  const tk = [["164K borrowers (53%)", "103K only borrow; just 21K also keep money with us: cross-sell deposits", NAVY],
-    ["105K depositors and savers (34%)", "50K hold a balance only; 23K are savers with over ฿10K", CYAN],
-    ["39K payers only (13%)", "Use the app to pay but hold nothing: first target for a deposit offer", "7F95AD"]];
+  const tk = [["164K borrowers (53%)", "103K only borrow; just 21K also save with us: cross-sell savings", NAVY],
+    ["105K savers (34%)", "50K emerging savers hold a balance only; 23K core savers hold over ฿10K", CYAN],
+    ["39K payers only (13%)", "Use the app to pay but hold nothing: first target for a savings offer", "7F95AD"]];
   tk.forEach((t, k) => {
     const y = 3.05 + k * 1.22;
     s.addShape(pres.shapes.RECTANGLE, { x: RX, y, w: 0.06, h: 1.05, fill: { color: t[2] }, line: { type: "none" }, objectName: `Takeaway bar ${k}` });
