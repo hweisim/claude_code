@@ -275,7 +275,7 @@ pres.addSection({ title: "Storyline" });
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("4 / 5  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
   s.addText("3 in 4 payers come through AIS or OR; 19% of them stopped after the August deal, but those who stay pay 39% more", { placeholder: "title" });
-  s.addText("Partner payers = ever paid AIS or PTT OR. 19% = drop in partner payers Aug → Oct (114.3K → 93.2K); 39% = spend per partner payer, ฿2.1K → ฿3.0K. +22K assumes prepaid pays at the postpaid rate. Other shops = Scan and Pay to merchants other than AIS and OR. Source: Partner Payment Story v1, Oct 2026", { placeholder: "foot" });
+  s.addText("Partner payers = ever paid AIS or PTT OR. All customers = 126.8K of 1.51M paid in Oct. 19% = drop in partner payers Aug → Oct (114.3K → 93.2K); 39% = spend per partner payer, ฿2.1K → ฿3.0K. +22K assumes prepaid pays at the postpaid rate. Other shops = Scan and Pay to merchants other than AIS and OR. Source: Partner Payment Story v1, Oct 2026", { placeholder: "foot" });
   const cw = (12.33 - 0.3) / 3, top = 1.5, ch = 5.28;
   const cols = [
     { head: "Partners start payments, but promotions don't keep them", big: "73%", lbl: "of October payers came through AIS or OR, making 67% of spend",
@@ -284,7 +284,8 @@ pres.addSection({ title: "Storyline" });
       table: [["Partner payers", "12.8K", "31.6K", "114.3K", "95.0K", "93.2K"], ["Their spend", "฿20M", "฿88M", "฿244M", "฿262M", "฿275M"]],
       so: "Keep AIS and OR promotions as the way in; reward the second and third month" },
     { head: "AIS prepaid is the biggest payment gap", big: "516.5K", lbl: "AIS prepaid customers, only 8.4% pay",
-      chart: { type: "bar", t: "% who paid in October", labels: ["AIS postpaid", "AIS prepaid", "OR customers", "Not OR"], values: [0.128, 0.084, 0.113, 0.074], fmt: "0.0%", max: 0.155, colors: [NAVY, CYAN, BLUE, GREY] },
+      chart: { type: "bar", t: "% who paid in October", labels: ["AIS postpaid", "AIS prepaid", "PTT + Amazon", "Amazon only", "PTT only"], values: [0.128, 0.084, 0.120, 0.107, 0.083], fmt: "0.0%", max: 0.155, colors: [NAVY, CYAN, BLUE, "5A86BE", "8FB3DA"],
+        layout: { x: 0.3, y: 0.17, w: 0.6, h: 0.68 }, bench: { v: 0.084, label: "All customers 8.4%" } },
       note: "The gap is mostly bill pay and top-up: 4.6% vs 7.8%",
       so: "Top-up-first offers for prepaid: up to +22K payers a month" },
     { head: "Non-partner payers put more into loans and investing", big: "1.8×", lbl: "more spent per non-partner payer at other shops: ฿3.9K vs ฿2.2K",
@@ -306,7 +307,13 @@ pres.addSection({ title: "Storyline" });
     const multi = !!ch2.series;
     s.addChart(pres.charts.BAR, multi ? ch2.series.map((x2) => ({ name: x2.name, labels: ch2.labels, values: x2.values })) : [{ name: ch2.t, labels: ch2.labels, values: ch2.values }], { x: x + 0.08, y: top + 1.62, w: cw - 0.16, h: c.table ? 2.2 : 2.35, barDir: ch2.type, barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle(ch2.t), titleFontSize: 10.5,
       chartColors: ch2.colors, showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: multi ? 8 : 10, dataLabelFormatCode: ch2.fmt,
-      showLegend: multi, legendPos: "b", legendFontSize: 9, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: ch2.max, catAxisOrientation: ch2.type === "bar" ? "maxMin" : "minMax", catAxisLabelFontSize: 10, objectName: `Pay chart ${i}` });
+      showLegend: multi, legendPos: "b", legendFontSize: 9, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: ch2.max, catAxisOrientation: ch2.type === "bar" ? "maxMin" : "minMax", catAxisLabelFontSize: 10, ...(ch2.layout ? { layout: ch2.layout } : {}), objectName: `Pay chart ${i}` });
+    if (ch2.bench) {
+      const gx = x + 0.08, gw = cw - 0.16, gy = top + 1.62, gh = 2.35, L = ch2.layout;
+      const bx = gx + gw * (L.x + L.w * ch2.bench.v / ch2.max);
+      s.addShape(pres.shapes.LINE, { x: bx, y: gy + gh * L.y, w: 0, h: gh * L.h, line: { color: MUTED, width: 1.25, dashType: "dash" }, objectName: `Pay bench ${i}` });
+      s.addText(ch2.bench.label, { x: bx - 0.8, y: gy + gh * (L.y + L.h) + 0.02, w: 1.6, h: 0.2, fontSize: 8.5, color: MUTED, align: "center", margin: 0, isTextBox: true, objectName: `Pay bench label ${i}` });
+    }
     if (c.table) {
       const hd = ["", "Jun", "Jul", "Aug", "Sep", "Oct"].map((t) => ({ text: t, options: { bold: true, color: MUTED, align: "right" } }));
       const rows = c.table.map((r) => r.map((t, j) => ({ text: t, options: { bold: j === 0, color: j === 0 ? NAVY : TXT, align: j === 0 ? "left" : "right" } })));
