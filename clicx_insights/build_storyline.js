@@ -103,7 +103,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 1: diagnosis
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("1 / 5  |  WHAT WE KNOW: CUSTOMERS", { placeholder: "tracker" });
+  s.addText("1 / 6  |  WHAT WE KNOW: CUSTOMERS", { placeholder: "tracker" });
   s.addText("Partners gave us scale fast, but only 15% of customers are active, and loans are both our hook and our constraint", { placeholder: "title" });
   s.addText(SRC, { placeholder: "foot" });
   // governing question banner
@@ -173,64 +173,86 @@ pres.addSection({ title: "Storyline" });
   });
 }
 
-// ---------- Slide 2: what we know, payments
+// ---------- Slide 2: what we know, products
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("2 / 5  |  WHAT WE KNOW: USAGE AND PAYMENTS", { placeholder: "tracker" });
-  s.addText("Use follows life stage and payments follow steady income; promotions alone don't build the habit, and AIS prepaid is the biggest gap", { placeholder: "title" });
-  s.addText("Depositor = balance over ฿100; saver = Save Max/More over ฿10K. Ever partner = paid AIS or PTT OR. Category figures cover Scan and Pay to other merchants. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026). Full tables in appendix A1–A2", { placeholder: "foot" });
-  const panel = (x, y, w, h, tag, q, ans, big, bigLbl, n) => {
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Pay panel ${n}` });
-    s.addText([{ text: tag + "  ", options: { color: CYAN, bold: true } }, { text: q, options: { color: MUTED } }],
-      { x: x + 0.18, y: y + 0.1, w: w - 0.36, h: 0.26, fontSize: 10, margin: 0, valign: "middle", isTextBox: true, objectName: `Pay q ${n}` });
-    s.addText(ans, { x: x + 0.18, y: y + 0.36, w: w - 0.36, h: 0.5, fontSize: 12, bold: true, color: NAVY, margin: 0, valign: "top", isTextBox: true, objectName: `Pay ans ${n}` });
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.18, y: y + 0.92, w: 1.45, h: h - 1.07, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: `Pay stat box ${n}` });
-    s.addText(big, { x: x + 0.26, y: y + 0.98, w: 1.32, h: 0.5, fontSize: big.length > 5 ? 20 : 24, bold: true, color: BLUE, margin: 0, valign: "middle", isTextBox: true, objectName: `Pay stat ${n}` });
-    s.addText(bigLbl, { x: x + 0.26, y: y + 1.48, w: 1.32, h: h - 1.6, fontSize: 9, color: TXT, margin: 0, valign: "top", isTextBox: true, objectName: `Pay stat lbl ${n}` });
-  };
-  const bars = (x, y, w, rows, n, o = {}) => {
-    const lw = o.lw || 0.9, vw = o.vw || 0.62, bw = w - lw - vw - 0.06, rh = o.rh || 0.26;
-    if (o.head) s.addText(o.head, { x, y: y - 0.24, w, h: 0.22, fontSize: 8.5, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: `Pay bars head ${n}` });
-    rows.forEach((r, k) => {
-      const yy = y + k * rh;
-      if (r[4]) s.addImage({ path: IC(r[4]), x, y: yy + 0.04, h: 0.18, w: 0.18 * r[5], altText: r[0] + " logo", objectName: `Pay logo ${n}-${k}` });
-      else s.addText(r[0], { x, y: yy, w: lw, h: rh, fontSize: 9, color: TXT, margin: 0, valign: "middle", isTextBox: true, objectName: `Pay label ${n}-${k}` });
-      s.addShape(pres.shapes.RECTANGLE, { x: x + lw, y: yy + rh * 0.3, w: bw, h: rh * 0.4, fill: { color: "E3E8EE" }, line: { type: "none" }, objectName: `Pay track ${n}-${k}` });
-      s.addShape(pres.shapes.RECTANGLE, { x: x + lw, y: yy + rh * 0.3, w: Math.max(0.03, bw * r[1]), h: rh * 0.4, fill: { color: r[3] }, line: { type: "none" }, objectName: `Pay bar ${n}-${k}` });
-      s.addText(r[2], { x: x + lw + bw + 0.05, y: yy, w: vw, h: rh, fontSize: 9, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Pay val ${n}-${k}` });
-    });
-  };
-  const W = 4.01, G = 0.15, H = 2.48, ys = [1.5, 4.1];
-  const xs = [0.5, 0.5 + W + G, 0.5 + 2 * (W + G)];
-  const bx = (i) => xs[i % 3] + 1.78, by = (i) => ys[Math.floor(i / 3)] + 1.18, bw = W - 1.95;
-  // 1 holding by age
-  panel(xs[0], ys[0], W, H, "Q3", "What do customers hold, by age?", "80% hold nothing; teens pay, 20–59s borrow, 60+ save", "79.5%", "of customers hold no active product", 1);
-  bars(bx(0), by(0), bw, [["Teens: pay only", 0.096 / 0.2, "9.6%", CYAN], ["20–29: borrow", 0.073 / 0.2, "7.3%", BLUE], ["60–69: deposit", 0.142 / 0.2, "14.2%", NAVY]], 1, { head: "Main product for each age group", lw: 1.05, vw: 0.48, rh: 0.27 });
-  s.addText("No loans under 20 or over 59 (age limits)", { x: bx(0), y: by(0) + 0.84, w: bw, h: 0.2, fontSize: 8, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Age note" });
-  // 2 what they pay for
-  panel(xs[1], ys[0], W, H, "Q3", "What do customers pay for?", "Mostly everyday Scan and Pay, not partner bills", "฿408M", "paid in October, +11% vs August", 2);
-  bars(bx(1), by(1), bw, [["Scan & Pay", 0.84, "84%", CYAN], ["AIS", 0.11, "11%", BLUE, "logo_ais.png", 2.74], ["OR", 0.05, "5%", NAVY, "logo_or.png", 1.93]], 2, { head: "Share of October spend", lw: 0.72, vw: 0.42, rh: 0.3 });
-  // 3 who pays
-  panel(xs[2], ys[0], W, H, "Q3", "Who pays with CLICX?", "Merchants and salaried pay most; blue-collar and gig workers least", "8.4%", "of all customers paid in October", 3);
-  bars(bx(2), by(2) - 0.06, bw, [["Online merchant", 0.102 / 0.12, "10.2%", CYAN], ["Salaried", 0.094 / 0.12, "9.4%", CYAN], ["Freelance", 0.073 / 0.12, "7.3%", GREY], ["Rider", 0.071 / 0.12, "7.1%", NAVY], ["Blue-collar", 0.064 / 0.12, "6.4%", NAVY]], 3, { head: "% who paid in October, by job", lw: 0.95, vw: 0.48, rh: 0.21 });
-  // 4 promotion
-  panel(xs[0], ys[1], W, H, "Q3", "Did the payment promotion build a habit?", "Partly: a third of payers left, but those who stayed pay more", "59.9K", "paid only in August and never came back", 4);
-  bars(bx(3), by(3), bw, [["Aug", 1.0, "164K", GREY], ["Sep", 0.80, "130K", BLUE], ["Oct", 0.77, "127K", BLUE]], 4, { head: "Customers paying each month", lw: 0.4, vw: 0.5, rh: 0.26 });
-  s.addText("Stayers: ฿2.1K → ฿3.0K each", { x: bx(3), y: by(3) + 0.82, w: bw, h: 0.22, fontSize: 9, bold: true, color: CYAN, margin: 0, isTextBox: true, objectName: "Stayers spend" });
-  // 5 biggest gaps
-  panel(xs[1], ys[1], W, H, "Q1", "Where are the biggest payment gaps?", "AIS prepaid customers, and OR customers who don't pay", "516.5K", "AIS prepaid customers; +22K payers a month at the postpaid rate", 5);
-  bars(bx(4), by(4) - 0.05, bw, [["Postpaid", 0.128 / 0.14, "12.8%", NAVY], ["Prepaid", 0.084 / 0.14, "8.4%", CYAN], ["OR", 0.113 / 0.14, "11.3%", BLUE], ["Not OR", 0.074 / 0.14, "7.4%", GREY]], 5, { head: "% who paid in October", lw: 0.62, vw: 0.5, rh: 0.25 });
-  // 6 product leads
-  panel(xs[2], ys[1], W, H, "Q4", "What do non-partner payers spend on?", "Repaying other banks and investing: leads for a card and investment", "26%", "of their spend repays other banks' cards and loans, ฿4.3K each", 6);
-  bars(bx(5), by(5) - 0.05, bw, [["Repay banks", 0.26 / 0.3, "26%", NAVY], ["Crypto, gold, stocks", 0.10 / 0.3, "10%", CYAN], ["Local shops", 0.25 / 0.3, "25%", GREY]], 6, { head: "Share of their spend", lw: 1.15, vw: 0.38, rh: 0.27 });
-  s.addText("Partner payers: 20%, 9%, 27%", { x: bx(5), y: by(5) + 0.78, w: bw, h: 0.22, fontSize: 9, color: MUTED, margin: 0, isTextBox: true, objectName: "Partner comparison" });
+  s.addText("2 / 6  |  WHAT WE KNOW: PRODUCTS", { placeholder: "tracker" });
+  s.addText("Products follow life stage and job: 30–49s borrow, 60+ save, salaried borrow and merchants save, but 80% hold nothing yet", { placeholder: "title" });
+  s.addText("Share of each group's customers; a customer can hold several. By age: product segments, 31 Oct 2026 (borrow = any loan; save = balance over ฿100 or Save Max/More; pay = in-app payments). By job: Data for Strategy 2027, Sep 2026 (save = balance over ฿0). * under 11K customers", { placeholder: "foot" });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.5, w: 12.33, h: 0.46, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Hold nothing band" });
+  s.addText([{ text: "79.5%  ", options: { bold: true, fontSize: 18, color: BLUE } }, { text: "of customers hold no active product. The charts show what the other 20% hold, and who holds it.", options: { fontSize: 11.5, color: TXT } }],
+    { x: 0.7, y: 1.5, w: 12.0, h: 0.46, valign: "middle", margin: 0, isTextBox: true, objectName: "Hold nothing text" });
+  const pw = (12.33 - 0.15) / 2, py = 2.1, ph = 4.68;
+  const ser = (labels, b, sv, p) => [{ name: "Borrow", labels, values: b }, { name: "Save", labels, values: sv }, { name: "Pay", labels, values: p }];
+  const panels = [
+    { n: "1", head: "By age: teens pay, 30–49s borrow, and saving rises to 28% at 60–69", chartT: "% of each age group holding each product",
+      data: ser(["10–19*", "20–29", "30–39", "40–49", "50–59", "60–69"], [0, 0.109, 0.116, 0.113, 0.094, 0], [0.113, 0.043, 0.07, 0.105, 0.165, 0.28], [0.142, 0.069, 0.077, 0.074, 0.067, 0.066]),
+      max: 0.32, so: "Payments for the young, credit for 20–59s, savings and then investment for 50+ (P4). No loans under 20 or over 59 (age limits)" },
+    { n: "2", head: "By job: salaried borrow most, merchants save most; blue-collar and riders use least of everything", chartT: "% of each job group holding each product",
+      data: ser(["Salaried", "Merchant", "Freelance", "Rider", "Blue collar"], [0.11, 0.07, 0.06, 0.05, 0.07], [0.18, 0.20, 0.16, 0.13, 0.12], [0.14, 0.14, 0.12, 0.11, 0.10]),
+      max: 0.24, so: "Card and salary-bridged loans for salaried (P1, P2); deposits and SME credit for merchants; savings and insurance first for blue-collar (P3)" },
+  ];
+  panels.forEach((p, i) => {
+    const x = 0.5 + i * (pw + 0.15);
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: py, w: pw, h: ph, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Product panel ${i}` });
+    s.addShape(pres.shapes.OVAL, { x: x + 0.18, y: py + 0.16, w: 0.42, h: 0.42, fill: { color: C.text2 }, line: { type: "none" }, objectName: `Insight badge ${i}` });
+    s.addText(p.n, { x: x + 0.18, y: py + 0.16, w: 0.42, h: 0.42, fontSize: 13, bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: `Insight num ${i}` });
+    s.addText(p.head, { x: x + 0.72, y: py + 0.1, w: pw - 0.9, h: 0.6, fontSize: 13.5, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Insight head ${i}` });
+    s.addChart(pres.charts.BAR, p.data, { x: x + 0.1, y: py + 0.78, w: pw - 0.2, h: 2.95, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle(p.chartT), titleFontSize: 11,
+      chartColors: [NAVY, CYAN, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 9, dataLabelFormatCode: "0%",
+      showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 45, valAxisMaxVal: p.max, catAxisLabelFontSize: 10.5, objectName: `Product chart ${i}` });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.18, y: py + 3.82, w: pw - 0.36, h: 0.72, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { type: "none" }, objectName: `So box ${i}` });
+    s.addText([{ text: "SO  ", options: { bold: true, color: CYAN, fontSize: 9.5, charSpacing: 1 } }, { text: p.so, options: { color: TXT, fontSize: 10.5 } }],
+      { x: x + 0.32, y: py + 3.82, w: pw - 0.64, h: 0.72, valign: "middle", margin: 0, isTextBox: true, objectName: `So text ${i}` });
+  });
+}
+
+// ---------- Slide 3: what we know, payments (3 insights)
+{
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
+  s.addText("3 / 6  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
+  s.addText("Payments start through partners but fade after promotions; steady earners pay most, and AIS prepaid is the biggest gap", { placeholder: "title" });
+  s.addText("Paid = paid with CLICX in October 2026. Up to +22K payers a month assumes prepaid customers pay at the postpaid rate. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026)", { placeholder: "foot" });
+  const cw = (12.33 - 0.3) / 3, top = 1.5, ch = 5.28;
+  const cols = [
+    { head: "Partners start payments, but promotions don't keep them", big: "73%", lbl: "of October payers came through AIS or OR",
+      chart: { type: "col", t: "Customers paying each month, thousand", labels: ["Aug", "Sep", "Oct"], values: [164, 130, 127], fmt: "#,##0", max: 200, colors: [GREY, BLUE, BLUE] },
+      note: "59.9K paid only in August; those who stayed spend ฿2.1K → ฿3.0K each",
+      so: "Keep AIS and OR promotions as the way in; reward the second and third month" },
+    { head: "Steady earners pay most, mostly by everyday Scan and Pay", big: "฿408M", lbl: "paid in October; 84% of it Scan and Pay",
+      chart: { type: "bar", t: "% who paid in October, by job", labels: ["Online merchant", "Offline merchant", "Salaried", "Freelance", "Rider", "Blue collar"], values: [0.102, 0.097, 0.094, 0.073, 0.071, 0.064], fmt: "0.0%", max: 0.125, colors: [CYAN, CYAN, CYAN, GREY, GREY, NAVY] },
+      note: "Average 8.4%; blue-collar pay at two-thirds the merchant rate",
+      so: "Target salaried and merchants for payments; give blue-collar a non-loan reason to stay" },
+    { head: "AIS prepaid is the biggest payment gap", big: "516.5K", lbl: "AIS prepaid customers, only 8.4% pay",
+      chart: { type: "bar", t: "% who paid in October", labels: ["AIS postpaid", "AIS prepaid", "OR customers", "Not OR"], values: [0.128, 0.084, 0.113, 0.074], fmt: "0.0%", max: 0.155, colors: [NAVY, CYAN, BLUE, GREY] },
+      note: "The gap is mostly bill pay and top-up: 4.6% vs 7.8%",
+      so: "Top-up-first offers for prepaid: up to +22K payers a month" },
+  ];
+  cols.forEach((c, i) => {
+    const x = 0.5 + i * (cw + 0.15);
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: top, w: cw, h: ch, rectRadius: 0.08, fill: { color: C.background2 }, line: { type: "none" }, objectName: `Pay col ${i}` });
+    s.addShape(pres.shapes.OVAL, { x: x + 0.16, y: top + 0.16, w: 0.4, h: 0.4, fill: { color: C.text2 }, line: { type: "none" }, objectName: `Pay badge ${i}` });
+    s.addText(String(i + 1), { x: x + 0.16, y: top + 0.16, w: 0.4, h: 0.4, fontSize: 12.5, bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: `Pay num ${i}` });
+    s.addText(c.head, { x: x + 0.66, y: top + 0.1, w: cw - 0.8, h: 0.58, fontSize: 12.5, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Pay head ${i}` });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.16, y: top + 0.8, w: cw - 0.32, h: 0.72, rectRadius: 0.06, fill: { color: STAT_BG }, line: { type: "none" }, objectName: `Pay stat box ${i}` });
+    s.addText([{ text: c.big, options: { bold: true, fontSize: 20, color: BLUE, breakLine: true } }, { text: c.lbl, options: { fontSize: 10, color: TXT } }],
+      { x: x + 0.28, y: top + 0.8, w: cw - 0.56, h: 0.72, valign: "middle", margin: 0, isTextBox: true, objectName: `Pay stat ${i}` });
+    const ch2 = c.chart;
+    s.addChart(pres.charts.BAR, [{ name: ch2.t, labels: ch2.labels, values: ch2.values }], { x: x + 0.08, y: top + 1.62, w: cw - 0.16, h: 2.35, barDir: ch2.type, ...AX, ...quiet(), ...chartTitle(ch2.t), titleFontSize: 10.5,
+      chartColors: ch2.colors, showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 10, dataLabelFormatCode: ch2.fmt,
+      showLegend: false, barGapWidthPct: 40, valAxisMaxVal: ch2.max, catAxisOrientation: ch2.type === "bar" ? "maxMin" : "minMax", catAxisLabelFontSize: 10, objectName: `Pay chart ${i}` });
+    s.addText(c.note, { x: x + 0.18, y: top + 4.0, w: cw - 0.36, h: 0.4, fontSize: 9.5, italic: true, color: MUTED, margin: 0, valign: "top", isTextBox: true, objectName: `Pay note ${i}` });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.16, y: top + 4.45, w: cw - 0.32, h: 0.68, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { type: "none" }, objectName: `Pay so box ${i}` });
+    s.addText([{ text: "SO  ", options: { bold: true, color: CYAN, fontSize: 9.5, charSpacing: 1 } }, { text: c.so, options: { color: TXT, fontSize: 10.5 } }],
+      { x: x + 0.28, y: top + 4.45, w: cw - 0.56, h: 0.68, valign: "middle", margin: 0, isTextBox: true, objectName: `Pay so ${i}` });
+  });
 }
 
 // ---------- Slide 2: what we will do, in two parts
 const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2.14M customers, Sep 2026); pools overlap";
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("3 / 5  |  WHAT WE WILL DO", { placeholder: "tracker" });
+  s.addText("4 / 6  |  WHAT WE WILL DO", { placeholder: "tracker" });
   s.addText("We will grow in two ways: keep acquiring through our partners, and activate the 1.8M customers we already have", { placeholder: "title" });
   s.addText(POOL_NOTE + ". Icons: Font Awesome (open licence). " + SRC, { placeholder: "foot" });
   const pill = (x, y, w, n, t, col, obj) => {
@@ -319,7 +341,7 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
 // ---------- Slide 3: prioritization table (connects to business cases)
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("4 / 5  |  PRIORITIZATION", { placeholder: "tracker" });
+  s.addText("5 / 6  |  PRIORITIZATION", { placeholder: "tracker" });
   s.addText("Prioritization for upcoming initiatives: the customers are already in our base; financials follow the business cases", { placeholder: "title" });
   s.addText(POOL_NOTE + ". xx = to be sized; figures to be filled in once business cases are complete. Icons: Font Awesome (open licence)", { placeholder: "foot" });
   const cols = [["Upcoming initiatives", "in priority order", 0.5, 3.0], ["Persona", "target archetypes", 3.6, 3.15], ["Prospect customers", "in existing CLICX base", 6.85, 2.15],
@@ -361,7 +383,7 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
 // ---------- Slide 5: customer overview by age and occupation, segment actions, next steps
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("5 / 5  |  CUSTOMER SEGMENTS AND NEXT STEPS", { placeholder: "tracker" });
+  s.addText("6 / 6  |  CUSTOMER SEGMENTS AND NEXT STEPS", { placeholder: "tracker" });
   s.addText("Most customers are 20–49; salaried and merchants engage most, gig and blue-collar least, so we act segment by segment", { placeholder: "title" });
   s.addText("1.51M customers as of 31 Oct 2026. Paid = paid with CLICX in October; teal = 15%+ above the 8.4% average, rose = 15%+ below. Salaried = corporate + government. Segments overlap. Source: payment-by-age and occupation files; Partner Payment Story v1", { placeholder: "foot" });
   const UP = "CDEAE7", DOWN = "F4DCDC", AVG = 8.4;
