@@ -533,61 +533,58 @@ const heat = (s, head, rows, colW, base, opts) => {
 }
 
 {
-  // Appendix A5: customer landscape, number of customers by product segment x age
+  // Appendix A5: customer landscape by product segment, area proportional to customers
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
-  s.addText("APPENDIX A5  |  CUSTOMER LANDSCAPE · PRODUCT SEGMENT × AGE · NUMBER OF CUSTOMERS", { placeholder: "tracker" });
-  s.addText("Of the 308K customers with a product, about half are borrowers aged 20–49; depositors lean 40+, and payers are young", { placeholder: "title" });
-  s.addText("Customers = age group size × segment share in A4 (31 Oct 2026), in thousands; rounded, so totals may differ slightly. No loans under 20 or over 59 (age limits). Saver = Save Max/More over ฿10K; depositor = other balance over ฿100", { placeholder: "foot" });
-  const ages = ["10–19", "20–29", "30–39", "40–49", "50–59", "60–69", "70+"];
-  const n = [10.9, 395.3, 580.3, 369.3, 126.5, 22.2, 2.9];
-  const segs = ["Borrower only", "Borrower + transactor", "Depositor + borrower", "Depositor + transactor", "Depositor only", "Saver", "Transactor only", "No segment"];
-  const P = [[0, 0, 0, 4.6, 6.0, 0.7, 9.6, 79.2], [7.3, 2.6, 1.0, 1.5, 1.3, 0.5, 2.8, 82.9], [7.1, 3.1, 1.4, 2.0, 2.5, 1.1, 2.6, 80.1], [6.8, 2.7, 1.8, 2.3, 4.4, 2.0, 2.4, 77.5], [5.9, 1.5, 2.0, 3.0, 7.7, 3.8, 2.2, 73.9], [0, 0, 0, 4.4, 14.2, 9.4, 2.2, 69.8], [0, 0, 0, 5.4, 18.7, 15.0, 3.1, 57.7]];
-  const cnt = segs.map((_, j) => ages.map((_, i) => n[i] * P[i][j] / 100));
-  const act = ages.map((_, i) => segs.slice(0, 7).reduce((a, _, j) => a + cnt[j][i], 0));
-  const ACT = act.reduce((a, b) => a + b, 0);
-  const bins = [[30, CYAN, "FFFFFF"], [20, "4DB8AE", "FFFFFF"], [10, "8FD0C9", TXT], [5, "CDEAE7", TXT], [0.05, "EAF5F4", TXT]];
-  const shade = (v) => bins.find((b) => v >= b[0]);
-  const fmt = (v) => (v < 0.05 ? "–" : v.toFixed(1));
-  const bd = [{ type: "none" }, { pt: 1.5, color: "FFFFFF" }, { pt: 1.5, color: "FFFFFF" }, { type: "none" }];
-  const hdr = [{ text: "Product segment", options: { bold: true, fontSize: 9.5, color: NAVY, align: "left", valign: "bottom", border: [{ type: "none" }, { type: "none" }, { pt: 1.25, color: NAVY }, { type: "none" }] } }]
-    .concat(ages.map((a, i) => ({ text: [{ text: a, options: { bold: true, breakLine: true } }, { text: n[i].toFixed(1) + "K", options: { fontSize: 8, color: MUTED } }], options: { fontSize: 9.5, color: NAVY, align: "center", valign: "bottom", border: [{ type: "none" }, { type: "none" }, { pt: 1.25, color: NAVY }, { type: "none" }] } })))
-    .concat([["Total", "K"], ["Share", "of 308K"]].map((t) => ({ text: [{ text: t[0], options: { bold: true, breakLine: true } }, { text: t[1], options: { fontSize: 8, color: MUTED } }], options: { fontSize: 9.5, color: NAVY, align: "right", valign: "bottom", border: [{ type: "none" }, { type: "none" }, { pt: 1.25, color: NAVY }, { type: "none" }] } })));
-  const groupFill = ["E1E9F2", "E1E9F2", "E1E9F2", "E5F1F0", "E5F1F0", "E5F1F0", "F0F2F5"];
-  const body = segs.slice(0, 7).map((g, j) => {
-    const tot = cnt[j].reduce((a, b) => a + b, 0);
-    return [{ text: g, options: { bold: true, fontSize: 10, color: NAVY, align: "left", fill: { color: groupFill[j] }, border: bd } }]
-      .concat(cnt[j].map((v) => { const b = shade(v); return { text: fmt(v), options: { fontSize: 10, align: "center", color: b ? b[2] : GREY, bold: !!b && v >= 20, fill: { color: b ? b[1] : "F7F8FA" }, border: bd } }; }))
-      .concat([{ text: tot.toFixed(0), options: { fontSize: 10.5, bold: true, color: NAVY, align: "right", border: bd } }, { text: (100 * tot / ACT).toFixed(0) + "%", options: { fontSize: 10, color: MUTED, align: "right", border: bd } }]);
+  s.addText("APPENDIX A5  |  CUSTOMER LANDSCAPE BY PRODUCT SEGMENT", { placeholder: "tracker" });
+  s.addText("Only 1 in 5 customers holds a product; among them, borrowers lead (53%) and just 21K both borrow and keep money with us", { placeholder: "title" });
+  s.addText("Box size is in proportion to the number of customers. 1.51M customers, 31 Oct 2026; counts rounded. Saver = Save Max/More over ฿10K; depositor = other balance over ฿100; transactor = pays in the app", { placeholder: "foot" });
+  const TOTAL = 1507.4, NONE = 1198.0, ACT = 308.0;
+  const X0 = 0.5, W = 8.95;
+  // whole base strip
+  const sy = 1.95, sh = 0.42, aw = W * ACT / TOTAL;
+  s.addText("Whole customer base, 1.51M", { x: X0, y: 1.7, w: 4, h: 0.22, fontSize: 9, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Strip label" });
+  s.addText([{ text: "No active product  ", options: { bold: true } }, { text: "1.20M · 79.5%" }], { x: X0, y: sy, w: W - aw, h: sh, fontSize: 10.5, color: "FFFFFF", fill: { color: GREY }, margin: 7, valign: "middle", isTextBox: true, objectName: "Strip none" });
+  s.addText([{ text: "308K · 20.5%", options: { bold: true } }], { x: X0 + W - aw, y: sy, w: aw, h: sh, fontSize: 10, color: "FFFFFF", align: "center", fill: { color: CYAN }, line: { color: "FFFFFF", width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip active" });
+  // zoom lines
+  const ty = 2.98, th = 3.72, ly = ty - 0.34;
+  s.addShape(pres.shapes.LINE, { x: X0, y: sy + sh, w: W - aw, h: ly - sy - sh, flipH: true, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom left" });
+  s.addShape(pres.shapes.LINE, { x: X0 + W, y: sy + sh, w: 0, h: ly - sy - sh, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom right" });
+  // treemap: columns by family, stacked by segment
+  const fam = [
+    ["Borrowers", 164.0, [["Borrower only", 102.6, NAVY, "FFFFFF"], ["Borrower + transactor", 40.1, "2B5C93", "FFFFFF"], ["Depositor + borrower", 21.3, "5A86BE", "FFFFFF"]]],
+    ["Depositors and savers", 104.7, [["Depositor only", 50.0, CYAN, "FFFFFF"], ["Depositor + transactor", 31.5, "4DB8AE", "FFFFFF"], ["Saver", 23.2, "8FD0C9", TXT]]],
+    ["Payers only", 39.4, [["Transactor only", 39.4, "7F95AD", "FFFFFF"]]],
+  ];
+  let cx = X0;
+  fam.forEach((f, a) => {
+    const cw = W * f[1] / ACT;
+    let cy = ty;
+    f[2].forEach((g, b) => {
+      const gh = th * g[1] / f[1];
+      const big = gh > 0.9 && cw > 2;
+      const runs = [{ text: g[0], options: { bold: true, fontSize: big ? 13 : 10.5, breakLine: true } },
+        { text: Math.round(g[1]) + "K", options: { bold: true, fontSize: big ? 22 : 12 } },
+        { text: "  " + Math.round(100 * g[1] / ACT) + "%", options: { fontSize: big ? 11 : 9.5 } }];
+      s.addText(runs, { x: cx, y: cy, w: cw, h: gh, color: g[3], fill: { color: g[2] }, line: { color: "FFFFFF", width: 2 }, margin: 7, valign: gh < 0.7 ? "middle" : "top", isTextBox: true, objectName: `Tree ${g[0]}` });
+      cy += gh;
+    });
+    s.addText(a === 2 ? [{ text: "Payers only", options: { bold: true } }] : [{ text: f[0], options: { bold: true } }, { text: "  " + Math.round(f[1]) + "K · " + Math.round(100 * f[1] / ACT) + "%" }],
+      { x: cx, y: ty - 0.28, w: cw, h: 0.24, fontSize: 9, color: [NAVY, CYAN, MUTED][a], margin: [0, 0, 0, 0.04], valign: "bottom", isTextBox: true, objectName: `Family ${a}` });
+    cx += cw;
   });
-  const topB = [{ pt: 1.25, color: NAVY }, { type: "none" }, { type: "none" }, { type: "none" }];
-  body.push([{ text: "With a product", options: { bold: true, fontSize: 10, color: NAVY, border: topB } }]
-    .concat(act.map((v) => ({ text: v.toFixed(1), options: { bold: true, fontSize: 10, color: NAVY, align: "center", border: topB } })))
-    .concat([{ text: ACT.toFixed(0), options: { bold: true, fontSize: 10.5, color: NAVY, align: "right", border: topB } }, { text: "100%", options: { bold: true, fontSize: 10, color: NAVY, align: "right", border: topB } }]));
-  body.push([{ text: "No active product", options: { fontSize: 10, color: MUTED, italic: true, border: [{ type: "none" }, { type: "none" }, { type: "none" }, { type: "none" }] } }]
-    .concat(cnt[7].map((v) => ({ text: v.toFixed(1), options: { fontSize: 10, color: MUTED, align: "center" } })))
-    .concat([{ text: cnt[7].reduce((a, b) => a + b, 0).toFixed(0), options: { fontSize: 10, color: MUTED, align: "right" } }, { text: "", options: {} }]));
-  const TX = 0.5, TW = 8.95;
-  s.addTable([hdr, ...body], { x: TX, y: 1.78, w: TW, colW: [1.95, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.75, 0.65], fontFace: "Arial", rowH: [0.55, ...body.map(() => 0.4)], margin: [0.03, 0.08, 0.03, 0.08], valign: "middle", objectName: "Landscape heatmap" });
-  // legend
-  const ly = 1.78 + 0.55 + 9 * 0.4 + 0.14;
-  s.addText("Customers (K):", { x: TX, y: ly, w: 1.15, h: 0.24, fontSize: 8.5, color: MUTED, margin: 0, valign: "middle", isTextBox: true, objectName: "Legend label" });
-  [["under 5", "EAF5F4", TXT], ["5–10", "CDEAE7", TXT], ["10–20", "8FD0C9", TXT], ["20–30", "4DB8AE", "FFFFFF"], ["30+", CYAN, "FFFFFF"]].forEach((l, k) => {
-    s.addText(l[0], { x: TX + 1.2 + k * 0.82, y: ly, w: 0.78, h: 0.24, fontSize: 8.5, color: l[2], align: "center", fill: { color: l[1] }, margin: 0, valign: "middle", isTextBox: true, objectName: `Legend ${k}` });
-  });
-  s.addText("– = none (age limits)", { x: TX + 1.2 + 5 * 0.82 + 0.1, y: ly, w: 1.8, h: 0.24, fontSize: 8.5, color: MUTED, margin: 0, valign: "middle", isTextBox: true, objectName: "Legend dash" });
   // takeaways
   const RX = 9.7, RW = 3.13;
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: 1.78, w: RW, h: 0.95, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Active stat" });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: 1.95, w: RW, h: 0.95, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Active stat" });
   s.addText([{ text: "308K", options: { bold: true, fontSize: 24, color: BLUE, breakLine: true } }, { text: "of 1.51M customers (20%) hold at least one product; 1.20M hold none", options: { fontSize: 9.5, color: TXT } }],
-    { x: RX + 0.15, y: 1.83, w: RW - 0.3, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: "Active stat text" });
-  const tk = [["164K borrowers (53%)", "93% are aged 20–49; 30–39 alone is 67K", NAVY],
-    ["105K depositors and savers (34%)", "55% are 40+; the share holding deposits rises with age", CYAN],
-    ["39K payers only (13%)", "Two in three are 20–39: a natural first target for a deposit offer", BLUE]];
+    { x: RX + 0.15, y: 2.0, w: RW - 0.3, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: "Active stat text" });
+  const tk = [["164K borrowers (53%)", "103K only borrow; just 21K also keep money with us: cross-sell deposits", NAVY],
+    ["105K depositors and savers (34%)", "50K hold a balance only; 23K are savers with over ฿10K", CYAN],
+    ["39K payers only (13%)", "Use the app to pay but hold nothing: first target for a deposit offer", "7F95AD"]];
   tk.forEach((t, k) => {
-    const y = 2.86 + k * 1.02;
-    s.addShape(pres.shapes.RECTANGLE, { x: RX, y, w: 0.06, h: 0.9, fill: { color: t[2] }, line: { type: "none" }, objectName: `Takeaway bar ${k}` });
+    const y = 3.05 + k * 1.22;
+    s.addShape(pres.shapes.RECTANGLE, { x: RX, y, w: 0.06, h: 1.05, fill: { color: t[2] }, line: { type: "none" }, objectName: `Takeaway bar ${k}` });
     s.addText([{ text: t[0], options: { bold: true, fontSize: 11, color: NAVY, breakLine: true } }, { text: t[1], options: { fontSize: 9.5, color: TXT } }],
-      { x: RX + 0.18, y, w: RW - 0.2, h: 0.9, margin: 0, valign: "middle", isTextBox: true, objectName: `Takeaway ${k}` });
+      { x: RX + 0.18, y, w: RW - 0.2, h: 1.05, margin: 0, valign: "middle", isTextBox: true, objectName: `Takeaway ${k}` });
   });
 }
 
