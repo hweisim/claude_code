@@ -103,7 +103,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- Slide 1: diagnosis
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("1 / 4  |  WHAT WE KNOW: CUSTOMER ACQUISITION", { placeholder: "tracker" });
+  s.addText("1 / 5  |  WHAT WE KNOW: CUSTOMER ACQUISITION", { placeholder: "tracker" });
   s.addText("Partners gave us scale fast, but only 15% of customers are active, and loans are both our hook and our constraint", { placeholder: "title" });
   s.addText(SRC, { placeholder: "foot" });
   // governing question banner
@@ -173,16 +173,71 @@ pres.addSection({ title: "Storyline" });
   });
 }
 
-// ---------- Slide 2: what we know, products
+// ---------- Slide 2 (new): what customers hold
+{
+  // Slide 2: what customers hold, product segments sized by customers
+  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
+  s.addText("2 / 5  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE", { placeholder: "tracker" });
+  s.addText("Only 1 in 5 customers holds a product; among them, borrowers lead (53%) and just 21K both borrow and save with us", { placeholder: "title" });
+  s.addText("Box size is in proportion to the number of customers; counts rounded. Both bases give ~310K active customers: the 1.8M inactive on slide 5 counts all 2.14M sign-ups, 1.20M here counts the 1.51M in the product data. Core saver = Save Max/More over ฿10K; emerging saver = other balance over ฿100; transactor = pays in the app", { placeholder: "foot" });
+  const TOTAL = 1507.4, NONE = 1198.0, ACT = 308.0;
+  const X0 = 0.5, W = 8.95;
+  // whole base strip
+  const sy = 1.95, sh = 0.42, aw = W * ACT / TOTAL;
+  s.addText("2.14M sign-ups (Sep 2026)  →  1.51M in the product data (31 Oct 2026)  →  308K hold a product", { x: X0, y: 1.7, w: W, h: 0.22, fontSize: 9, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Strip label" });
+  s.addText([{ text: "No active product  ", options: { bold: true } }, { text: "1.20M · 79.5%" }], { x: X0, y: sy, w: W - aw, h: sh, fontSize: 10.5, color: "FFFFFF", fill: { color: GREY }, margin: 7, valign: "middle", isTextBox: true, objectName: "Strip none" });
+  s.addText([{ text: "308K · 20.5%", options: { bold: true } }], { x: X0 + W - aw, y: sy, w: aw, h: sh, fontSize: 10, color: "FFFFFF", align: "center", fill: { color: CYAN }, line: { color: "FFFFFF", width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip active" });
+  // zoom lines
+  const ty = 2.98, th = 3.72, ly = ty - 0.34;
+  s.addShape(pres.shapes.LINE, { x: X0, y: sy + sh, w: W - aw, h: ly - sy - sh, flipH: true, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom left" });
+  s.addShape(pres.shapes.LINE, { x: X0 + W, y: sy + sh, w: 0, h: ly - sy - sh, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom right" });
+  // treemap: columns by family, stacked by segment
+  const fam = [
+    ["Borrowers", 164.0, [["Borrower only", 102.6, NAVY, "FFFFFF"], ["Borrower + transactor", 40.1, "2B5C93", "FFFFFF"], ["Emerging saver + borrower", 21.3, "5A86BE", "FFFFFF"]]],
+    ["Savers", 104.7, [["Emerging saver only", 50.0, CYAN, "FFFFFF"], ["Emerging saver + transactor", 31.5, "4DB8AE", "FFFFFF"], ["Core saver", 23.2, "8FD0C9", TXT]]],
+    ["Payers only", 39.4, [["Transactor only", 39.4, "7F95AD", "FFFFFF"]]],
+  ];
+  let cx = X0;
+  fam.forEach((f, a) => {
+    const cw = W * f[1] / ACT;
+    let cy = ty;
+    f[2].forEach((g, b) => {
+      const gh = th * g[1] / f[1];
+      const big = gh > 0.9 && cw > 2;
+      const runs = [{ text: g[0], options: { bold: true, fontSize: big ? 13 : 10.5, breakLine: true } },
+        { text: Math.round(g[1]) + "K", options: { bold: true, fontSize: big ? 22 : 12 } },
+        { text: "  " + Math.round(100 * g[1] / ACT) + "%", options: { fontSize: big ? 11 : 9.5 } }];
+      s.addText(runs, { x: cx, y: cy, w: cw, h: gh, color: g[3], fill: { color: g[2] }, line: { color: "FFFFFF", width: 2 }, margin: 7, valign: gh < 0.7 ? "middle" : "top", isTextBox: true, objectName: `Tree ${g[0]}` });
+      cy += gh;
+    });
+    s.addText(a === 2 ? [{ text: "Payers only", options: { bold: true } }] : [{ text: f[0], options: { bold: true } }, { text: "  " + Math.round(f[1]) + "K · " + Math.round(100 * f[1] / ACT) + "%" }],
+      { x: cx, y: ty - 0.28, w: cw, h: 0.24, fontSize: 9, color: [NAVY, CYAN, MUTED][a], margin: [0, 0, 0, 0.04], valign: "bottom", isTextBox: true, objectName: `Family ${a}` });
+    cx += cw;
+  });
+  // takeaways
+  const RX = 9.7, RW = 3.13;
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: 1.95, w: RW, h: 0.95, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Active stat" });
+  s.addText([{ text: "308K", options: { bold: true, fontSize: 24, color: BLUE, breakLine: true } }, { text: "of the 1.51M in the product data (20%) hold at least one product; 1.20M hold none", options: { fontSize: 9.5, color: TXT } }],
+    { x: RX + 0.15, y: 2.0, w: RW - 0.3, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: "Active stat text" });
+  const tk = [["164K borrowers (53%)", "103K only borrow; just 21K also save with us: cross-sell savings", NAVY],
+    ["105K savers (34%)", "50K emerging savers hold a balance only; 23K core savers hold over ฿10K", CYAN],
+    ["39K payers only (13%)", "Use the app to pay but hold nothing: first target for a savings offer", "7F95AD"]];
+  tk.forEach((t, k) => {
+    const y = 3.05 + k * 1.22;
+    s.addShape(pres.shapes.RECTANGLE, { x: RX, y, w: 0.06, h: 1.05, fill: { color: t[2] }, line: { type: "none" }, objectName: `Takeaway bar ${k}` });
+    s.addText([{ text: t[0], options: { bold: true, fontSize: 11, color: NAVY, breakLine: true } }, { text: t[1], options: { fontSize: 9.5, color: TXT } }],
+      { x: RX + 0.18, y, w: RW - 0.2, h: 1.05, margin: 0, valign: "middle", isTextBox: true, objectName: `Takeaway ${k}` });
+  });
+}
+
+
+// ---------- Slide 3: what we know, who holds what
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("2 / 4  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE", { placeholder: "tracker" });
-  s.addText("Products follow life stage and job: 30–49s borrow, 60+ save, salaried borrow and merchants save, but 80% hold nothing yet", { placeholder: "title" });
+  s.addText("3 / 5  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE BY PERSONA", { placeholder: "tracker" });
+  s.addText("Products follow life stage and job: 30–49s borrow, 60+ save, salaried borrow and merchants save", { placeholder: "title" });
   s.addText("Share of each group's customers; a customer can hold several. By age: product segments, 31 Oct 2026 (borrow = any loan; save = balance over ฿100 or Save Max/More; pay = in-app payments). By job: Data for Strategy 2027, Sep 2026 (save = balance over ฿0). * under 11K customers", { placeholder: "foot" });
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.5, y: 1.5, w: 12.33, h: 0.46, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Hold nothing band" });
-  s.addText([{ text: "79.5%  ", options: { bold: true, fontSize: 18, color: BLUE } }, { text: "of customers hold no active product. The charts show what the other 20% hold, and who holds it.", options: { fontSize: 11.5, color: TXT } }],
-    { x: 0.7, y: 1.5, w: 12.0, h: 0.46, valign: "middle", margin: 0, isTextBox: true, objectName: "Hold nothing text" });
-  const pw = (12.33 - 0.15) / 2, py = 2.1, ph = 4.68;
+  const pw = (12.33 - 0.15) / 2, py = 1.6, ph = 5.18;
   const ser = (labels, b, sv, p) => [{ name: "Borrow", labels, values: b }, { name: "Save", labels, values: sv }, { name: "Pay", labels, values: p }];
   const panels = [
     { n: "1", head: "By age: teens pay, 30–49s borrow, and saving rises to 28% at 60–69", chartT: "% of each age group holding each product",
@@ -198,19 +253,19 @@ pres.addSection({ title: "Storyline" });
     s.addShape(pres.shapes.OVAL, { x: x + 0.18, y: py + 0.16, w: 0.42, h: 0.42, fill: { color: C.text2 }, line: { type: "none" }, objectName: `Insight badge ${i}` });
     s.addText(p.n, { x: x + 0.18, y: py + 0.16, w: 0.42, h: 0.42, fontSize: 13, bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0, isTextBox: true, objectName: `Insight num ${i}` });
     s.addText(p.head, { x: x + 0.72, y: py + 0.1, w: pw - 0.9, h: 0.6, fontSize: 13.5, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Insight head ${i}` });
-    s.addChart(pres.charts.BAR, p.data, { x: x + 0.1, y: py + 0.78, w: pw - 0.2, h: 2.95, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle(p.chartT), titleFontSize: 11,
+    s.addChart(pres.charts.BAR, p.data, { x: x + 0.1, y: py + 0.78, w: pw - 0.2, h: ph - 1.73, barDir: "col", barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle(p.chartT), titleFontSize: 11,
       chartColors: [NAVY, CYAN, BLUE], showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: 9, dataLabelFormatCode: "0%",
       showLegend: true, legendPos: "b", legendFontSize: 10, legendColor: MUTED, barGapWidthPct: 45, valAxisMaxVal: p.max, catAxisLabelFontSize: 10.5, objectName: `Product chart ${i}` });
-    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.18, y: py + 3.82, w: pw - 0.36, h: 0.72, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { type: "none" }, objectName: `So box ${i}` });
+    s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.18, y: py + ph - 0.86, w: pw - 0.36, h: 0.72, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { type: "none" }, objectName: `So box ${i}` });
     s.addText([{ text: "SO  ", options: { bold: true, color: CYAN, fontSize: 9.5, charSpacing: 1 } }, { text: p.so, options: { color: TXT, fontSize: 10.5 } }],
-      { x: x + 0.32, y: py + 3.82, w: pw - 0.64, h: 0.72, valign: "middle", margin: 0, isTextBox: true, objectName: `So text ${i}` });
+      { x: x + 0.32, y: py + ph - 0.86, w: pw - 0.64, h: 0.72, valign: "middle", margin: 0, isTextBox: true, objectName: `So text ${i}` });
   });
 }
 
 // ---------- Slide 3: what we know, payments (3 insights)
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("3 / 4  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
+  s.addText("4 / 5  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
   s.addText("Payments start through partners but fade after promotions; steady earners pay most, and AIS prepaid is the biggest gap", { placeholder: "title" });
   s.addText("Paid = paid with CLICX in October 2026. Partner customers = ever paid AIS or PTT OR in that month or before. Up to +22K payers a month assumes prepaid customers pay at the postpaid rate. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026)", { placeholder: "foot" });
   const cw = (12.33 - 0.3) / 3, top = 1.5, ch = 5.28;
@@ -254,7 +309,7 @@ pres.addSection({ title: "Storyline" });
 const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2.14M customers, Sep 2026); pools overlap";
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
-  s.addText("4 / 4  |  WHAT WE WILL DO", { placeholder: "tracker" });
+  s.addText("5 / 5  |  WHAT WE WILL DO", { placeholder: "tracker" });
   s.addText("We will grow in two ways: keep acquiring through our partners, and activate the 1.8M inactive customers we already have", { placeholder: "title" });
   s.addText(POOL_NOTE + ". Target pools from the 49.5M consortium base (AIS × KTB × OR). Source: Data Room; Data for Strategy 2027; Partner Payment Story v1. Icons: Font Awesome", { placeholder: "foot" });
   const pill = (x, y, w, n, t, col, obj) => {
@@ -530,62 +585,6 @@ const heat = (s, head, rows, colW, base, opts) => {
   s.addText("BORROWER", { x: 2.95, y: 1.72, w: 2.6, h: 0.26, fontSize: 9.5, bold: true, color: MUTED, align: "center", charSpacing: 1, margin: 0, isTextBox: true, objectName: "Borrower label" });
   s.addText("EMERGING OR CORE SAVER", { x: 5.55, y: 1.72, w: 5.2, h: 0.26, fontSize: 9.5, bold: true, color: CYAN, align: "center", charSpacing: 1, margin: 0, isTextBox: true, objectName: "Depositor label" });
   heat(s, head, rows, [1.0, 1.2, 1.25, 1.35, 1.3, 1.35, 1.3, 1.25, 1.3, 1.03], 0, { y: 2.0, name: "Segments by age table", dataFrom: 2, baseFor: (ri, ci) => parseFloat(all[ci]), noColor: (ci) => ci === 9 || false });
-}
-
-{
-  // Appendix A5: customer landscape by product segment, area proportional to customers
-  const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Appendix" });
-  s.addText("APPENDIX A5  |  CUSTOMER LANDSCAPE BY PRODUCT SEGMENT", { placeholder: "tracker" });
-  s.addText("Only 1 in 5 customers holds a product; among them, borrowers lead (53%) and just 21K both borrow and save with us", { placeholder: "title" });
-  s.addText("Box size is in proportion to the number of customers. 1.51M customers, 31 Oct 2026; counts rounded. Core saver = Save Max/More over ฿10K; emerging saver = other balance over ฿100; transactor = pays in the app", { placeholder: "foot" });
-  const TOTAL = 1507.4, NONE = 1198.0, ACT = 308.0;
-  const X0 = 0.5, W = 8.95;
-  // whole base strip
-  const sy = 1.95, sh = 0.42, aw = W * ACT / TOTAL;
-  s.addText("Whole customer base, 1.51M", { x: X0, y: 1.7, w: 4, h: 0.22, fontSize: 9, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Strip label" });
-  s.addText([{ text: "No active product  ", options: { bold: true } }, { text: "1.20M · 79.5%" }], { x: X0, y: sy, w: W - aw, h: sh, fontSize: 10.5, color: "FFFFFF", fill: { color: GREY }, margin: 7, valign: "middle", isTextBox: true, objectName: "Strip none" });
-  s.addText([{ text: "308K · 20.5%", options: { bold: true } }], { x: X0 + W - aw, y: sy, w: aw, h: sh, fontSize: 10, color: "FFFFFF", align: "center", fill: { color: CYAN }, line: { color: "FFFFFF", width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip active" });
-  // zoom lines
-  const ty = 2.98, th = 3.72, ly = ty - 0.34;
-  s.addShape(pres.shapes.LINE, { x: X0, y: sy + sh, w: W - aw, h: ly - sy - sh, flipH: true, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom left" });
-  s.addShape(pres.shapes.LINE, { x: X0 + W, y: sy + sh, w: 0, h: ly - sy - sh, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom right" });
-  // treemap: columns by family, stacked by segment
-  const fam = [
-    ["Borrowers", 164.0, [["Borrower only", 102.6, NAVY, "FFFFFF"], ["Borrower + transactor", 40.1, "2B5C93", "FFFFFF"], ["Emerging saver + borrower", 21.3, "5A86BE", "FFFFFF"]]],
-    ["Savers", 104.7, [["Emerging saver only", 50.0, CYAN, "FFFFFF"], ["Emerging saver + transactor", 31.5, "4DB8AE", "FFFFFF"], ["Core saver", 23.2, "8FD0C9", TXT]]],
-    ["Payers only", 39.4, [["Transactor only", 39.4, "7F95AD", "FFFFFF"]]],
-  ];
-  let cx = X0;
-  fam.forEach((f, a) => {
-    const cw = W * f[1] / ACT;
-    let cy = ty;
-    f[2].forEach((g, b) => {
-      const gh = th * g[1] / f[1];
-      const big = gh > 0.9 && cw > 2;
-      const runs = [{ text: g[0], options: { bold: true, fontSize: big ? 13 : 10.5, breakLine: true } },
-        { text: Math.round(g[1]) + "K", options: { bold: true, fontSize: big ? 22 : 12 } },
-        { text: "  " + Math.round(100 * g[1] / ACT) + "%", options: { fontSize: big ? 11 : 9.5 } }];
-      s.addText(runs, { x: cx, y: cy, w: cw, h: gh, color: g[3], fill: { color: g[2] }, line: { color: "FFFFFF", width: 2 }, margin: 7, valign: gh < 0.7 ? "middle" : "top", isTextBox: true, objectName: `Tree ${g[0]}` });
-      cy += gh;
-    });
-    s.addText(a === 2 ? [{ text: "Payers only", options: { bold: true } }] : [{ text: f[0], options: { bold: true } }, { text: "  " + Math.round(f[1]) + "K · " + Math.round(100 * f[1] / ACT) + "%" }],
-      { x: cx, y: ty - 0.28, w: cw, h: 0.24, fontSize: 9, color: [NAVY, CYAN, MUTED][a], margin: [0, 0, 0, 0.04], valign: "bottom", isTextBox: true, objectName: `Family ${a}` });
-    cx += cw;
-  });
-  // takeaways
-  const RX = 9.7, RW = 3.13;
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: 1.95, w: RW, h: 0.95, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Active stat" });
-  s.addText([{ text: "308K", options: { bold: true, fontSize: 24, color: BLUE, breakLine: true } }, { text: "of 1.51M customers (20%) hold at least one product; 1.20M hold none", options: { fontSize: 9.5, color: TXT } }],
-    { x: RX + 0.15, y: 2.0, w: RW - 0.3, h: 0.85, margin: 0, valign: "middle", isTextBox: true, objectName: "Active stat text" });
-  const tk = [["164K borrowers (53%)", "103K only borrow; just 21K also save with us: cross-sell savings", NAVY],
-    ["105K savers (34%)", "50K emerging savers hold a balance only; 23K core savers hold over ฿10K", CYAN],
-    ["39K payers only (13%)", "Use the app to pay but hold nothing: first target for a savings offer", "7F95AD"]];
-  tk.forEach((t, k) => {
-    const y = 3.05 + k * 1.22;
-    s.addShape(pres.shapes.RECTANGLE, { x: RX, y, w: 0.06, h: 1.05, fill: { color: t[2] }, line: { type: "none" }, objectName: `Takeaway bar ${k}` });
-    s.addText([{ text: t[0], options: { bold: true, fontSize: 11, color: NAVY, breakLine: true } }, { text: t[1], options: { fontSize: 9.5, color: TXT } }],
-      { x: RX + 0.18, y, w: RW - 0.2, h: 1.05, margin: 0, valign: "middle", isTextBox: true, objectName: `Takeaway ${k}` });
-  });
 }
 
 (async () => {
