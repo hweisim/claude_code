@@ -274,8 +274,8 @@ pres.addSection({ title: "Storyline" });
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("4 / 5  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
-  s.addText("AIS and OR deals get people paying, but many stop after the deal; few AIS prepaid users pay, and regular earners pay most", { placeholder: "title" });
-  s.addText("Paid = paid with CLICX in October 2026. Partner customers = ever paid AIS or PTT OR in that month or before. Up to +22K payers a month assumes prepaid customers pay at the postpaid rate. Source: Partner Payment Story v1 and payment-by-age files (1.51M customers, 31 Oct 2026)", { placeholder: "foot" });
+  s.addText("AIS and OR deals get people paying, but many stop after the deal; few AIS prepaid users pay, and non-partner payers put more into loans and investing", { placeholder: "title" });
+  s.addText("Paid = paid with CLICX in October 2026. Partner customers = ever paid AIS or PTT OR in that month or before. Up to +22K payers a month assumes prepaid customers pay at the postpaid rate. Other shops = Scan and Pay to merchants other than AIS and OR; partner payers 93.2K, non-partner 33.7K. Source: Partner Payment Story v1, 31 Oct 2026", { placeholder: "foot" });
   const cw = (12.33 - 0.3) / 3, top = 1.5, ch = 5.28;
   const cols = [
     { head: "Partners start payments, but promotions don't keep them", big: "73%", lbl: "of October payers came through AIS or OR, making 67% of spend",
@@ -287,10 +287,11 @@ pres.addSection({ title: "Storyline" });
       chart: { type: "bar", t: "% who paid in October", labels: ["AIS postpaid", "AIS prepaid", "OR customers", "Not OR"], values: [0.128, 0.084, 0.113, 0.074], fmt: "0.0%", max: 0.155, colors: [NAVY, CYAN, BLUE, GREY] },
       note: "The gap is mostly bill pay and top-up: 4.6% vs 7.8%",
       so: "Top-up-first offers for prepaid: up to +22K payers a month" },
-    { head: "Steady earners pay most, mostly by everyday Scan and Pay", big: "฿408M", lbl: "paid in October; 84% of it Scan and Pay",
-      chart: { type: "bar", t: "% who paid in October, by job", labels: ["Online merchant", "Offline merchant", "Salaried", "Freelance", "Rider", "Blue collar"], values: [0.102, 0.097, 0.094, 0.073, 0.071, 0.064], fmt: "0.0%", max: 0.125, colors: [CYAN, CYAN, CYAN, GREY, GREY, NAVY] },
-      note: "Average 8.4%; blue-collar pay at two-thirds the merchant rate",
-      so: "Target salaried and merchants for payments; give blue-collar a non-loan reason to stay" },
+    { head: "Non-partner payers put more into loans and investing", big: "1.8×", lbl: "more spent per non-partner payer at other shops: ฿3.9K vs ฿2.2K",
+      chart: { type: "bar", t: "Share of October spend at other shops", labels: ["Card and loan repayments", "Small local shops", "Retail and convenience", "Online and travel", "Crypto, gold and stocks", "Bills and insurance"], fmt: "0%", max: 0.34, colors: [NAVY, CYAN],
+        series: [{ name: "Partner payers", values: [0.203, 0.266, 0.121, 0.090, 0.087, 0.039] }, { name: "Non-partner payers", values: [0.263, 0.246, 0.099, 0.107, 0.098, 0.054] }] },
+      note: "Both groups look alike by age and job; 8 in 10 payments for both are everyday shops",
+      so: "Offer refinance, savings and investing to non-partner payers; everyday shop deals to partner payers" },
   ];
   cols.forEach((c, i) => {
     const x = 0.5 + i * (cw + 0.15);
