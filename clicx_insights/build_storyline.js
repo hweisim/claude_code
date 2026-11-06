@@ -274,14 +274,14 @@ pres.addSection({ title: "Storyline" });
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("4 / 5  |  WHAT WE KNOW: PAYMENTS", { placeholder: "tracker" });
-  s.addText("AIS and OR deals get people paying, but many stop after the deal; few AIS prepaid users pay, and non-partner payers put more into loans and investing", { placeholder: "title" });
-  s.addText("Paid = paid with CLICX in October 2026. Partner customers = ever paid AIS or PTT OR in that month or before. Up to +22K payers a month assumes prepaid customers pay at the postpaid rate. Other shops = Scan and Pay to merchants other than AIS and OR; partner payers 93.2K, non-partner 33.7K. Source: Partner Payment Story v1, 31 Oct 2026", { placeholder: "foot" });
+  s.addText("3 in 4 payers come through AIS or OR; 19% of them stopped after the August deal, but those who stay pay 39% more", { placeholder: "title" });
+  s.addText("Partner payers = ever paid AIS or PTT OR. 19% = drop in partner payers Aug → Oct (114.3K → 93.2K); 39% = spend per partner payer, ฿2.1K → ฿3.0K. +22K assumes prepaid pays at the postpaid rate. Other shops = Scan and Pay to merchants other than AIS and OR. Source: Partner Payment Story v1, Oct 2026", { placeholder: "foot" });
   const cw = (12.33 - 0.3) / 3, top = 1.5, ch = 5.28;
   const cols = [
     { head: "Partners start payments, but promotions don't keep them", big: "73%", lbl: "of October payers came through AIS or OR, making 67% of spend",
       chart: { type: "col", t: "Partner customers' share of payers and of spend", labels: ["Jun", "Jul", "Aug", "Sep", "Oct"], fmt: "0%", max: 0.9, colors: [NAVY, CYAN],
         series: [{ name: "Share of payers", values: [0.57, 0.67, 0.70, 0.73, 0.73] }, { name: "Share of spend", values: [0.51, 0.62, 0.66, 0.67, 0.67] }] },
-      note: "Payers fell 164K → 127K since Aug; 59.9K paid only in Aug; stayers spend ฿2.1K → ฿3.0K",
+      table: [["Partner payers", "12.8K", "31.6K", "114.3K", "95.0K", "93.2K"], ["Their spend", "฿20M", "฿88M", "฿244M", "฿262M", "฿275M"]],
       so: "Keep AIS and OR promotions as the way in; reward the second and third month" },
     { head: "AIS prepaid is the biggest payment gap", big: "516.5K", lbl: "AIS prepaid customers, only 8.4% pay",
       chart: { type: "bar", t: "% who paid in October", labels: ["AIS postpaid", "AIS prepaid", "OR customers", "Not OR"], values: [0.128, 0.084, 0.113, 0.074], fmt: "0.0%", max: 0.155, colors: [NAVY, CYAN, BLUE, GREY] },
@@ -304,10 +304,16 @@ pres.addSection({ title: "Storyline" });
       { x: x + 0.28, y: top + 0.8, w: cw - 0.56, h: 0.72, valign: "middle", margin: 0, isTextBox: true, objectName: `Pay stat ${i}` });
     const ch2 = c.chart;
     const multi = !!ch2.series;
-    s.addChart(pres.charts.BAR, multi ? ch2.series.map((x2) => ({ name: x2.name, labels: ch2.labels, values: x2.values })) : [{ name: ch2.t, labels: ch2.labels, values: ch2.values }], { x: x + 0.08, y: top + 1.62, w: cw - 0.16, h: 2.35, barDir: ch2.type, barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle(ch2.t), titleFontSize: 10.5,
+    s.addChart(pres.charts.BAR, multi ? ch2.series.map((x2) => ({ name: x2.name, labels: ch2.labels, values: x2.values })) : [{ name: ch2.t, labels: ch2.labels, values: ch2.values }], { x: x + 0.08, y: top + 1.62, w: cw - 0.16, h: c.table ? 2.2 : 2.35, barDir: ch2.type, barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle(ch2.t), titleFontSize: 10.5,
       chartColors: ch2.colors, showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: multi ? 8 : 10, dataLabelFormatCode: ch2.fmt,
       showLegend: multi, legendPos: "b", legendFontSize: 9, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: ch2.max, catAxisOrientation: ch2.type === "bar" ? "maxMin" : "minMax", catAxisLabelFontSize: 10, objectName: `Pay chart ${i}` });
-    s.addText(c.note, { x: x + 0.18, y: top + 4.0, w: cw - 0.36, h: 0.4, fontSize: 9.5, italic: true, color: MUTED, margin: 0, valign: "top", isTextBox: true, objectName: `Pay note ${i}` });
+    if (c.table) {
+      const hd = ["", "Jun", "Jul", "Aug", "Sep", "Oct"].map((t) => ({ text: t, options: { bold: true, color: MUTED, align: "right" } }));
+      const rows = c.table.map((r) => r.map((t, j) => ({ text: t, options: { bold: j === 0, color: j === 0 ? NAVY : TXT, align: j === 0 ? "left" : "right" } })));
+      const fw = 1.0, ow = (cw - 0.36 - fw) / 5;
+      s.addTable([hd, ...rows], { x: x + 0.18, y: top + 3.84, w: cw - 0.36, colW: [fw, ow, ow, ow, ow, ow], rowH: 0.18, fontSize: 8.5, fontFace: "Arial", margin: [0, 0.04, 0, 0.04], valign: "middle", border: { type: "none" }, objectName: `Pay table ${i}` });
+    }
+    if (c.note) s.addText(c.note, { x: x + 0.18, y: top + 4.0, w: cw - 0.36, h: 0.4, fontSize: 9.5, italic: true, color: MUTED, margin: 0, valign: "top", isTextBox: true, objectName: `Pay note ${i}` });
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: x + 0.16, y: top + 4.45, w: cw - 0.32, h: 0.68, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { type: "none" }, objectName: `Pay so box ${i}` });
     s.addText([{ text: "SO  ", options: { bold: true, color: CYAN, fontSize: 9.5, charSpacing: 1 } }, { text: c.so, options: { color: TXT, fontSize: 10.5 } }],
       { x: x + 0.28, y: top + 4.45, w: cw - 0.56, h: 0.68, valign: "middle", margin: 0, isTextBox: true, objectName: `Pay so ${i}` });
