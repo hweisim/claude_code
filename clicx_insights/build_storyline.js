@@ -256,7 +256,7 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("4 / 4  |  WHAT WE WILL DO", { placeholder: "tracker" });
   s.addText("We will grow in two ways: keep acquiring through our partners, and activate the 1.8M inactive customers we already have", { placeholder: "title" });
-  s.addText(POOL_NOTE + ". OR base estimated from its 7.4% join rate. Source: Data Room; Data for Strategy 2027; Partner Payment Story v1. Icons: Font Awesome", { placeholder: "foot" });
+  s.addText(POOL_NOTE + ". Target pools from the 49.5M consortium base (AIS × KTB × OR). Source: Data Room; Data for Strategy 2027; Partner Payment Story v1. Icons: Font Awesome", { placeholder: "foot" });
   const pill = (x, y, w, n, t, col, obj) => {
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w, h: 0.42, rectRadius: 0.21, fill: { color: col }, line: { type: "none" }, objectName: obj });
     s.addText([{ text: n + "   ", options: { bold: true, fontSize: 14, color: "FFFFFF" } }, { text: t, options: { bold: true, fontSize: 12.5, color: "FFFFFF", charSpacing: 1 } }],
@@ -289,17 +289,17 @@ const POOL_NOTE = "Prospect pools = CLICX customers by occupation and profile (2
   const th = 1.46;
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: LX, y: ty, w: LW, h: th, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Target card" });
   circIcon(LX + 0.15, ty + 0.1, 0.34, "target.png", CYAN, "Target icon", "Target icon");
-  s.addText("Who to target, by partner", { x: LX + 0.58, y: ty + 0.1, w: LW - 0.7, h: 0.34, fontSize: 11, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: "Target head" });
-  const tg = [["logo_ais.png", 2.74, "4.9M", "single-bank AIS users; 3.9% joined"],
-    ["logo_ktb.jpeg", 2.58, "3.4M", "KTB Next-only users; 0.3% joined"],
-    ["logo_or.png", 1.93, "~9.1M", "OR customers not yet on CLICX"]];
+  s.addText("Who to target in the 49.5M base", { x: LX + 0.58, y: ty + 0.1, w: LW - 0.7, h: 0.34, fontSize: 11, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: "Target head" });
+  s.addText([{ text: "Not yet on CLICX", options: { bold: true, color: MUTED } }], { x: LX + 1.95, y: ty + 0.4, w: 1.0, h: 0.16, fontSize: 8, align: "right", margin: 0, isTextBox: true, objectName: "Target col1" });
+  s.addText([{ text: "Joined", options: { bold: true, color: MUTED } }], { x: LX + 3.05, y: ty + 0.4, w: 0.75, h: 0.16, fontSize: 8, align: "right", margin: 0, isTextBox: true, objectName: "Target col2" });
+  const tg = [["Tech-savvy", "5.8M", "8.5%"], ["Working Gen Z, 23–29", "2.4M", "6.6%"], ["Multi-bank users", "8.0M", "2.4%"]];
   tg.forEach((t, k) => {
-    const yy = ty + 0.5 + k * 0.27;
-    s.addImage({ path: IC(t[0]), x: LX + 0.15, y: yy + 0.04, h: 0.18, w: 0.18 * t[1], altText: "Partner logo", objectName: `Target logo ${k}` });
-    s.addText([{ text: t[2] + "  ", options: { bold: true, fontSize: 10.5, color: BLUE } }, { text: t[3], options: { fontSize: 9, color: TXT } }],
-      { x: LX + 0.72, y: yy, w: LW - 0.8, h: 0.26, margin: 0, valign: "middle", isTextBox: true, objectName: `Target pool ${k}` });
+    const yy = ty + 0.56 + k * 0.235;
+    s.addText(t[0], { x: LX + 0.15, y: yy, w: 1.8, h: 0.23, fontSize: 9.5, bold: true, color: NAVY, margin: 0, valign: "middle", isTextBox: true, objectName: `Target seg ${k}` });
+    s.addText(t[1], { x: LX + 1.95, y: yy, w: 1.0, h: 0.23, fontSize: 11, bold: true, color: BLUE, align: "right", margin: 0, valign: "middle", isTextBox: true, objectName: `Target pool ${k}` });
+    s.addText(t[2], { x: LX + 3.05, y: yy, w: 0.75, h: 0.23, fontSize: 10, bold: true, color: k === 2 ? MUTED : CYAN, align: "right", margin: 0, valign: "middle", isTextBox: true, objectName: `Target rate ${k}` });
   });
-  s.addText("Also: tech-savvy 6.3M (8.5% joined), multi-bank 8.2M (2.4%)", { x: LX + 0.15, y: ty + 1.28, w: LW - 0.3, h: 0.18, fontSize: 8.5, italic: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Target across" });
+  s.addText("Win more look-alikes; give multi-bank users a reason to switch", { x: LX + 0.15, y: ty + 1.27, w: LW - 0.3, h: 0.17, fontSize: 8, italic: true, color: MUTED, margin: 0, valign: "middle", isTextBox: true, objectName: "Target note" });
   // board asks (compact)
   const by = ty + th + 0.06;
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: LX, y: by, w: LW, h: 6.75 - by, rectRadius: 0.08, fill: { color: C.text2 }, line: { type: "none" }, objectName: "Asks box" });
