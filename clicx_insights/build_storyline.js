@@ -173,71 +173,79 @@ pres.addSection({ title: "Storyline" });
   });
 }
 
-// ---------- Slide 2 (new): what customers hold
+// ---------- Slide 2: what customers hold, product segments sized by customers, in-app payers outlined
 {
-  // Slide 2: what customers hold, product segments sized by customers
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("2 / 5  |  WHAT WE KNOW: PRODUCT HOLDING AND USAGE", { placeholder: "tracker" });
-  s.addText("Only 1 in 5 customers really uses CLICX; about half of them borrow, and just 21K both borrow and save with us", { placeholder: "title" });
-  s.addText("Box size = number of customers; persona = biggest age and job groups in each segment. Bal > ฿0 = balance above ฿0 but not over ฿100, with no loan or payment. Slide 5's 1.8M inactive counts all 2.14M sign-ups; both give ~310K active. Core saver = Save Max/More over ฿20K; emerging saver = other balance over ฿100. Product segment data, 31 Oct 2026", { placeholder: "foot" });
+  s.addText("Only 1 in 5 customers really uses CLICX; 127K of them pay in-app, spread across every segment", { placeholder: "title" });
+  s.addText("Box size = customers · orange outline = paid in-app in Oct · active = balance over ฿100, payment or loan · 31 Oct 2026", { placeholder: "foot" });
+  const ORANGE = "E3A15F", WHITE = "FFFFFF";
   const TOTAL = 1507.4, ZERO = 1061.3, MONEY = 136.7, ACT = 309.4;
   const X0 = 0.5, W = 8.95;
-  // whole base strip: no product (฿0 / money in) and with a product
-  const sy = 1.95, sh = 0.5, aw = W * ACT / TOTAL, zw = W * ZERO / TOTAL, mw = W * MONEY / TOTAL;
-  s.addText("2.14M sign-ups (Sep 2026)  →  1.51M in the product data (31 Oct 2026)  →  309K with balance over ฿100, a payment or a loan", { x: X0, y: 1.7, w: W, h: 0.22, fontSize: 9, bold: true, color: MUTED, margin: 0, isTextBox: true, objectName: "Strip label" });
-  s.addText([{ text: "No product, ฿0 balance  ", options: { bold: true } }, { text: "1.06M · 70%" }, { text: "   same age and job mix as the base", options: { fontSize: 9, color: "E9EDF1" } }],
-    { x: X0, y: sy, w: zw, h: sh, fontSize: 10.5, color: "FFFFFF", fill: { color: GREY }, margin: 7, valign: "middle", isTextBox: true, objectName: "Strip zero" });
-  s.addText([{ text: "137K · 9%", options: { bold: true, fontSize: 9.5, breakLine: true } }, { text: "bal > ฿0", options: { fontSize: 8.5 } }],
-    { x: X0 + zw, y: sy, w: mw, h: sh, color: TXT, align: "center", fill: { color: "C5CDD6" }, line: { color: "FFFFFF", width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip money" });
-  s.addText([{ text: "309K · 20.5%", options: { bold: true, breakLine: true } }, { text: "bal > ฿100 / transact / book loan", options: { fontSize: 8 } }],
-    { x: X0 + W - aw, y: sy, w: aw, h: sh, fontSize: 10, color: "FFFFFF", align: "center", fill: { color: CYAN }, line: { color: "FFFFFF", width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip active" });
-  // zoom lines
-  const ty = 3.02, th = 3.68, ly = ty - 0.34;
-  s.addShape(pres.shapes.LINE, { x: X0, y: sy + sh, w: W - aw, h: ly - sy - sh, flipH: true, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom left" });
-  s.addShape(pres.shapes.LINE, { x: X0 + W, y: sy + sh, w: 0, h: ly - sy - sh, line: { color: LGREY, width: 1, dashType: "dash" }, objectName: "Zoom right" });
-  // treemap: columns by family, stacked by segment; [name, K, fill, text colour, persona]
-  const fam = [
-    ["Borrowers", 164.478, [["Borrower only", 102.7, NAVY, "FFFFFF", "Mostly salaried, aged 20–39; 6 in 10 keep ฿0 with us"], ["Borrower + transactor", 40.5, "2B5C93", "FFFFFF", "Salaried, aged 30–39"], ["Emerging saver + borrower", 21.3, "5A86BE", "FFFFFF", "Salaried, aged 30–49"]]],
-    ["Savers", 105.4, [["Emerging saver only", 50.3, CYAN, "FFFFFF", "Salaried and merchants, aged 40–59"], ["Emerging saver + transactor", 31.9, "4DB8AE", "FFFFFF", "Salaried and merchants, aged 30–49"], ["Core saver", 23.3, "8FD0C9", TXT, "Salaried, aged 40+"]]],
-    ["Payers only", 39.492, [["Transactor only", 39.492, "7F95AD", "FFFFFF", "Mixed ages; more wage, gig and online sellers"]]],
-  ];
-  let cx = X0;
+  // whole base strip
+  const sy = 1.62, sh = 0.46, zw = W * ZERO / TOTAL, mw = W * MONEY / TOTAL, aw = W - zw - mw;
+  s.addText([{ text: "No product, ฿0 balance ", options: { bold: true } }, { text: "1.06M · 70%" }], { x: X0, y: sy, w: zw, h: sh, fontSize: 11, color: WHITE, fill: { color: GREY }, line: { color: WHITE, width: 1.5 }, margin: 7, valign: "middle", isTextBox: true, objectName: "Strip zero" });
+  s.addText([{ text: "137K", options: { bold: true, breakLine: true } }, { text: "9%" }], { x: X0 + zw, y: sy, w: mw, h: sh, fontSize: 9.5, color: TXT, align: "center", fill: { color: "C8CFD6" }, line: { color: WHITE, width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip money" });
+  s.addText([{ text: "309K ", options: { bold: true } }, { text: "20.5%" }], { x: X0 + zw + mw, y: sy, w: aw, h: sh, fontSize: 10.5, color: WHITE, align: "center", fill: { color: "3A8A80" }, line: { color: WHITE, width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip active" });
+  // treemap geometry
+  const ty = 2.4, th = 3.62;
+  const fam = [["Borrowers", 164.478, NAVY], ["Savers", 105.4, CYAN], ["Payers only", 39.5, MUTED]];
+  const cwF = fam.map((f) => W * f[1] / ACT);
+  const cx = [X0, X0 + cwF[0], X0 + cwF[0] + cwF[1]];
   fam.forEach((f, a) => {
-    const cw = W * f[1] / ACT;
-    let cy = ty;
-    f[2].forEach((g, b) => {
-      const gh = th * g[1] / f[1];
-      const big = gh > 1.2 && cw > 2, small = gh < 0.6;
-      const k = Math.round(g[1]) + "K", pct = Math.round(100 * g[1] / ACT) + "%";
-      const runs = small
-        ? [{ text: g[0] + "  ", options: { bold: true, fontSize: 10 } }, { text: k, options: { bold: true, fontSize: 11 } }, { text: "  " + pct, options: { fontSize: 9, breakLine: true } }, { text: g[4], options: { fontSize: 8.5 } }]
-        : [{ text: g[0], options: { bold: true, fontSize: big ? 13 : 10.5, breakLine: true } },
-           { text: k, options: { bold: true, fontSize: big ? 22 : 13 } }, { text: "  " + pct, options: { fontSize: big ? 11 : 9.5, breakLine: true } },
-           { text: g[4], options: { fontSize: big ? 10 : 8.5 } }];
-      s.addText(runs, { x: cx, y: cy, w: cw, h: gh, color: g[3], fill: { color: g[2] }, line: { color: "FFFFFF", width: 2 }, margin: small ? 4 : 7, valign: small ? "middle" : "top", isTextBox: true, objectName: `Tree ${g[0]}` });
-      cy += gh;
-    });
-    s.addText(a === 2 ? [{ text: "Payers only", options: { bold: true } }] : [{ text: f[0], options: { bold: true } }, { text: "  " + Math.round(f[1]) + "K · " + Math.round(100 * f[1] / ACT) + "%" }],
-      { x: cx, y: ty - 0.28, w: cw, h: 0.24, fontSize: 9, color: [NAVY, CYAN, MUTED][a], margin: [0, 0, 0, 0.04], valign: "bottom", isTextBox: true, objectName: `Family ${a}` });
-    cx += cw;
+    const lab = a === 2 ? [{ text: f[0], options: { bold: true } }] : [{ text: f[0], options: { bold: true } }, { text: "  " + Math.round(f[1]) + "K · " + Math.round(100 * f[1] / ACT) + "%" }];
+    s.addText(lab, { x: cx[a], y: ty - 0.27, w: cwF[a], h: 0.24, fontSize: 10, color: f[2], margin: [0, 0, 0, 0.02], valign: "bottom", isTextBox: true, objectName: `Family ${a}` });
   });
-  // takeaways
+  const box = (x, y, w, h, fill, txtCol, runs, pay, obj, opts = {}) =>
+    s.addText(runs, { x, y, w, h, color: txtCol, fill: { color: fill }, line: { color: pay ? ORANGE : WHITE, width: pay ? 2.25 : 2 }, margin: opts.margin ?? 8, valign: opts.valign || "top", align: opts.align || "left", isTextBox: true, objectName: obj });
+  const H = (v, f) => th * v / f;
+  // borrowers column
+  { const x = cx[0], w = cwF[0], f = 164.478; let y = ty;
+    const h1 = H(102.7, f), h2 = H(40.5, f), h3 = H(21.3, f);
+    box(x, y, w, h1, NAVY, WHITE, [{ text: "Borrower only", options: { bold: true, fontSize: 14, breakLine: true } }, { text: "103K", options: { bold: true, fontSize: 30 } }, { text: " 33%", options: { fontSize: 11, breakLine: true } }, { text: "Mostly salaried, aged 20–39; 6 in 10 keep ฿0", options: { fontSize: 11 } }], false, "Tree Borrower only");
+    y += h1;
+    box(x, y, w, h2, "3A5A85", WHITE, [{ text: "Borrower + transactor", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "41K", options: { bold: true, fontSize: 18 } }, { text: " 13% · salaried, 30–39", options: { fontSize: 10.5 } }], true, "Tree Borrower + transactor", { valign: "middle" });
+    y += h2;
+    const w1 = w * 11.0 / 21.3, w2 = w - w1;
+    box(x, y, w1, h3, "5374A8", WHITE, [{ text: "11.0K · 4%", options: { bold: true, fontSize: 12 } }], false, "Tree Saver + borrower", { align: "center", valign: "middle", margin: 2 });
+    box(x + w1, y, w2, h3, "5374A8", WHITE, [{ text: "10.3K · 3%", options: { bold: true, fontSize: 12 } }], true, "Tree Saver + borrower who pay", { align: "center", valign: "middle", margin: 2 });
+    var callB = [[x + w1 / 2, "Saver + borrower", "Salaried, aged 30–49"], [x + w1 + w2 / 2, "Saver + borrower who pay", "Salaried, aged 30–39"]];
+  }
+  // savers column
+  { const x = cx[1], w = cwF[1], f = 105.4; let y = ty;
+    const h1 = H(50.3, f), h2 = H(31.9, f), h3 = H(23.3, f);
+    box(x, y, w, h1, "4BA394", WHITE, [{ text: "Emerging saver only", options: { bold: true, fontSize: 14, breakLine: true } }, { text: "50K", options: { bold: true, fontSize: 30 } }, { text: " 16%", options: { fontSize: 11, breakLine: true } }, { text: "Salaried and merchants, 40–59", options: { fontSize: 11 } }], false, "Tree Emerging saver only");
+    y += h1;
+    box(x, y, w, h2, "66B3A6", WHITE, [{ text: "Emerging saver + transactor", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "32K", options: { bold: true, fontSize: 18 } }, { text: " 10%", options: { fontSize: 10.5, breakLine: true } }, { text: "Salaried and merchants, 30–49", options: { fontSize: 10.5 } }], true, "Tree Emerging saver + transactor");
+    y += h2;
+    const w1 = w * 18.6 / 23.3, w2 = w - w1;
+    box(x, y, w1, h3, "9FCFC7", TXT, [{ text: "Core saver", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "18.6K", options: { bold: true, fontSize: 18 } }, { text: " 6% · aged 40+", options: { fontSize: 10.5 } }], false, "Tree Core saver", { valign: "middle" });
+    box(x + w1, y, w2, h3, "9FCFC7", TXT, [{ text: "4.7K", options: { bold: true, fontSize: 11.5, breakLine: true } }, { text: "2%", options: { fontSize: 10 } }], true, "Tree Core savers who pay", { align: "center", valign: "middle", margin: 2 });
+    var callS = [[x + w1 + w2 / 2, "Core savers who pay", "Salaried, aged 30–49"]];
+  }
+  // payers-only column
+  box(cx[2], ty, cwF[2], th, "8395AB", WHITE, [{ text: "Pays only", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "39K", options: { bold: true, fontSize: 18 } }, { text: " 13%", options: { fontSize: 10.5, breakLine: true } }, { text: "Wage, gig and online sellers", options: { fontSize: 10.5 } }], true, "Tree Pays only");
+  // callouts under the split boxes
+  const cy = ty + th;
+  [...callB, ...callS].forEach((c, k) => {
+    s.addShape(pres.shapes.LINE, { x: c[0], y: cy, w: 0, h: 0.09, line: { color: TXT, width: 1 }, objectName: `Callout tick ${k}` });
+    const lw = 2.2, lx = k === 2 ? c[0] - lw + 0.05 : c[0] - lw / 2;
+    s.addText([{ text: c[1], options: { bold: true, breakLine: true } }, { text: c[2], options: { color: MUTED } }], { x: lx, y: cy + 0.1, w: lw, h: 0.4, fontSize: 9.5, color: TXT, align: k === 2 ? "right" : "center", margin: 0, valign: "top", isTextBox: true, objectName: `Callout ${k}` });
+  });
+  // right panel
   const RX = 9.7, RW = 3.13;
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: 1.95, w: RW, h: 0.9, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Active stat" });
-  s.addText([{ text: "309K", options: { bold: true, fontSize: 22, color: BLUE, breakLine: true } }, { text: "of 1.51M (20%): bal > ฿100, transact or book a loan; another 137K have bal > ฿0", options: { fontSize: 9, color: TXT } }],
-    { x: RX + 0.15, y: 1.98, w: RW - 0.3, h: 0.84, margin: 0, valign: "middle", isTextBox: true, objectName: "Active stat text" });
-  const tk = [["164K borrowers (53%)", "Mostly salaried 20–39s; 6 in 10 who only borrow keep ฿0 with us: cross-sell savings", NAVY],
-    ["105K savers (34%)", "Older, salaried or merchants; 23K core savers are salaried 40+", CYAN],
-    ["39K payers only (13%)", "3 in 4 already keep a small balance: first target for a savings offer", "7F95AD"],
-    ["137K with balance over ฿0 only", "Under ฿100, no loan or payment: a nudge to save more", "C5CDD6"]];
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: RX, y: sy, w: RW, h: 0.9, rectRadius: 0.08, fill: { color: STAT_BG }, line: { type: "none" }, objectName: "Active stat" });
+  s.addText([{ text: "309K", options: { bold: true, fontSize: 28, color: NAVY, breakLine: true } }, { text: "active: 20% of 1.51M", options: { fontSize: 11, color: TXT } }],
+    { x: RX + 0.15, y: sy + 0.04, w: RW - 0.3, h: 0.82, margin: 0, valign: "middle", isTextBox: true, objectName: "Active stat text" });
+  const tk = [["127K pay in-app (41%)", "88K also borrow or save", ORANGE], ["164K borrowers (53%)", "6 in 10 keep ฿0: sell savings", NAVY],
+    ["105K savers (34%)", "1 in 5 core savers pays in-app", CYAN], ["137K hold ฿1–100 only", "No loan, no payment", "C8CFD6"]];
   tk.forEach((t, k) => {
-    const y = 3.0 + k * 0.94;
-    s.addShape(pres.shapes.RECTANGLE, { x: RX, y, w: 0.06, h: 0.82, fill: { color: t[2] }, line: { type: "none" }, objectName: `Takeaway bar ${k}` });
-    s.addText([{ text: t[0], options: { bold: true, fontSize: 10.5, color: NAVY, breakLine: true } }, { text: t[1], options: { fontSize: 9, color: TXT } }],
-      { x: RX + 0.18, y, w: RW - 0.2, h: 0.82, margin: 0, valign: "middle", isTextBox: true, objectName: `Takeaway ${k}` });
+    const y = 2.72 + k * 0.7;
+    s.addShape(pres.shapes.RECTANGLE, { x: RX, y, w: 0.05, h: 0.56, fill: { color: t[2] }, line: { type: "none" }, objectName: `Takeaway bar ${k}` });
+    s.addText([{ text: t[0], options: { bold: true, fontSize: 12, color: NAVY, breakLine: true } }, { text: t[1], options: { fontSize: 10.5, color: TXT } }],
+      { x: RX + 0.17, y, w: RW - 0.2, h: 0.56, margin: 0, valign: "middle", isTextBox: true, objectName: `Takeaway ${k}` });
   });
 }
-
 
 // ---------- Slide 3: what we know, who holds what
 {
