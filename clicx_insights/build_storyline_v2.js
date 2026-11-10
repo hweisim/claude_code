@@ -516,11 +516,11 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("9 / 10  |  DEFEND AGAINST TRUE", { placeholder: "tracker" });
   s.addText("True's new virtual bank puts ฿1.98B (63%) of our deposits at risk; defend first where KTB customers already use TrueMoney", { placeholder: "title" });
-  s.addText("AIS no TrueMoney = AIS customers who don't use TrueMoney Wallet; True = True and TrueMoney customers (1.86M data-room base; 2%, about 39K, are in neither group, grey). Tech-savvy = uses Make, Kept, Dime or crypto. TrueMoney use and Jai-pump rejects from KTB data. Source: Data for Business Strategy (draft), Sep 2026", { placeholder: "foot" });
+  s.addText("AIS no TrueMoney = AIS customers who don't use TrueMoney Wallet; True = True and TrueMoney customers (561,177 and 1,257,522 customers; 1.82M in all). Tech-savvy = uses Make, Kept, Dime or crypto. TrueMoney use and Jai-pump rejects from KTB data. Source: Data for Business Strategy (draft), Sep 2026", { placeholder: "foot" });
   const y = 1.6, H = 4.65, PW = (12.33 - 0.15) / 2;
   card(s, 0.5, y, PW, H, C.background2, "Deposit panel");
   panelHead(s, 0.5, y, PW, 1, "True and TrueMoney customers hold almost two-thirds of our deposits", "CLICX customers and balances, AIS without TrueMoney vs True", TRUEC);
-  const sb = [["Customers", 0.30, "561K · 30%", "1.26M · 68%", 0.68], ["Deposits", 0.37, "฿1.17B · 37%", "฿1.98B · 63%", 0.63]];
+  const sb = [["Customers", 0.3086, "561K · 31%", "1.26M · 69%", 0.6914], ["Deposits", 0.37, "฿1.17B · 37%", "฿1.98B · 63%", 0.63]];
   const bx = 1.85, bw = PW - 1.75;
   sb.forEach((r, k) => {
     const yy = y + 1.05 + k * 0.72;
