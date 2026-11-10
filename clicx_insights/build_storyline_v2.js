@@ -516,19 +516,20 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("9 / 10  |  DEFEND AGAINST TRUE", { placeholder: "tracker" });
   s.addText("True's new virtual bank puts ฿1.98B (63%) of our deposits at risk; defend first where KTB customers already use TrueMoney", { placeholder: "title" });
-  s.addText("AIS no TrueMoney = AIS customers who don't use TrueMoney Wallet; True = True and TrueMoney customers (1.86M data-room base). Tech-savvy = uses Make, Kept, Dime or crypto. TrueMoney use and Jai-pump rejects from KTB data. Source: Data for Business Strategy (draft), Sep 2026", { placeholder: "foot" });
+  s.addText("AIS no TrueMoney = AIS customers who don't use TrueMoney Wallet; True = True and TrueMoney customers (1.86M data-room base; 2%, about 39K, are in neither group, grey). Tech-savvy = uses Make, Kept, Dime or crypto. TrueMoney use and Jai-pump rejects from KTB data. Source: Data for Business Strategy (draft), Sep 2026", { placeholder: "foot" });
   const y = 1.6, H = 4.65, PW = (12.33 - 0.15) / 2;
   card(s, 0.5, y, PW, H, C.background2, "Deposit panel");
   panelHead(s, 0.5, y, PW, 1, "True and TrueMoney customers hold almost two-thirds of our deposits", "CLICX customers and balances, AIS without TrueMoney vs True", TRUEC);
-  const sb = [["Customers", 0.33, "561K · 33%", "1.26M · 67%"], ["Deposits", 0.37, "฿1.17B · 37%", "฿1.98B · 63%"]];
+  const sb = [["Customers", 0.30, "561K · 30%", "1.26M · 68%", 0.68], ["Deposits", 0.37, "฿1.17B · 37%", "฿1.98B · 63%", 0.63]];
   const bx = 1.85, bw = PW - 1.75;
   sb.forEach((r, k) => {
     const yy = y + 1.05 + k * 0.72;
     txt(s, r[0], { x: 0.7, y: yy, w: 1.1, h: 0.56, fontSize: 11, bold: true, color: TXT, valign: "middle", objectName: `Split label ${k}` });
     s.addShape(pres.shapes.RECTANGLE, { x: bx, y: yy, w: bw * r[1], h: 0.56, fill: { color: NAVY }, line: { color: "FFFFFF", width: 1.5 }, objectName: `AIS part ${k}` });
-    s.addShape(pres.shapes.RECTANGLE, { x: bx + bw * r[1], y: yy, w: bw * (1 - r[1]), h: 0.56, fill: { color: TRUEC }, line: { color: "FFFFFF", width: 1.5 }, objectName: `True part ${k}` });
+    if (r[1] + r[4] < 0.995) s.addShape(pres.shapes.RECTANGLE, { x: bx + bw * (r[1] + r[4]), y: yy, w: bw * (1 - r[1] - r[4]), h: 0.56, fill: { color: LGREY }, line: { color: "FFFFFF", width: 1.5 }, objectName: `Other part ${k}` });
+    s.addShape(pres.shapes.RECTANGLE, { x: bx + bw * r[1], y: yy, w: bw * r[4], h: 0.56, fill: { color: TRUEC }, line: { color: "FFFFFF", width: 1.5 }, objectName: `True part ${k}` });
     txt(s, r[2], { x: bx + 0.1, y: yy, w: bw * r[1] - 0.2, h: 0.56, fontSize: 10.5, bold: true, color: "FFFFFF", valign: "middle", objectName: `AIS value ${k}` });
-    txt(s, r[3], { x: bx + bw * r[1], y: yy, w: bw * (1 - r[1]), h: 0.56, fontSize: 10, bold: true, color: "FFFFFF", align: "center", valign: "middle", objectName: `True value ${k}` });
+    txt(s, r[3], { x: bx + bw * r[1], y: yy, w: bw * r[4], h: 0.56, fontSize: 10, bold: true, color: "FFFFFF", align: "center", valign: "middle", objectName: `True value ${k}` });
   });
   [["AIS, no TrueMoney", NAVY], ["True and TrueMoney", TRUEC]].forEach((l, k) => {
     s.addShape(pres.shapes.RECTANGLE, { x: bx + k * 2.0, y: y + 2.55, w: 0.16, h: 0.16, fill: { color: l[1] }, line: { type: "none" }, objectName: `Split key ${k}` });
