@@ -165,7 +165,7 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
     txt(s, h, { x: cx[k], y: 2.07, w: 2.5, h: 0.24, fontSize: 9, bold: true, color: MUTED, charSpacing: 1, objectName: `Col head ${k}` }));
   const rows = [
     ["Consortium penetration", "96% of customers come from AIS, KTB or OR, but we have reached only 4–7% of each partner's base", "96%", "from partners", "Keep acquiring through partners, aimed at tech-savvy and Gen Z look-alikes"],
-    ["Persona and portfolio", "We hit our targets (82% underserved; tech-savvy join most), but 72% came for cash and only 7% got a loan", "7%", "got a loan", "Credit card for 1.1M, investing for 528K, SME loans for 133K merchants"],
+    ["Persona and portfolio", "We hit our targets (82% underserved; tech-savvy join most), but 72% came for cash and only 7% got a loan", "7%", "got a loan", "Credit card for 1.1M, investing for 528K, SME loans for 106K merchants"],
     ["Activate inactive customers", "Only 1 in 5 really uses CLICX; partner deals start payments, but 19% of partner payers stopped after August", "309K", "active of 1.51M", "Lead with AIS prepaid top-up and Amazon offers; sell savings to borrowers"],
     ["Low KTB cannibalization", "64% of shared customers were inactive at KTB, and 450K of KTB's loan rejects applied with us", "1.1M", "KTB-inactive", "Make the Paotang reject list a standing channel: under-40s and riders first"],
     ["Defend against True", "630K customers on the True network hold ฿818M, 26% of our deposits", "฿818M", "at risk", "Reach the 313K TrueMoney users KTB turned down before True does"],
@@ -375,7 +375,7 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("6 / 10  |  PORTFOLIO: NEXT PRODUCTS", { placeholder: "tracker" });
-  s.addText("Customers already point to our next products: a credit card for 1.1M, investing for 528K and SME loans for 133K merchants", { placeholder: "title" });
+  s.addText("Customers already point to our next products: a credit card for 1.1M, investing for 528K and SME loans for 106K merchants", { placeholder: "title" });
   s.addText("Pools overlap. Tech-savvy = uses Make, Kept, Dime or crypto (AIS and KTB data). Income from CLICX profile. Source: Data for Business Strategy (draft), Sep 2026", { placeholder: "foot" });
   const cards = [
     ["card.png", NAVY, "Digital credit card", "1.1M", "earn over ฿15K a month, aged 20–44: 482K salaried, 637K without a steady income",
@@ -384,8 +384,8 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
     ["invest.png", CYAN, "Investing and wealth", "528K", "tech-savvy customers: 63K under 24, 379K aged 25–44, 86K aged 45–59",
       ["110K already hold over ฿20K or Save Max/More", "71–73% are AIS, KTB or OR customers", "Under-24s: high cash need, low wealth, pay more"],
       "Under 24: small-ticket, low-risk investing, learn-and-earn · 25–44: zero-fee fractional shares in ADVANC, OR, KTB, GULF · 45–59: pre-retirement plans with insurance"],
-    ["sme.png", BLUE, "SME loan for merchants", "133K", "merchants who applied for a loan but were turned down or cancelled",
-      ["288K merchants: 102K online, 186K offline", "More active: 44% open the app vs 36% of others", "Half earn over ฿30K a month", "106K turned-down merchants earn over ฿30K: first wave"],
+    ["sme.png", BLUE, "SME loan for merchants", "106K", "merchants who applied for a loan but didn't get one, and earn over ฿30K a month",
+      ["288K merchants: 102K online, 186K offline", "More active: 44% open the app vs 36% of others", "Half earn over ฿30K a month", "222K applied without getting a loan; 106K of them earn over ฿30K"],
       "Loan based on sales and partner data · start in Isan (21%), Greater Bangkok (16%) and Bangkok (15%)"],
   ];
   const cw = (12.33 - 0.3) / 3, y = 1.6, H = 5.15;
@@ -572,7 +572,7 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
   const mv = [
     ["acquire.png", NAVY, "ACQUIRE", "Turn KTB's rejects into customers", ["Paotang reject list: 1.9M a year, 24% apply", "Under-40s, freelancers and riders first", "Partner campaigns aimed at tech-savvy and Gen Z, who join at up to 2× the average"]],
     ["activate.png", CYAN, "ACTIVATE", "Give every customer a reason to come back", ["AIS prepaid top-up first: up to +22K payers a month", "Amazon + PTT offers; reward the second and third month", "Savings for the 103K who only borrow", "Smaller first loans and savings for 924K turned-down applicants"]],
-    ["chart.png", BLUE, "GROW", "Launch the next three products", ["Digital credit card: 1.1M earning over ฿15K", "Investing: 528K tech-savvy, 110K already saving", "SME loan: 133K merchants, 106K first wave"]],
+    ["chart.png", BLUE, "GROW", "Launch the next three products", ["Digital credit card: 1.1M earning over ฿15K", "Investing: 528K tech-savvy, 110K already saving", "SME loan: 106K merchants earning over ฿30K"]],
     ["shield.png", TRUEC, "DEFEND", "Hold deposits as True launches", ["฿818M held by 630K True-network customers", "Savings rewards and a credit card for under-30s", "Reach 313K TrueMoney users KTB turned down"]],
   ];
   const cw = (12.33 - 0.45) / 4, y = 1.6, H = 4.5;
