@@ -409,7 +409,7 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("7 / 10  |  ACTIVATE INACTIVE CUSTOMERS", { placeholder: "tracker" });
   s.addText("3 in 4 payers come through AIS or OR; 19% of them stopped after the August deal, but those who stay pay 39% more", { placeholder: "title" });
-  s.addText("Partner payers = ever paid AIS or PTT OR. All customers = 126.8K of 1.51M paid in Oct. 19% = drop in partner payers Aug → Oct (114.3K → 93.2K); 39% = spend per partner payer, ฿2.1K → ฿3.0K. +22K assumes prepaid pays at the postpaid rate. Other shops = Scan and Pay to merchants other than AIS and OR. Source: Partner Payment Story v1, Oct 2026", { placeholder: "foot" });
+  s.addText("Partner payers = ever paid AIS or PTT OR. 19% = drop in partner payers Aug → Oct (114.3K → 93.2K); 39% = spend per partner payer, ฿2.1K → ฿3.0K; +22K assumes prepaid pays at the postpaid rate. Points 1–2: Partner Payment Story (8.4% of 1.51M paid in Oct); point 3: Oct segment extract (7.8% of 1.50M); gig and wage = freelance, rider, wage earner", { placeholder: "foot" });
   const cw = (12.33 - 0.3) / 3, top = 1.5, ch = 5.28;
   const cols = [
     { head: "Partners start payments, but promotions don't keep them", big: "73%", lbl: "of October payers came through AIS or OR, making 67% of spend",
@@ -422,11 +422,13 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
         layout: { x: 0.3, y: 0.17, w: 0.6, h: 0.68 }, bench: { v: 0.084, label: "All customers 8.4%" } },
       note: "The gap is mostly bill pay and top-up: 4.6% vs 7.8%",
       so: "Top-up-first offers for prepaid: up to +22K payers a month" },
-    { head: "Non-partner payers put more into loans and investing", big: "1.8×", lbl: "more spent per non-partner payer at other shops: ฿3.9K vs ฿2.2K",
-      chart: { type: "bar", t: "Share of October spend at other shops", labels: ["Card and loan repayments", "Small local shops", "Retail and convenience", "Online and travel", "Crypto, gold and stocks", "Bills and insurance"], fmt: "0%", max: 0.34, colors: [NAVY, CYAN],
-        series: [{ name: "Partner payers", values: [0.203, 0.266, 0.121, 0.090, 0.087, 0.039] }, { name: "Non-partner payers", values: [0.263, 0.246, 0.099, 0.107, 0.098, 0.054] }] },
-      note: "Both groups look alike by age and job; 8 in 10 payments for both are everyday shops",
-      so: "Offer refinance, savings and investing to non-partner payers; everyday shop deals to partner payers" },
+    { head: "Teens, merchants and 30–49s pay most; blue-collar pay least", big: "13.5%", lbl: "of 10–19s paid in Oct; merchants 9.1–9.6%, vs 7.8% of all customers",
+      chart: { type: "bar", t: "% who paid in October, by age and job", labels: ["Age 10–19", "Age 20–29", "Age 30–49", "Age 50–69", "Online merchant", "Offline merchant", "Salaried", "Gig and wage", "Blue collar"],
+        values: [0.135, 0.070, 0.081, 0.076, 0.096, 0.091, 0.086, 0.068, 0.059], fmt: "0.0%", max: 0.165, fs: 9,
+        colors: [CYAN, "B8C2CC", CYAN, "B8C2CC", CYAN, CYAN, CYAN, "B8C2CC", "B8C2CC"],
+        layout: { x: 0.36, y: 0.15, w: 0.52, h: 0.8 } },
+      note: "Teal = above the 7.8% all-customer rate; salaried and merchants aged 30–49 are where the volume is",
+      so: "Aim payment offers at merchants, salaried 30–49s and students; give blue-collar and gig workers an easy first payment" },
   ];
   cols.forEach((c, i) => {
     const x = 0.5 + i * (cw + 0.15);
@@ -439,15 +441,15 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
       { x: x + 0.28, y: top + 0.8, w: cw - 0.56, h: 0.72, valign: "middle", margin: 0, isTextBox: true, objectName: `Pay stat ${i}` });
     const ch2 = c.chart;
     const multi = !!ch2.series;
-    s.addChart(pres.charts.BAR, multi ? ch2.series.map((x2) => ({ name: x2.name, labels: ch2.labels, values: x2.values })) : [{ name: ch2.t, labels: ch2.labels, values: ch2.values }], { x: x + 0.08, y: top + 1.62, w: cw - 0.16, h: c.table ? 2.2 : 2.35, barDir: ch2.type, barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle(ch2.t), titleFontSize: 10.5,
-      chartColors: ch2.colors, showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: multi ? 8 : 10, dataLabelFormatCode: ch2.fmt,
-      showLegend: multi, legendPos: "b", legendFontSize: 9, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: ch2.max, catAxisOrientation: ch2.type === "bar" ? "maxMin" : "minMax", catAxisLabelFontSize: 10, ...(ch2.layout ? { layout: ch2.layout } : {}), objectName: `Pay chart ${i}` });
     if (ch2.bench) {
       const gx = x + 0.08, gw = cw - 0.16, gy = top + 1.62, gh = 2.35, L = ch2.layout;
       const bx = gx + gw * (L.x + L.w * ch2.bench.v / ch2.max);
       s.addShape(pres.shapes.LINE, { x: bx, y: gy + gh * L.y, w: 0, h: gh * L.h, line: { color: MUTED, width: 1.25, dashType: "dash" }, objectName: `Pay bench ${i}` });
       s.addText(ch2.bench.label, { x: bx - 0.8, y: gy + gh * (L.y + L.h) + 0.02, w: 1.6, h: 0.2, fontSize: 8.5, color: MUTED, align: "center", margin: 0, isTextBox: true, objectName: `Pay bench label ${i}` });
     }
+    s.addChart(pres.charts.BAR, multi ? ch2.series.map((x2) => ({ name: x2.name, labels: ch2.labels, values: x2.values })) : [{ name: ch2.t, labels: ch2.labels, values: ch2.values }], { x: x + 0.08, y: top + 1.62, w: cw - 0.16, h: c.table ? 2.2 : 2.35, barDir: ch2.type, barGrouping: "clustered", ...AX, ...quiet(), ...chartTitle(ch2.t), titleFontSize: 10.5,
+      chartColors: ch2.colors, showValue: true, dataLabelPosition: "outEnd", dataLabelColor: TXT, dataLabelFontSize: ch2.fs || (multi ? 8 : 10), dataLabelFormatCode: ch2.fmt,
+      showLegend: multi, legendPos: "b", legendFontSize: 9, legendColor: MUTED, barGapWidthPct: 40, valAxisMaxVal: ch2.max, catAxisOrientation: ch2.type === "bar" ? "maxMin" : "minMax", catAxisLabelFontSize: ch2.fs || 10, ...(ch2.layout ? { layout: ch2.layout } : {}), objectName: `Pay chart ${i}` });
     if (c.table) {
       const hd = ["", "Jun", "Jul", "Aug", "Sep", "Oct"].map((t) => ({ text: t, options: { bold: true, color: MUTED, align: "right" } }));
       const rows = c.table.map((r) => r.map((t, j) => ({ text: t, options: { bold: j === 0, color: j === 0 ? NAVY : TXT, align: j === 0 ? "left" : "right" } })));
