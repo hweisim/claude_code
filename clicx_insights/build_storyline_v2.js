@@ -168,7 +168,7 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
     ["Persona and portfolio", "We hit our targets (82% underserved; tech-savvy join most), but 72% came for cash and only 7% got a loan", "7%", "got a loan", "Credit card for 1.1M, investing for 528K, SME loans for 106K merchants"],
     ["Activate inactive customers", "Only 1 in 5 really uses CLICX; partner deals start payments, but 19% of partner payers stopped after August", "309K", "active of 1.51M", "Lead with AIS prepaid top-up and Amazon offers; sell savings to borrowers"],
     ["Low KTB cannibalization", "64% of shared customers were inactive at KTB, and 450K of KTB's loan rejects applied with us", "1.1M", "KTB-inactive", "Make the Paotang reject list a standing channel: under-40s and riders first"],
-    ["Defend against True", "630K customers on the True network hold ฿818M, 26% of our deposits", "฿818M", "at risk", "Reach the 313K TrueMoney users KTB turned down before True does"],
+    ["Defend against True", "1.26M True and TrueMoney customers hold ฿1.98B, 63% of our deposits", "฿1.98B", "at risk", "Reach the 313K TrueMoney users KTB turned down before True does"],
   ];
   rows.forEach((r, k) => {
     const y = 2.36 + k * 0.86, h = 0.8;
@@ -515,12 +515,12 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
 {
   const s = pres.addSlide({ masterName: "QUESTION", sectionTitle: "Storyline" });
   s.addText("9 / 10  |  DEFEND AGAINST TRUE", { placeholder: "tracker" });
-  s.addText("True's new virtual bank puts ฿818M (26%) of our deposits at risk; defend first where KTB customers already use TrueMoney", { placeholder: "title" });
-  s.addText("True customers = CLICX customers in the data room not found in AIS data (1.86M base). Tech-savvy = uses Make, Kept, Dime or crypto. TrueMoney use and Jai-pump rejects from KTB data. Source: Data for Business Strategy (draft), Sep 2026", { placeholder: "foot" });
+  s.addText("True's new virtual bank puts ฿1.98B (63%) of our deposits at risk; defend first where KTB customers already use TrueMoney", { placeholder: "title" });
+  s.addText("AIS no TrueMoney = AIS customers who don't use TrueMoney Wallet; True = True and TrueMoney customers (1.86M data-room base). Tech-savvy = uses Make, Kept, Dime or crypto. TrueMoney use and Jai-pump rejects from KTB data. Source: Data for Business Strategy (draft), Sep 2026", { placeholder: "foot" });
   const y = 1.6, H = 4.65, PW = (12.33 - 0.15) / 2;
   card(s, 0.5, y, PW, H, C.background2, "Deposit panel");
-  panelHead(s, 0.5, y, PW, 1, "True-network customers hold a quarter of our deposits", "CLICX customers and balances, AIS vs True network", TRUEC);
-  const sb = [["Customers", 0.66, "1,238K · 66%", "630K · 34%"], ["Deposits", 0.74, "฿2,325M · 74%", "฿818M · 26%"]];
+  panelHead(s, 0.5, y, PW, 1, "True and TrueMoney customers hold almost two-thirds of our deposits", "CLICX customers and balances, AIS without TrueMoney vs True", TRUEC);
+  const sb = [["Customers", 0.33, "561K · 33%", "1.26M · 67%"], ["Deposits", 0.37, "฿1.17B · 37%", "฿1.98B · 63%"]];
   const bx = 1.85, bw = PW - 1.75;
   sb.forEach((r, k) => {
     const yy = y + 1.05 + k * 0.72;
@@ -530,11 +530,11 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
     txt(s, r[2], { x: bx + 0.1, y: yy, w: bw * r[1] - 0.2, h: 0.56, fontSize: 10.5, bold: true, color: "FFFFFF", valign: "middle", objectName: `AIS value ${k}` });
     txt(s, r[3], { x: bx + bw * r[1], y: yy, w: bw * (1 - r[1]), h: 0.56, fontSize: 10, bold: true, color: "FFFFFF", align: "center", valign: "middle", objectName: `True value ${k}` });
   });
-  [["AIS", NAVY], ["True network", TRUEC]].forEach((l, k) => {
-    s.addShape(pres.shapes.RECTANGLE, { x: bx + k * 1.4, y: y + 2.55, w: 0.16, h: 0.16, fill: { color: l[1] }, line: { type: "none" }, objectName: `Split key ${k}` });
-    txt(s, l[0], { x: bx + 0.22 + k * 1.4, y: y + 2.5, w: 1.2, h: 0.26, fontSize: 10, color: MUTED, valign: "middle", objectName: `Split legend ${k}` });
+  [["AIS, no TrueMoney", NAVY], ["True and TrueMoney", TRUEC]].forEach((l, k) => {
+    s.addShape(pres.shapes.RECTANGLE, { x: bx + k * 2.0, y: y + 2.55, w: 0.16, h: 0.16, fill: { color: l[1] }, line: { type: "none" }, objectName: `Split key ${k}` });
+    txt(s, l[0], { x: bx + 0.22 + k * 2.0, y: y + 2.5, w: 1.75, h: 0.26, fontSize: 10, color: MUTED, valign: "middle", objectName: `Split legend ${k}` });
   });
-  const tf = [["31% vs 24%", "of True vs AIS customers are under 30: True's base is younger"], ["14% vs 35%", "are tech-savvy: True customers are harder to win with investing alone"]];
+  const tf = [["67% vs 58%", "of True vs AIS customers are under 40: True's base is younger"], ["33% vs 20%", "are tech-savvy: more digital, so easier to lose"]];
   tf.forEach((f, k) => {
     card(s, 0.7, y + 2.95 + k * 0.78, PW - 0.4, 0.68, "FFFFFF", `True fact box ${k}`);
     txt(s, [{ text: f[0] + "  ", options: { bold: true, fontSize: 15, color: TRUEC } }, { text: f[1], options: { fontSize: 10.5, color: TXT } }], { x: 0.85, y: y + 2.95 + k * 0.78, w: PW - 0.7, h: 0.68, valign: "middle", objectName: `True fact ${k}` });
@@ -560,7 +560,7 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
     txt(s, [{ text: p[0] + "   ", options: { bold: true, fontSize: 10, color: TRUEC } }, { text: p[1] + "  ", options: { bold: true, fontSize: 16, color: NAVY } }, { text: p[2], options: { fontSize: 10, color: TXT } }],
       { x: X2 + 0.35, y: yy, w: fw2 - 0.3, h: 0.64, valign: "middle", objectName: `Priority text ${k}` });
   });
-  soBar(s, 6.37, "Hold deposits with savings rewards and a credit card for young True-network customers; offer loans to 313K TrueMoney users KTB turned down");
+  soBar(s, 6.37, "Hold deposits with savings rewards and a credit card for young True customers; offer loans to 313K TrueMoney users KTB turned down");
 }
 
 // ---------- 10 What we will do
@@ -573,7 +573,7 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
     ["acquire.png", NAVY, "ACQUIRE", "Turn KTB's rejects into customers", ["Paotang reject list: 1.9M a year, 24% apply", "Under-40s, freelancers and riders first", "Partner campaigns aimed at tech-savvy and Gen Z, who join at up to 2× the average"]],
     ["activate.png", CYAN, "ACTIVATE", "Give every customer a reason to come back", ["AIS prepaid top-up first: up to +22K payers a month", "Amazon + PTT offers; reward the second and third month", "Savings for the 103K who only borrow", "Smaller first loans and savings for 924K turned-down applicants"]],
     ["chart.png", BLUE, "GROW", "Launch the next three products", ["Digital credit card: 1.1M earning over ฿15K", "Investing: 528K tech-savvy, 110K already saving", "SME loan: 106K merchants earning over ฿30K"]],
-    ["shield.png", TRUEC, "DEFEND", "Hold deposits as True launches", ["฿818M held by 630K True-network customers", "Savings rewards and a credit card for under-30s", "Reach 313K TrueMoney users KTB turned down"]],
+    ["shield.png", TRUEC, "DEFEND", "Hold deposits as True launches", ["฿1.98B held by 1.26M True and TrueMoney customers", "Savings rewards and a credit card for under-40s", "Reach 313K TrueMoney users KTB turned down"]],
   ];
   const cw = (12.33 - 0.45) / 4, y = 1.6, H = 4.5;
   mv.forEach((m, k) => {
