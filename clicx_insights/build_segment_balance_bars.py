@@ -1,5 +1,5 @@
-rows=[("-","Borrower",74137),("-","Have Balance",74045),("-","No Balance",534085),("-","No Deposit",216022),
-      ("LA","Have Balance",25996),("LA","No Balance",54083),("LA","No Deposit",84300)]
+rows=[("-","Borrower",74137),("-","Have Balance",25996),("-","No Balance",54083),("-","No Deposit",84300),
+      ("LA","Have Balance",74045),("LA","No Balance",534085),("LA","No Deposit",216022)]
 T=sum(r[2] for r in rows)
 stops=[(0,(0xF0,0xF1,0xF2)),(90e3,(0xD5,0xE4,0xE1)),(270e3,(0xA3,0xD3,0xCC)),(545e3,(0x5B,0xA4,0xA0))]
 def col(v):
