@@ -185,7 +185,7 @@ pres.addSection({ title: "Storyline" });
   // whole base strip
   const sy = 1.62, sh = 0.46, zw = W * ZERO / TOTAL, mw = W * MONEY / TOTAL, aw = W - zw - mw;
   s.addText([{ text: "No product, ฿0 balance ", options: { bold: true } }, { text: "1.06M · 70%" }], { x: X0, y: sy, w: zw, h: sh, fontSize: 11, color: WHITE, fill: { color: GREY }, line: { color: WHITE, width: 1.5 }, margin: 7, valign: "middle", isTextBox: true, objectName: "Strip zero" });
-  s.addText([{ text: "137K", options: { bold: true, breakLine: true } }, { text: "9%" }], { x: X0 + zw, y: sy, w: mw, h: sh, fontSize: 9.5, color: TXT, align: "center", fill: { color: "C8CFD6" }, line: { color: WHITE, width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip money" });
+  s.addText([{ text: "137K · 9%", options: { bold: true, fontSize: 9, breakLine: true } }, { text: "bal >฿0 & ≤฿100", options: { fontSize: 7.5 } }], { x: X0 + zw, y: sy, w: mw, h: sh, fontSize: 9, color: TXT, align: "center", fill: { color: "C8CFD6" }, line: { color: WHITE, width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip money" });
   s.addText([{ text: "309K ", options: { bold: true } }, { text: "20.5%" }], { x: X0 + zw + mw, y: sy, w: aw, h: sh, fontSize: 10.5, color: WHITE, align: "center", fill: { color: "3A8A80" }, line: { color: WHITE, width: 1.5 }, margin: 0, valign: "middle", isTextBox: true, objectName: "Strip active" });
   // treemap geometry
   const ty = 2.4, th = 3.62;
