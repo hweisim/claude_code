@@ -363,7 +363,7 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
   const X2 = 0.5 + PW + 0.15;
   card(s, X2, y, PW, H, C.background2, "Active panel");
   panelHead(s, X2, y, PW, 2, "Customers stay active only if they borrow or keep money with us", "% active in Sep 2026, by what customers hold");
-  hbars(s, X2 + 0.2, y + 1.0, PW - 0.4, [["Borrower (158K)", 88, "88%", CYAN], ["Money in, applied (80K)", 50, "50%", BLUE], ["Money in, never applied (48K)", 52, "52%", BLUE],
+  hbars(s, X2 + 0.2, y + 1.0, PW - 0.4, [["Borrower (158K)", 88, "88%", CYAN], ["Money in, applied (161K)", 50, "50%", BLUE], ["Money in, never applied (92K)", 52, "52%", BLUE],
     ["No money in, never applied (113K)", 7, "7%", GREY], ["No money in, applied (924K)", 4, "4%", GREY]], { lw: 2.55, rh: 0.42, max: 100, fs: 10, name: "Active" });
   card(s, X2 + 0.2, y + 3.25, PW - 0.4, 1.2, "FFFFFF", "Turned down box");
   txt(s, [{ text: "924K", options: { bold: true, fontSize: 22, color: NAVY } }, { text: "  applied, didn't get a loan and keep no money with us: 96% of them are inactive. Another 694K hold no product at all", options: { fontSize: 11, color: TXT } }],
