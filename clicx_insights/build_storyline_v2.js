@@ -384,8 +384,8 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
     ["invest.png", CYAN, "Investing and wealth", "528K", "tech-savvy customers: 63K under 24, 379K aged 25–44, 86K aged 45–59",
       ["110K already hold over ฿20K or Save Max/More", "71–73% are AIS, KTB or OR customers", "Under-24s: high cash need, low wealth, pay more"],
       "Under 24: small-ticket, low-risk investing, learn-and-earn · 25–44: zero-fee fractional shares in ADVANC, OR, KTB, GULF · 45–59: pre-retirement plans with insurance"],
-    ["sme.png", BLUE, "SME loan for merchants", "106K", "merchants who applied for a loan but didn't get one, and earn over ฿30K a month",
-      ["288K merchants: 102K online, 186K offline", "More active: 44% open the app vs 36% of others", "Half earn over ฿30K a month", "222K applied without getting a loan; 106K of them earn over ฿30K"],
+    ["sme.png", BLUE, "SME loan for merchants", "288K", "merchants: 102K online, 186K offline; half earn over ฿30K a month",
+      ["106K applied for a loan without getting one and earn over ฿30K: first wave", "222K applied without getting a loan in all", "More active: 44% open the app vs 36% of others"],
       "Loan based on sales and partner data · start in Isan (21%), Greater Bangkok (16%) and Bangkok (15%)"],
   ];
   const cw = (12.33 - 0.3) / 3, y = 1.6, H = 5.15;
