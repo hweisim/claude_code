@@ -11,7 +11,7 @@ const CATEGORIES = {
   other:         { label: 'Other',         icon: '📦', color: '#78909C' },
 };
 
-const CURRENCIES = { USD: '$', EUR: '€', GBP: '£', JPY: '¥', CAD: 'C$', AUD: 'A$' };
+const CURRENCIES = { USD: '$', EUR: '€', GBP: '£', JPY: '¥', CAD: 'C$', AUD: 'A$', MYR: 'RM' };
 
 const MEMBER_COLORS = ['#5C6BC0', '#26C6DA', '#EF9A9A'];
 
