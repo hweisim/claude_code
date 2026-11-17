@@ -709,6 +709,8 @@ pres.addSection({ title: "Appendix" });
 
 
 
+require(__dirname + "/region_slide.js")(pres, { master: "QUESTION", tracker: "APPENDIX A5  |  PRODUCT HOLDING BY REGION" });
+
 (async () => {
   await pres.writeFile({ fileName: OUT });
   await applyTheme(OUT, THEME);

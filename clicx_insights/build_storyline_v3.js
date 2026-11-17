@@ -281,7 +281,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- 4 The base map: came for cash, left with nothing
 {
   const s = mk(1, "4 / 11  |  WHY CUSTOMERS GO QUIET", "But 3 in 4 customers came for a loan and only 1 in 10 of them got one: 1.3M left with nothing, and they stay away",
-    "2.14M customers, Sep 2026. Active = paid, transferred in, used ATM, pocket or coupon, booked or repaid a loan, or joined a mission in the month. Group sizes reconciled across the draft's two activeness tables: see data notes, A5. " + SRC);
+    "2.14M customers, Sep 2026. Active = paid, transferred in, used ATM, pocket or coupon, booked or repaid a loan, or joined a mission in the month. Group sizes reconciled across the draft's two activeness tables: see data notes, A6. " + SRC);
   const MX = 0.5, RHW = 1.85, CW = 2.08, G = 0.08, y0 = 1.62, HH = 0.62, r0 = y0 + HH + G, RH = 1.08;
   const cx = [0, 1, 2].map((i) => MX + RHW + G + i * (CW + G));
   const ry = [0, 1, 2].map((i) => r0 + i * (RH + G));
@@ -356,7 +356,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- 6 Who is active (treemap, payers outlined)
 {
   const s = mk(1, "6 / 11  |  WHO IS ACTIVE", "Only 1 in 5 customers really uses CLICX; 127K of them pay in-app, spread across every segment",
-    "Box size = customers · orange outline = paid in-app in Oct · active = balance over ฿100, payment or loan · 1.51M customers in the product data, 31 Oct 2026 (see data notes, A5)");
+    "Box size = customers · orange outline = paid in-app in Oct · active = balance over ฿100, payment or loan · 1.51M customers in the product data, 31 Oct 2026 (see data notes, A6)");
   const TOTAL = 1507.4, ZERO = 1061.3, MONEY = 136.7, ACT = 309.4;
   const X0 = 0.5, W = 8.95;
   const sy = 1.62, sh = 0.46, zw = W * ZERO / TOTAL, mw = W * MONEY / TOTAL, aw = W - zw - mw;
@@ -722,9 +722,11 @@ pres.addSection({ title: "Appendix" });
   });
 }
 
-// ---------- A5 Data notes
+require(__dirname + "/region_slide.js")(pres, { master: "CONTENT", tracker: "APPENDIX A5  |  PRODUCT HOLDING BY REGION" });
+
+// ---------- A6 Data notes
 {
-  const s = mk(null, "APPENDIX A5  |  DATA NOTES", "The numbers behind this deck: five customer bases, and seven points to confirm before the board",
+  const s = mk(null, "APPENDIX A6  |  DATA NOTES", "The numbers behind this deck: five customer bases, and seven points to confirm before the board",
     SRC + "; Partner Payment Story v1; product segment extract, 31 Oct 2026", "Appendix");
   const y = 1.62, H = 5.15, LW = 5.2, RX = 5.85, RW = 12.83 - 5.85;
   RR(s, 0.5, y, LW, H, C.background2, "Bases panel");
