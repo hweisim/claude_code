@@ -356,7 +356,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- 6 Who is active (treemap, payers outlined)
 {
   const s = mk(1, "6 / 11  |  WHO IS ACTIVE", "Only 1 in 5 customers really uses CLICX; 127K of them pay in-app, spread across every segment",
-    "Box size = customers · orange outline = paid in-app in Oct · active = balance over ฿100, payment or loan · 1.51M customers in the product data, 31 Oct 2026 (see data notes, A6)");
+    "Box size = customers · orange outline = paid in-app in Oct · active = balance over ฿100, payment or loan · saver on balance only: core over ฿20K, emerging ฿101–20K (Save Max/More flag not used) · 1.51M customers in the product data, 31 Oct 2026 (see data notes, A6)");
   const TOTAL = 1507.4, ZERO = 1061.3, MONEY = 136.7, ACT = 309.4;
   const X0 = 0.5, W = 8.95;
   const sy = 1.62, sh = 0.46, zw = W * ZERO / TOTAL, mw = W * MONEY / TOTAL, aw = W - zw - mw;
@@ -364,7 +364,7 @@ pres.addSection({ title: "Storyline" });
   T(s, [{ text: "137K · 9%", options: { bold: true, fontSize: 9, breakLine: true } }, { text: "bal >฿0 & ≤฿100", options: { fontSize: 7.5 } }], { x: X0 + zw, y: sy, w: mw, h: sh, fontSize: 9, color: TXT, align: "center", fill: { color: "C8CFD6" }, line: { color: WHITE, width: 1.5 }, valign: "middle", objectName: "Strip money" });
   T(s, [{ text: "309K ", options: { bold: true } }, { text: "20.5%" }], { x: X0 + zw + mw, y: sy, w: aw, h: sh, fontSize: 10.5, color: WHITE, align: "center", fill: { color: "3A8A80" }, line: { color: WHITE, width: 1.5 }, valign: "middle", objectName: "Strip active" });
   const ty = 2.4, th = 3.28;
-  const fam = [["Borrowers", 164.478, NAVY], ["Savers", 105.4, CYAN], ["Payers only", 39.5, MUTED]];
+  const fam = [["Borrowers", 165.161, NAVY], ["Savers", 104.733, CYAN], ["Payers only", 39.492, MUTED]];
   const cwF = fam.map((f) => W * f[1] / ACT);
   const cx = [X0, X0 + cwF[0], X0 + cwF[0] + cwF[1]];
   fam.forEach((f, a) => {
@@ -375,26 +375,26 @@ pres.addSection({ title: "Storyline" });
     s.addText(runs, { x, y, w, h, color: txtCol, fill: { color: fill }, line: { color: pay ? ORANGE : WHITE, width: pay ? 2.25 : 2 }, margin: opts.margin ?? 8, valign: opts.valign || "top", align: opts.align || "left", isTextBox: true, objectName: obj });
   const Hh = (v, f) => th * v / f;
   let callB, callS;
-  { const x = cx[0], w = cwF[0], f = 164.478; let y = ty;
-    const h1 = Hh(102.7, f), h2 = Hh(40.5, f), h3 = Hh(21.3, f);
+  { const x = cx[0], w = cwF[0], f = 165.161; let y = ty;
+    const h1 = Hh(102.665, f), h2 = Hh(40.526, f), h3 = Hh(21.97, f);
     box(x, y, w, h1, NAVY, WHITE, [{ text: "Borrower only", options: { bold: true, fontSize: 14, breakLine: true } }, { text: "103K", options: { bold: true, fontSize: 30 } }, { text: " 33%", options: { fontSize: 11, breakLine: true } }, { text: "Mostly salaried, aged 20–39; 6 in 10 keep ฿0", options: { fontSize: 11 } }], false, "Tree Borrower only");
     y += h1;
     box(x, y, w, h2, "3A5A85", WHITE, [{ text: "Borrower + transactor", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "41K", options: { bold: true, fontSize: 18 } }, { text: " 13% · salaried, 30–39", options: { fontSize: 10.5 } }], true, "Tree Borrower + transactor", { valign: "middle" });
     y += h2;
-    const w1 = w * 11.0 / 21.3, w2 = w - w1;
-    box(x, y, w1, h3, "5374A8", WHITE, [{ text: "11.0K · 4%", options: { bold: true, fontSize: 12 } }], false, "Tree Saver + borrower", { align: "center", valign: "middle", margin: 2 });
-    box(x + w1, y, w2, h3, "5374A8", WHITE, [{ text: "10.3K · 3%", options: { bold: true, fontSize: 12 } }], true, "Tree Saver + borrower who pay", { align: "center", valign: "middle", margin: 2 });
-    callB = [[x + w1 / 2, "Saver + borrower", "Salaried, aged 30–49"], [x + w1 + w2 / 2, "Saver + borrower who pay", "Salaried, aged 30–39"]];
+    const w1 = w * 11.326 / 21.97, w2 = w - w1;
+    box(x, y, w1, h3, "5374A8", WHITE, [{ text: "11.3K · 4%", options: { bold: true, fontSize: 12 } }], false, "Tree Saver + borrower", { align: "center", valign: "middle", margin: 2 });
+    box(x + w1, y, w2, h3, "5374A8", WHITE, [{ text: "10.6K · 3%", options: { bold: true, fontSize: 12 } }], true, "Tree Saver + borrower who pay", { align: "center", valign: "middle", margin: 2 });
+    callB = [[x + w1 / 2, "Saver + borrower", "Salaried, aged 30–49"], [x + w1 + w2 / 2, "Saver + borrower who pay", "Salaried, aged 30–49"]];
   }
-  { const x = cx[1], w = cwF[1], f = 105.4; let y = ty;
-    const h1 = Hh(50.3, f), h2 = Hh(31.9, f), h3 = Hh(23.3, f);
-    box(x, y, w, h1, "4BA394", WHITE, [{ text: "Emerging saver only", options: { bold: true, fontSize: 14, breakLine: true } }, { text: "50K", options: { bold: true, fontSize: 30 } }, { text: " 16%", options: { fontSize: 11, breakLine: true } }, { text: "Salaried and merchants, 40–59", options: { fontSize: 11 } }], false, "Tree Emerging saver only");
+  { const x = cx[1], w = cwF[1], f = 104.733; let y = ty;
+    const h1 = Hh(47.265, f), h2 = Hh(30.043, f), h3 = Hh(27.425, f);
+    box(x, y, w, h1, "4BA394", WHITE, [{ text: "Emerging saver only", options: { bold: true, fontSize: 14, breakLine: true } }, { text: "47K", options: { bold: true, fontSize: 30 } }, { text: " 15%", options: { fontSize: 11, breakLine: true } }, { text: "Salaried and merchants, 40–59", options: { fontSize: 11 } }], false, "Tree Emerging saver only");
     y += h1;
-    box(x, y, w, h2, "66B3A6", WHITE, [{ text: "Emerging saver + transactor", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "32K", options: { bold: true, fontSize: 18 } }, { text: " 10%", options: { fontSize: 10.5, breakLine: true } }, { text: "Salaried and merchants, 30–49", options: { fontSize: 10.5 } }], true, "Tree Emerging saver + transactor");
+    box(x, y, w, h2, "66B3A6", WHITE, [{ text: "Emerging saver + transactor", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "30K", options: { bold: true, fontSize: 18 } }, { text: " 10%", options: { fontSize: 10.5, breakLine: true } }, { text: "Salaried and merchants, 30–49", options: { fontSize: 10.5 } }], true, "Tree Emerging saver + transactor");
     y += h2;
-    const w1 = w * 18.6 / 23.3, w2 = w - w1;
-    box(x, y, w1, h3, "9FCFC7", TXT, [{ text: "Core saver", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "18.6K", options: { bold: true, fontSize: 18 } }, { text: " 6% · aged 40+", options: { fontSize: 10.5 } }], false, "Tree Core saver", { valign: "middle" });
-    box(x + w1, y, w2, h3, "9FCFC7", TXT, [{ text: "4.7K", options: { bold: true, fontSize: 11.5, breakLine: true } }, { text: "2%", options: { fontSize: 10 } }], true, "Tree Core savers who pay", { align: "center", valign: "middle", margin: 2 });
+    const w1 = w * 21.282 / 27.425, w2 = w - w1;
+    box(x, y, w1, h3, "9FCFC7", TXT, [{ text: "Core saver", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "21.3K", options: { bold: true, fontSize: 18 } }, { text: " 7% · aged 40+", options: { fontSize: 10.5 } }], false, "Tree Core saver", { valign: "middle" });
+    box(x + w1, y, w2, h3, "9FCFC7", TXT, [{ text: "6.1K", options: { bold: true, fontSize: 11.5, breakLine: true } }, { text: "2%", options: { fontSize: 10 } }], true, "Tree Core savers who pay", { align: "center", valign: "middle", margin: 2 });
     callS = [[x + w1 + w2 / 2, "Core savers who pay", "Salaried, aged 30–49"]];
   }
   box(cx[2], ty, cwF[2], th, "8395AB", WHITE, [{ text: "Pays only", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "39K", options: { bold: true, fontSize: 18 } }, { text: " 13%", options: { fontSize: 10.5, breakLine: true } }, { text: "Wage, gig and online sellers", options: { fontSize: 10.5 } }], true, "Tree Pays only");
@@ -407,7 +407,7 @@ pres.addSection({ title: "Storyline" });
   const RX = 9.7, RW = 3.13;
   RR(s, RX, sy, RW, 0.9, TINT, "Active stat");
   T(s, [{ text: "309K", options: { bold: true, fontSize: 28, color: NAVY, breakLine: true } }, { text: "active: 20% of 1.51M", options: { fontSize: 11, color: TXT } }], { x: RX + 0.15, y: sy + 0.04, w: RW - 0.3, h: 0.82, valign: "middle", objectName: "Active stat text" });
-  [["127K pay in-app (41%)", "88K also borrow or save", ORANGE], ["164K borrowers (53%)", "6 in 10 keep ฿0: sell savings", NAVY],
+  [["127K pay in-app (41%)", "88K also borrow or save", ORANGE], ["165K borrowers (53%)", "6 in 10 keep ฿0: sell savings", NAVY],
     ["105K savers (34%)", "1 in 5 core savers pays in-app", CYAN], ["137K hold ฿1–100 only", "No loan, no payment", "C8CFD6"]].forEach((t, k) => {
     const y = 2.72 + k * 0.7;
     R(s, RX, y, 0.05, 0.56, t[2], `Takeaway bar ${k}`);
@@ -512,7 +512,7 @@ const PLAYS = [
   ["ACTIVATE", 3, "A first deposit or first loan for those who left with nothing", 1295, "1.3M", "With money in, 50% are active, against 4% without"],
   ["ACTIVATE", 4, "Top-up-first offers for AIS prepaid", 516.5, "516K", "Prepaid pay at 8.4% vs 12.8% for postpaid: up to +22K payers a month"],
   ["ACTIVATE", 5, "Win back payers who stopped", 114, "114K", "53K paid in Sep but not Oct; 61K paid only in the August promotion"],
-  ["GROW", 6, "Savings for customers who only borrow", 103, "103K", "6 in 10 keep ฿0 with us; only 21K both borrow and save"],
+  ["GROW", 6, "Savings for customers who only borrow", 103, "103K", "6 in 10 keep ฿0 with us; only 22K both borrow and save"],
   ["GROW", 7, "SME loan for merchants", 106, "106K", "Applied without getting a loan and earn over ฿30K; merchants open the app most"],
   ["GROW", 8, "Digital credit card", 1100, "1.1M", "Earn over ฿15K, aged 20–44; 85% have a high need for cash"],
   ["GROW", 9, "Investing and wealth", 528, "528K", "Tech-savvy customers; 110K already hold over ฿20K or Save Max/More"],
