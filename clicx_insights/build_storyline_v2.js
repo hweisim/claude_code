@@ -283,8 +283,11 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
     const lab = a === 2 ? [{ text: f[0], options: { bold: true } }] : [{ text: f[0], options: { bold: true } }, { text: "  " + Math.round(f[1]) + "K · " + Math.round(100 * f[1] / ACT) + "%" + (f[3] || "") }];
     s.addText(lab, { x: cx[a], y: ty - 0.27, w: cwF[a], h: 0.24, fontSize: 10, color: f[2], margin: [0, 0, 0, 0.02], valign: "bottom", isTextBox: true, objectName: `Family ${a}` });
   });
-  const box = (x, y, w, h, fill, txtCol, runs, pay, obj, opts = {}) =>
-    s.addText(runs, { x, y, w, h, color: txtCol, fill: { color: fill }, line: { color: pay ? ORANGE : WHITE, width: pay ? 2.25 : 2 }, margin: opts.margin ?? 8, valign: opts.valign || "top", align: opts.align || "left", isTextBox: true, objectName: obj });
+  const payBoxes = [];
+  const box = (x, y, w, h, fill, txtCol, runs, pay, obj, opts = {}) => {
+    if (pay) payBoxes.push([x, y, w, h, obj]);
+    s.addText(runs, { x, y, w, h, color: txtCol, fill: { color: fill }, line: { color: WHITE, width: 2 }, margin: opts.margin ?? 8, valign: opts.valign || "top", align: opts.align || "left", isTextBox: true, objectName: obj });
+  };
   const H = (v, f) => th * v / f;
   // borrowers column
   { const x = cx[0], w = cwF[0], f = 165.161; let y = ty;
@@ -313,6 +316,8 @@ const panelHead = (s, x, y, w, n, head, sub, col = NAVY) => {
   // payers-only column
   box(cx[2], ty, cwF[2], th, "8395AB", WHITE, [{ text: "Pays only", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "39K", options: { bold: true, fontSize: 18 } }, { text: " 13%", options: { fontSize: 10.5, breakLine: true } }, { text: "Wage, gig and online sellers", options: { fontSize: 10.5 } }], true, "Tree Pays only");
   // callouts under the split boxes
+  // payer outlines drawn last, inset, so neighbouring boxes can't cover them
+  payBoxes.forEach(([x, y, w, h, obj]) => s.addShape(pres.shapes.RECTANGLE, { x: x + 0.025, y: y + 0.025, w: w - 0.05, h: h - 0.05, fill: { type: "none" }, line: { color: ORANGE, width: 2.75 }, objectName: obj + " payer outline" }));
   const cy = ty + th;
   [...callB, ...callS].forEach((c, k) => {
     s.addShape(pres.shapes.LINE, { x: c[0], y: cy, w: 0, h: 0.09, line: { color: TXT, width: 1 }, objectName: `Callout tick ${k}` });
