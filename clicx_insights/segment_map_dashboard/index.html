@@ -5,6 +5,8 @@
 .sm-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; }
 .sm-lede { margin: 0; max-width: 72ch; font-size: var(--cds-font-size-body); color: var(--color-fg); }
 .sm-lede b { font-variant-numeric: tabular-nums; }
+.sm-filters { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-sm) var(--cds-gap-md); }
+.sm-filter-label { font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); color: var(--color-fg); }
 .sm-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--cds-gap-md); }
 .sm-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: grid; gap: var(--cds-gap-xs); min-width: 0; }
 .sm-tile-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
@@ -42,7 +44,21 @@
 <div class="sm">
   <header class="sm-head" id="overview">
     <h1 class="sm-title">CLICX Segment Map</h1>
-    <p class="sm-lede" data-read lang="en">Only <b data-draw="leadActive" data-source="summary" data-field="active_share" data-row="0" class="dash-skeleton">—</b> of <b data-draw="leadTotal" data-source="summary" data-field="customers" data-row="0" class="dash-skeleton">—</b> customers are active. By region, the active share runs from <b data-draw="leadLowRegion" data-source="summary" data-field="low_region" data-row="0" class="dash-skeleton">—</b> (<b data-draw="leadLowRegionShare" data-source="summary" data-field="low_region_share" data-row="0" class="dash-skeleton">—</b>) to <b data-draw="leadTopRegion" data-source="summary" data-field="top_region" data-row="0" class="dash-skeleton">—</b> (<b data-draw="leadTopRegionShare" data-source="summary" data-field="top_region_share" data-row="0" class="dash-skeleton">—</b>); by occupation, <b data-draw="leadTopOcc" data-source="summary" data-field="top_occ" data-row="0" class="dash-skeleton">—</b> lead at <b data-draw="leadTopOccShare" data-source="summary" data-field="top_occ_share" data-row="0" class="dash-skeleton">—</b>.</p>
+    <div class="sm-filters" id="filters">
+      <label class="sm-filter-label" for="sm-age-pick">Age</label>
+      <select class="dash-select" id="sm-age-pick" aria-label="Age band">
+        <option value="">All ages</option>
+        <option value="10–19">10–19</option>
+        <option value="20–29">20–29</option>
+        <option value="30–39">30–39</option>
+        <option value="40–49">40–49</option>
+        <option value="50–59">50–59</option>
+        <option value="60–69">60–69</option>
+        <option value="70+">70+</option>
+      </select>
+      <span class="sm-note">Applies to every figure and chart on the page.</span>
+    </div>
+    <p class="sm-lede" data-read lang="en">Only <b data-draw="leadActive" data-source="summary" data-field="active_share" data-row="0" class="dash-skeleton">—</b> of <b data-draw="leadTotal" data-source="summary" data-field="customers" data-row="0" class="dash-skeleton">—</b> customers<span data-draw="ageScope"></span> are active. By region, the active share runs from <b data-draw="leadLowRegion" data-source="summary" data-field="low_region" data-row="0" class="dash-skeleton">—</b> (<b data-draw="leadLowRegionShare" data-source="summary" data-field="low_region_share" data-row="0" class="dash-skeleton">—</b>) to <b data-draw="leadTopRegion" data-source="summary" data-field="top_region" data-row="0" class="dash-skeleton">—</b> (<b data-draw="leadTopRegionShare" data-source="summary" data-field="top_region_share" data-row="0" class="dash-skeleton">—</b>); by occupation, <b data-draw="leadTopOcc" data-source="summary" data-field="top_occ" data-row="0" class="dash-skeleton">—</b> lead at <b data-draw="leadTopOccShare" data-source="summary" data-field="top_occ_share" data-row="0" class="dash-skeleton">—</b>.</p>
   </header>
 
   <section class="sm-tiles" id="headline" aria-label="Headline figures">
@@ -166,11 +182,13 @@ SM.pct = (v) => (v == null || isNaN(v) ? '—' : d3.format('.1f')(v * 100) + '%'
 dash.calc('regionMix', {
   inputs: ['segmap'],
   title: 'Segment mix by region',
-  description: 'Customers in each segment by region, with each segment\'s share of the region\'s customers and of its active customers',
+  description: 'For the chosen age band, customers in each segment by region, with each segment\'s share of the region\'s customers and of its active customers',
   fn: (segmap) => {
+    const age = dash.params().age || '';
+    const rows = age ? segmap.filter((d) => d.age === age) : segmap;
     const inactive = new Set(['Balance ฿1–100 only', 'No product (฿0)']);
     const out = [];
-    for (const [region, segs] of d3.rollup(segmap, (v) => d3.sum(v, (d) => +d.customers), (d) => d.region, (d) => d.segment)) {
+    for (const [region, segs] of d3.rollup(rows, (v) => d3.sum(v, (d) => +d.customers), (d) => d.region, (d) => d.segment)) {
       const all = d3.sum(segs.values());
       const active = d3.sum([...segs].filter(([s]) => !inactive.has(s)), ([, n]) => n);
       for (const [segment, customers] of segs) {
@@ -183,11 +201,13 @@ dash.calc('regionMix', {
 dash.calc('occMix', {
   inputs: ['segmap'],
   title: 'Segment mix by occupation',
-  description: 'Customers in each segment by occupation group, with each segment\'s share of the group\'s customers and of its active customers',
+  description: 'For the chosen age band, customers in each segment by occupation group, with each segment\'s share of the group\'s customers and of its active customers',
   fn: (segmap) => {
+    const age = dash.params().age || '';
+    const rows = age ? segmap.filter((d) => d.age === age) : segmap;
     const inactive = new Set(['Balance ฿1–100 only', 'No product (฿0)']);
     const out = [];
-    for (const [occupation, segs] of d3.rollup(segmap, (v) => d3.sum(v, (d) => +d.customers), (d) => d.occupation, (d) => d.segment)) {
+    for (const [occupation, segs] of d3.rollup(rows, (v) => d3.sum(v, (d) => +d.customers), (d) => d.occupation, (d) => d.segment)) {
       const all = d3.sum(segs.values());
       const active = d3.sum([...segs].filter(([s]) => !inactive.has(s)), ([, n]) => n);
       for (const [segment, customers] of segs) {
@@ -200,10 +220,12 @@ dash.calc('occMix', {
 dash.calc('cellMix', {
   inputs: ['segmap'],
   title: 'Customers by occupation, region and segment',
-  description: 'Customer counts for each occupation and region by segment, summed across provinces in a region',
+  description: 'For the chosen age band, customer counts for each occupation and region by segment, summed across provinces in a region',
   fn: (segmap) => {
+    const age = dash.params().age || '';
+    const rows = age ? segmap.filter((d) => d.age === age) : segmap;
     const out = [];
-    for (const [occupation, regions] of d3.rollup(segmap, (v) => d3.sum(v, (d) => +d.customers), (d) => d.occupation, (d) => d.region, (d) => d.segment)) {
+    for (const [occupation, regions] of d3.rollup(rows, (v) => d3.sum(v, (d) => +d.customers), (d) => d.occupation, (d) => d.region, (d) => d.segment)) {
       for (const [region, segs] of regions) for (const [segment, customers] of segs) out.push({ occupation, region, segment, customers });
     }
     return out;
@@ -212,23 +234,25 @@ dash.calc('cellMix', {
 dash.calc('summary', {
   inputs: ['segmap'],
   title: 'Headline figures',
-  description: 'Totals across all customers: active, paying, borrowing and saving, and the highest and lowest active shares by region and occupation',
+  description: 'Totals for the chosen age band: active, paying, borrowing and saving, and the highest and lowest active shares by region and occupation',
   fn: (segmap) => {
+    const age = dash.params().age || '';
+    const rows = age ? segmap.filter((d) => d.age === age) : segmap;
     const inactive = new Set(['Balance ฿1–100 only', 'No product (฿0)']);
     const pay = new Set(['Borrower + transactor', 'Saver + borrower who pay', 'Emerging saver + transactor', 'Core saver who pay', 'Pays only']);
     const borrow = new Set(['Borrower only', 'Borrower + transactor', 'Saver + borrower', 'Saver + borrower who pay']);
     const save = new Set(['Saver + borrower', 'Saver + borrower who pay', 'Emerging saver only', 'Emerging saver + transactor', 'Core saver', 'Core saver who pay']);
     const n = (rows, set) => d3.sum(rows.filter((d) => !set || set.has(d.segment)), (d) => +d.customers);
     const activeShare = (rows) => d3.sum(rows.filter((d) => !inactive.has(d.segment)), (d) => +d.customers) / n(rows);
-    const customers = n(segmap);
-    const active = customers - d3.sum(segmap.filter((d) => inactive.has(d.segment)), (d) => +d.customers);
-    const byRegion = [...d3.group(segmap, (d) => d.region)].map(([k, v]) => [k, activeShare(v)]).sort((a, b) => b[1] - a[1]);
-    const byOcc = [...d3.group(segmap, (d) => d.occupation)].map(([k, v]) => [k, activeShare(v)]).sort((a, b) => b[1] - a[1]);
+    const customers = n(rows);
+    const active = customers - d3.sum(rows.filter((d) => inactive.has(d.segment)), (d) => +d.customers);
+    const byRegion = [...d3.group(rows, (d) => d.region)].map(([k, v]) => [k, activeShare(v)]).sort((a, b) => b[1] - a[1]);
+    const byOcc = [...d3.group(rows, (d) => d.occupation)].map(([k, v]) => [k, activeShare(v)]).sort((a, b) => b[1] - a[1]);
     return [{
       customers, active, active_share: active / customers,
-      pay: n(segmap, pay), pay_share_active: n(segmap, pay) / active,
-      borrow: n(segmap, borrow), borrow_share_active: n(segmap, borrow) / active,
-      save: n(segmap, save), save_share_active: n(segmap, save) / active,
+      pay: n(rows, pay), pay_share_active: n(rows, pay) / active,
+      borrow: n(rows, borrow), borrow_share_active: n(rows, borrow) / active,
+      save: n(rows, save), save_share_active: n(rows, save) / active,
       top_region: byRegion[0][0], top_region_share: byRegion[0][1],
       low_region: byRegion[byRegion.length - 1][0], low_region_share: byRegion[byRegion.length - 1][1],
       top_occ: byOcc[0][0], top_occ_share: byOcc[0][1],
@@ -399,6 +423,14 @@ dash.draw('heat', (el) => {
 <script>
 const SM = window.SM;
 // controls: listen and set pressed state, then redraw
+dash.draw('ageScope', (el) => {
+  const age = dash.params().age;
+  el.textContent = age ? ` aged ${age}` : '';
+});
+document.querySelectorAll('#sm-age-pick').forEach((sel) => {
+  sel.addEventListener('change', () => dash.setParams({ age: sel.value }));
+  dash.onData(() => { if (document.activeElement !== sel) sel.value = dash.params().age || ''; });
+});
 document.querySelectorAll('.sm-mode').forEach((btn) => {
   btn.addEventListener('click', () => {
     SM.mode = btn.getAttribute('data-mode');
