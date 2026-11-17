@@ -356,7 +356,7 @@ pres.addSection({ title: "Storyline" });
 // ---------- 6 Who is active (treemap, payers outlined)
 {
   const s = mk(1, "6 / 11  |  WHO IS ACTIVE", "Only 1 in 5 customers really uses CLICX; 127K of them pay in-app, spread across every segment",
-    "Box size = customers · orange outline = paid in-app in Oct · active = balance over ฿100, payment or loan · saver on balance only: core over ฿20K, emerging ฿101–20K (Save Max/More flag not used) · 1.51M customers in the product data, 31 Oct 2026 (see data notes, A6)");
+    "Box size = customers · orange outline = paid in-app in Oct · active = balance over ฿100, payment or loan · Bangkok area = Bangkok, Nonthaburi, Pathum Thani, Samut Prakan · saver on balance only: core over ฿20K, emerging ฿101–20K (Save Max/More flag not used) · 1.51M customers in the product data, 31 Oct 2026 (see data notes, A6)");
   const TOTAL = 1507.4, ZERO = 1061.3, MONEY = 136.7, ACT = 309.4;
   const X0 = 0.5, W = 8.95;
   const sy = 1.62, sh = 0.46, zw = W * ZERO / TOTAL, mw = W * MONEY / TOTAL, aw = W - zw - mw;
@@ -364,11 +364,11 @@ pres.addSection({ title: "Storyline" });
   T(s, [{ text: "137K · 9%", options: { bold: true, fontSize: 9, breakLine: true } }, { text: "bal >฿0 & ≤฿100", options: { fontSize: 7.5 } }], { x: X0 + zw, y: sy, w: mw, h: sh, fontSize: 9, color: TXT, align: "center", fill: { color: "C8CFD6" }, line: { color: WHITE, width: 1.5 }, valign: "middle", objectName: "Strip money" });
   T(s, [{ text: "309K ", options: { bold: true } }, { text: "20.5%" }], { x: X0 + zw + mw, y: sy, w: aw, h: sh, fontSize: 10.5, color: WHITE, align: "center", fill: { color: "3A8A80" }, line: { color: WHITE, width: 1.5 }, valign: "middle", objectName: "Strip active" });
   const ty = 2.4, th = 3.28;
-  const fam = [["Borrowers", 165.161, NAVY], ["Savers", 104.733, CYAN], ["Payers only", 39.492, MUTED]];
+  const fam = [["Borrowers", 165.161, NAVY, " · 70% up-country"], ["Savers", 104.733, CYAN, " · 47% Bangkok area"], ["Payers only", 39.492, MUTED]];
   const cwF = fam.map((f) => W * f[1] / ACT);
   const cx = [X0, X0 + cwF[0], X0 + cwF[0] + cwF[1]];
   fam.forEach((f, a) => {
-    const lab = a === 2 ? [{ text: f[0], options: { bold: true } }] : [{ text: f[0], options: { bold: true } }, { text: "  " + Math.round(f[1]) + "K · " + Math.round(100 * f[1] / ACT) + "%" }];
+    const lab = a === 2 ? [{ text: f[0], options: { bold: true } }] : [{ text: f[0], options: { bold: true } }, { text: "  " + Math.round(f[1]) + "K · " + Math.round(100 * f[1] / ACT) + "%" + (f[3] || "") }];
     T(s, lab, { x: cx[a] + 0.02, y: ty - 0.27, w: cwF[a], h: 0.24, fontSize: 10, color: f[2], valign: "bottom", objectName: `Family ${a}` });
   });
   const box = (x, y, w, h, fill, txtCol, runs, pay, obj, opts = {}) =>
@@ -388,12 +388,12 @@ pres.addSection({ title: "Storyline" });
   }
   { const x = cx[1], w = cwF[1], f = 104.733; let y = ty;
     const h1 = Hh(47.265, f), h2 = Hh(30.043, f), h3 = Hh(27.425, f);
-    box(x, y, w, h1, "4BA394", WHITE, [{ text: "Emerging saver only", options: { bold: true, fontSize: 14, breakLine: true } }, { text: "47K", options: { bold: true, fontSize: 30 } }, { text: " 15%", options: { fontSize: 11, breakLine: true } }, { text: "Salaried and merchants, 40–59", options: { fontSize: 11 } }], false, "Tree Emerging saver only");
+    box(x, y, w, h1, "4BA394", WHITE, [{ text: "Emerging saver only", options: { bold: true, fontSize: 14, breakLine: true } }, { text: "47K", options: { bold: true, fontSize: 30 } }, { text: " 15%", options: { fontSize: 11, breakLine: true } }, { text: "Salaried and merchants, 40–59; 44% in Bangkok area", options: { fontSize: 11 } }], false, "Tree Emerging saver only");
     y += h1;
     box(x, y, w, h2, "66B3A6", WHITE, [{ text: "Emerging saver + transactor", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "30K", options: { bold: true, fontSize: 18 } }, { text: " 10%", options: { fontSize: 10.5, breakLine: true } }, { text: "Salaried and merchants, 30–49", options: { fontSize: 10.5 } }], true, "Tree Emerging saver + transactor");
     y += h2;
     const w1 = w * 21.282 / 27.425, w2 = w - w1;
-    box(x, y, w1, h3, "9FCFC7", TXT, [{ text: "Core saver", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "21.3K", options: { bold: true, fontSize: 18 } }, { text: " 7% · aged 40+", options: { fontSize: 10.5 } }], false, "Tree Core saver", { valign: "middle" });
+    box(x, y, w1, h3, "9FCFC7", TXT, [{ text: "Core saver", options: { bold: true, fontSize: 12, breakLine: true } }, { text: "21.3K", options: { bold: true, fontSize: 18 } }, { text: " 7%", options: { fontSize: 10.5, breakLine: true } }, { text: "Aged 40+; half live in Bangkok", options: { fontSize: 10 } }], false, "Tree Core saver", { valign: "middle" });
     box(x + w1, y, w2, h3, "9FCFC7", TXT, [{ text: "6.1K", options: { bold: true, fontSize: 11.5, breakLine: true } }, { text: "2%", options: { fontSize: 10 } }], true, "Tree Core savers who pay", { align: "center", valign: "middle", margin: 2 });
     callS = [[x + w1 + w2 / 2, "Core savers who pay", "Salaried, aged 30–49"]];
   }
@@ -408,7 +408,7 @@ pres.addSection({ title: "Storyline" });
   RR(s, RX, sy, RW, 0.9, TINT, "Active stat");
   T(s, [{ text: "309K", options: { bold: true, fontSize: 28, color: NAVY, breakLine: true } }, { text: "active: 20% of 1.51M", options: { fontSize: 11, color: TXT } }], { x: RX + 0.15, y: sy + 0.04, w: RW - 0.3, h: 0.82, valign: "middle", objectName: "Active stat text" });
   [["127K pay in-app (41%)", "88K also borrow or save", ORANGE], ["165K borrowers (53%)", "6 in 10 keep ฿0: sell savings", NAVY],
-    ["105K savers (34%)", "1 in 5 core savers pays in-app", CYAN], ["137K hold ฿1–100 only", "No loan, no payment", "C8CFD6"]].forEach((t, k) => {
+    ["105K savers (34%)", "1 in 5 core savers pays in-app", CYAN], ["137K hold ฿1–100 only", "No loan, no payment", "C8CFD6"], ["Saving is a Bangkok story", "46% of core savers live in Bangkok, vs 18% of customers", "0F6D64"]].forEach((t, k) => {
     const y = 2.72 + k * 0.7;
     R(s, RX, y, 0.05, 0.56, t[2], `Takeaway bar ${k}`);
     T(s, [{ text: t[0], options: { bold: true, fontSize: 12, color: NAVY, breakLine: true } }, { text: t[1], options: { fontSize: 10.5, color: TXT } }], { x: RX + 0.17, y, w: RW - 0.2, h: 0.56, valign: "middle", objectName: `Takeaway ${k}` });
