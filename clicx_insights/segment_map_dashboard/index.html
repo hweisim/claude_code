@@ -1,0 +1,416 @@
+<meta name="dash-one-writer">
+<style>
+.sm { display: grid; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.sm-head { display: grid; gap: var(--cds-gap-sm); }
+.sm-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; }
+.sm-lede { margin: 0; max-width: 72ch; font-size: var(--cds-font-size-body); color: var(--color-fg); }
+.sm-lede b { font-variant-numeric: tabular-nums; }
+.sm-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--cds-gap-md); }
+.sm-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: grid; gap: var(--cds-gap-xs); min-width: 0; }
+.sm-tile-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.sm-tile-value { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.sm-tile-sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.sm-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-md); min-width: 0; }
+.sm-card h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.sm-card-sub { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.sm-controls { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); align-items: center; }
+.sm-toggle { display: inline-flex; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); overflow: hidden; }
+.sm-toggle button { font: inherit; font-size: var(--cds-font-size-caption); padding: 6px 12px; border: 0; background: transparent; color: var(--color-fg-muted); cursor: pointer; }
+.sm-toggle button[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); }
+.sm-toggle button:focus-visible, .sm-legend button:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.sm-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0; padding: 0; list-style: none; font-size: var(--cds-font-size-caption); color: var(--color-fg); }
+.sm-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.sm-sw { width: 12px; height: 12px; border-radius: 2px; flex: none; }
+.sm-legend-group { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; }
+.sm-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: var(--cds-gap-lg); }
+.sm-chart { position: relative; min-height: 220px; min-width: 0; }
+.sm-chart svg { display: block; width: 100%; overflow: visible; }
+.sm-chart text { fill: var(--color-fg); font-size: 12px; }
+.sm-chart .sm-muted { fill: var(--cds-text-secondary); font-size: 11px; }
+.sm-chart .sm-in { font-size: 10.5px; pointer-events: none; }
+.sm-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: var(--cds-radius); padding: 6px 9px; font-size: var(--cds-font-size-caption); color: var(--color-fg); white-space: nowrap; z-index: 2; }
+.sm-tip b { font-variant-numeric: tabular-nums; }
+.sm-heat-wrap { overflow-x: auto; }
+.sm-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.sm details { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.sm details summary { cursor: pointer; color: var(--color-fg); }
+.sm details dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 8px 0 0; }
+.sm details dt { color: var(--color-fg); }
+.sm details dd { margin: 0; }
+</style>
+
+<div class="sm">
+  <header class="sm-head" id="overview">
+    <h1 class="sm-title">CLICX Segment Map</h1>
+    <p class="sm-lede" data-read lang="en">Only <b data-draw="leadActive" data-source="summary" data-field="active_share" data-row="0" class="dash-skeleton">—</b> of <b data-draw="leadTotal" data-source="summary" data-field="customers" data-row="0" class="dash-skeleton">—</b> customers are active. By region, the active share runs from <b data-draw="leadLowRegion" data-source="summary" data-field="low_region" data-row="0" class="dash-skeleton">—</b> (<b data-draw="leadLowRegionShare" data-source="summary" data-field="low_region_share" data-row="0" class="dash-skeleton">—</b>) to <b data-draw="leadTopRegion" data-source="summary" data-field="top_region" data-row="0" class="dash-skeleton">—</b> (<b data-draw="leadTopRegionShare" data-source="summary" data-field="top_region_share" data-row="0" class="dash-skeleton">—</b>); by occupation, <b data-draw="leadTopOcc" data-source="summary" data-field="top_occ" data-row="0" class="dash-skeleton">—</b> lead at <b data-draw="leadTopOccShare" data-source="summary" data-field="top_occ_share" data-row="0" class="dash-skeleton">—</b>.</p>
+  </header>
+
+  <section class="sm-tiles" id="headline" aria-label="Headline figures">
+    <div class="sm-tile"><span class="sm-tile-label">Customers</span><span class="sm-tile-value" data-draw="tileCustomers" data-source="summary" data-field="customers" data-row="0">—</span><span class="sm-tile-sub">1 Oct 2026 balances</span></div>
+    <div class="sm-tile"><span class="sm-tile-label">Active</span><span class="sm-tile-value" data-draw="tileActive" data-source="summary" data-field="active" data-row="0">—</span><span class="sm-tile-sub"><span data-draw="tileActiveShare" data-source="summary" data-field="active_share" data-row="0">—</span> of customers</span></div>
+    <div class="sm-tile"><span class="sm-tile-label">Paid in-app in Oct</span><span class="sm-tile-value" data-draw="tilePay" data-source="summary" data-field="pay" data-row="0">—</span><span class="sm-tile-sub"><span data-draw="tilePayShare" data-source="summary" data-field="pay_share_active" data-row="0">—</span> of active</span></div>
+    <div class="sm-tile"><span class="sm-tile-label">Ever booked a loan</span><span class="sm-tile-value" data-draw="tileBorrow" data-source="summary" data-field="borrow" data-row="0">—</span><span class="sm-tile-sub"><span data-draw="tileBorrowShare" data-source="summary" data-field="borrow_share_active" data-row="0">—</span> of active</span></div>
+    <div class="sm-tile"><span class="sm-tile-label">Save over ฿100</span><span class="sm-tile-value" data-draw="tileSave" data-source="summary" data-field="save" data-row="0">—</span><span class="sm-tile-sub"><span data-draw="tileSaveShare" data-source="summary" data-field="save_share_active" data-row="0">—</span> of active</span></div>
+  </section>
+
+  <section class="sm-card" id="segments">
+    <div class="sm-controls">
+      <div class="sm-toggle" role="group" aria-label="Customers shown in the segment mix">
+        <button type="button" class="sm-mode" data-mode="active" aria-pressed="true">Active customers</button>
+        <button type="button" class="sm-mode" data-mode="all" aria-pressed="false">All customers</button>
+      </div>
+      <p class="sm-note"><span class="sm-mode-note" data-for="active">Bars show each segment's share of the group's active customers.</span><span class="sm-mode-note" data-for="all" hidden>Bars show each segment's share of all the group's customers, including those with no product.</span></p>
+    </div>
+    <div>
+      <p class="sm-legend-group">Borrowers</p>
+      <ul class="sm-legend">
+        <li><span class="sm-sw" style="background:#1F3A5F"></span>Borrower only</li>
+        <li><span class="sm-sw" style="background:#3A5A85"></span>Borrower + transactor</li>
+        <li><span class="sm-sw" style="background:#5374A8"></span>Saver + borrower</li>
+        <li><span class="sm-sw" style="background:#8FA9D3"></span>Saver + borrower who pay</li>
+      </ul>
+    </div>
+    <div>
+      <p class="sm-legend-group">Savers, no loan</p>
+      <ul class="sm-legend">
+        <li><span class="sm-sw" style="background:#2BA597"></span>Emerging saver only</li>
+        <li><span class="sm-sw" style="background:#7CC5BA"></span>Emerging saver + transactor</li>
+        <li><span class="sm-sw" style="background:#0F6D64"></span>Core saver</li>
+        <li><span class="sm-sw" style="background:#B3E0DA"></span>Core saver who pay</li>
+      </ul>
+    </div>
+    <div>
+      <p class="sm-legend-group">Payers only, and no product</p>
+      <ul class="sm-legend">
+        <li><span class="sm-sw" style="background:#E3A15F"></span>Pays only</li>
+        <li class="sm-inactive-key" hidden><span class="sm-sw" style="background:#B8C1CC"></span>Balance ฿1–100 only</li>
+        <li class="sm-inactive-key" hidden><span class="sm-sw" style="background:#DDE2E8"></span>No product (฿0)</li>
+      </ul>
+    </div>
+    <div class="sm-two">
+      <div id="by-region">
+        <h2>By region</h2>
+        <p class="sm-card-sub">Customers by current address. Northeast and North are one province each (Nakhon Ratchasima, Chiang Mai).</p>
+        <div class="sm-chart" data-draw="regionBars" data-source="regionMix"></div>
+      </div>
+      <div id="by-occupation">
+        <h2>By occupation</h2>
+        <p class="sm-card-sub">Occupation group on the customer's profile.</p>
+        <div class="sm-chart" data-draw="occBars" data-source="occMix"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sm-card" id="grid">
+    <div class="sm-controls">
+      <h2>Occupation × region</h2>
+      <label class="sm-note" for="sm-heat-pick">Colour cells by</label>
+      <select class="dash-select" id="sm-heat-pick" aria-label="Segment shown in the grid">
+        <option value="Active (any product)">Active (any product)</option>
+        <option value="Paid in-app in Oct">Paid in-app in Oct</option>
+        <option value="Ever booked a loan">Ever booked a loan</option>
+        <option value="Save over ฿100">Save over ฿100</option>
+        <option value="Borrower only">Borrower only</option>
+        <option value="Borrower + transactor">Borrower + transactor</option>
+        <option value="Saver + borrower">Saver + borrower</option>
+        <option value="Saver + borrower who pay">Saver + borrower who pay</option>
+        <option value="Emerging saver only">Emerging saver only</option>
+        <option value="Emerging saver + transactor">Emerging saver + transactor</option>
+        <option value="Core saver">Core saver</option>
+        <option value="Core saver who pay">Core saver who pay</option>
+        <option value="Pays only">Pays only</option>
+        <option value="Balance ฿1–100 only">Balance ฿1–100 only</option>
+        <option value="No product (฿0)">No product (฿0)</option>
+      </select>
+    </div>
+    <p class="sm-card-sub">Each cell is the share of that occupation and region's customers in the chosen segment. Darker means a higher share; the All row and column are totals.</p>
+    <div class="sm-heat-wrap"><div class="sm-chart" data-draw="heat" data-source="cellMix"></div></div>
+  </section>
+
+  <details id="definitions">
+    <summary>How customers are classified</summary>
+    <dl>
+      <dt>Borrow</dt><dd>Has ever booked a loan with CLICX.</dd>
+      <dt>Pay</dt><dd>Paid in-app in October 2026 (Bill Pay / Top Up or Scan and Pay).</dd>
+      <dt>Core saver</dt><dd>Balance over ฿20K. The Save Max/More flag is not used.</dd>
+      <dt>Emerging saver</dt><dd>Balance ฿101–20K.</dd>
+      <dt>Active</dt><dd>Borrows, pays or saves (balance over ฿100). Anyone who has booked a loan sits with the borrowers, whatever their balance.</dd>
+      <dt>Region</dt><dd>The file names only the 8 largest provinces. Greater Bangkok is Nonthaburi, Pathum Thani and Samut Prakan; East is Chon Buri and Rayong. Other provinces holds the remaining 56% of customers.</dd>
+    </dl>
+  </details>
+</div>
+
+<script>
+const SM = (window.SM = window.SM || { mode: 'active', heat: 'Active (any product)' });
+SM.SEGS = [
+  ['Borrower only', '#1F3A5F'], ['Borrower + transactor', '#3A5A85'], ['Saver + borrower', '#5374A8'], ['Saver + borrower who pay', '#8FA9D3'],
+  ['Emerging saver only', '#2BA597'], ['Emerging saver + transactor', '#7CC5BA'], ['Core saver', '#0F6D64'], ['Core saver who pay', '#B3E0DA'],
+  ['Pays only', '#E3A15F'], ['Balance ฿1–100 only', '#B8C1CC'], ['No product (฿0)', '#DDE2E8'],
+];
+SM.COLOR = new Map(SM.SEGS);
+SM.INACTIVE = new Set(['Balance ฿1–100 only', 'No product (฿0)']);
+SM.GROUPS = {
+  'Active (any product)': SM.SEGS.map((s) => s[0]).filter((s) => !SM.INACTIVE.has(s)),
+  'Paid in-app in Oct': ['Borrower + transactor', 'Saver + borrower who pay', 'Emerging saver + transactor', 'Core saver who pay', 'Pays only'],
+  'Ever booked a loan': ['Borrower only', 'Borrower + transactor', 'Saver + borrower', 'Saver + borrower who pay'],
+  'Save over ฿100': ['Saver + borrower', 'Saver + borrower who pay', 'Emerging saver only', 'Emerging saver + transactor', 'Core saver', 'Core saver who pay'],
+};
+SM.GROUP_COLOR = { 'Active (any product)': '#1AA39A', 'Paid in-app in Oct': '#E3A15F', 'Ever booked a loan': '#1F3A5F', 'Save over ฿100': '#2BA597' };
+SM.REGIONS = ['Bangkok', 'Greater Bangkok', 'East', 'Northeast', 'North', 'Other provinces'];
+SM.REGION_SHORT = { 'Bangkok': 'Bangkok', 'Greater Bangkok': 'Gr. Bangkok', 'East': 'East', 'Northeast': 'Northeast', 'North': 'North', 'Other provinces': 'Other prov.', 'All': 'All' };
+SM.num = (n) => (n >= 1e6 ? d3.format('.2f')(n / 1e6) + 'M' : n >= 1e5 ? d3.format('.0f')(n / 1e3) + 'K' : n >= 1e3 ? d3.format('.1f')(n / 1e3) + 'K' : d3.format(',')(n));
+SM.pct = (v) => (v == null || isNaN(v) ? '—' : d3.format('.1f')(v * 100) + '%');
+</script>
+
+<script>
+dash.calc('regionMix', {
+  inputs: ['segmap'],
+  title: 'Segment mix by region',
+  description: 'Customers in each segment by region, with each segment\'s share of the region\'s customers and of its active customers',
+  fn: (segmap) => {
+    const inactive = new Set(['Balance ฿1–100 only', 'No product (฿0)']);
+    const out = [];
+    for (const [region, segs] of d3.rollup(segmap, (v) => d3.sum(v, (d) => +d.customers), (d) => d.region, (d) => d.segment)) {
+      const all = d3.sum(segs.values());
+      const active = d3.sum([...segs].filter(([s]) => !inactive.has(s)), ([, n]) => n);
+      for (const [segment, customers] of segs) {
+        out.push({ region, segment, customers, share_of_all: customers / all, share_of_active: inactive.has(segment) ? null : customers / active, region_customers: all, region_active: active });
+      }
+    }
+    return out;
+  },
+});
+dash.calc('occMix', {
+  inputs: ['segmap'],
+  title: 'Segment mix by occupation',
+  description: 'Customers in each segment by occupation group, with each segment\'s share of the group\'s customers and of its active customers',
+  fn: (segmap) => {
+    const inactive = new Set(['Balance ฿1–100 only', 'No product (฿0)']);
+    const out = [];
+    for (const [occupation, segs] of d3.rollup(segmap, (v) => d3.sum(v, (d) => +d.customers), (d) => d.occupation, (d) => d.segment)) {
+      const all = d3.sum(segs.values());
+      const active = d3.sum([...segs].filter(([s]) => !inactive.has(s)), ([, n]) => n);
+      for (const [segment, customers] of segs) {
+        out.push({ occupation, segment, customers, share_of_all: customers / all, share_of_active: inactive.has(segment) ? null : customers / active, occupation_customers: all, occupation_active: active });
+      }
+    }
+    return out;
+  },
+});
+dash.calc('cellMix', {
+  inputs: ['segmap'],
+  title: 'Customers by occupation, region and segment',
+  description: 'Customer counts for each occupation and region by segment, summed across provinces in a region',
+  fn: (segmap) => {
+    const out = [];
+    for (const [occupation, regions] of d3.rollup(segmap, (v) => d3.sum(v, (d) => +d.customers), (d) => d.occupation, (d) => d.region, (d) => d.segment)) {
+      for (const [region, segs] of regions) for (const [segment, customers] of segs) out.push({ occupation, region, segment, customers });
+    }
+    return out;
+  },
+});
+dash.calc('summary', {
+  inputs: ['segmap'],
+  title: 'Headline figures',
+  description: 'Totals across all customers: active, paying, borrowing and saving, and the highest and lowest active shares by region and occupation',
+  fn: (segmap) => {
+    const inactive = new Set(['Balance ฿1–100 only', 'No product (฿0)']);
+    const pay = new Set(['Borrower + transactor', 'Saver + borrower who pay', 'Emerging saver + transactor', 'Core saver who pay', 'Pays only']);
+    const borrow = new Set(['Borrower only', 'Borrower + transactor', 'Saver + borrower', 'Saver + borrower who pay']);
+    const save = new Set(['Saver + borrower', 'Saver + borrower who pay', 'Emerging saver only', 'Emerging saver + transactor', 'Core saver', 'Core saver who pay']);
+    const n = (rows, set) => d3.sum(rows.filter((d) => !set || set.has(d.segment)), (d) => +d.customers);
+    const activeShare = (rows) => d3.sum(rows.filter((d) => !inactive.has(d.segment)), (d) => +d.customers) / n(rows);
+    const customers = n(segmap);
+    const active = customers - d3.sum(segmap.filter((d) => inactive.has(d.segment)), (d) => +d.customers);
+    const byRegion = [...d3.group(segmap, (d) => d.region)].map(([k, v]) => [k, activeShare(v)]).sort((a, b) => b[1] - a[1]);
+    const byOcc = [...d3.group(segmap, (d) => d.occupation)].map(([k, v]) => [k, activeShare(v)]).sort((a, b) => b[1] - a[1]);
+    return [{
+      customers, active, active_share: active / customers,
+      pay: n(segmap, pay), pay_share_active: n(segmap, pay) / active,
+      borrow: n(segmap, borrow), borrow_share_active: n(segmap, borrow) / active,
+      save: n(segmap, save), save_share_active: n(segmap, save) / active,
+      top_region: byRegion[0][0], top_region_share: byRegion[0][1],
+      low_region: byRegion[byRegion.length - 1][0], low_region_share: byRegion[byRegion.length - 1][1],
+      top_occ: byOcc[0][0], top_occ_share: byOcc[0][1],
+    }];
+  },
+});
+</script>
+
+<script>
+const SM = window.SM;
+// headline words and figures
+[
+  ['leadActive', 'active_share', SM.pct], ['leadTotal', 'customers', SM.num],
+  ['leadLowRegion', 'low_region', String], ['leadLowRegionShare', 'low_region_share', SM.pct],
+  ['leadTopRegion', 'top_region', String], ['leadTopRegionShare', 'top_region_share', SM.pct],
+  ['leadTopOcc', 'top_occ', (s) => s.toLowerCase()], ['leadTopOccShare', 'top_occ_share', SM.pct],
+  ['tileCustomers', 'customers', SM.num], ['tileActive', 'active', SM.num], ['tileActiveShare', 'active_share', SM.pct],
+  ['tilePay', 'pay', SM.num], ['tilePayShare', 'pay_share_active', SM.pct],
+  ['tileBorrow', 'borrow', SM.num], ['tileBorrowShare', 'borrow_share_active', SM.pct],
+  ['tileSave', 'save', SM.num], ['tileSaveShare', 'save_share_active', SM.pct],
+].forEach(([name, field, fmt]) => dash.draw(name, (el) => {
+  const s = dash.data('summary');
+  if (s.status === 'loading') { el.textContent = '—'; return; }
+  el.classList.remove('dash-skeleton');
+  el.textContent = s.status === 'ok' && s.data && s.data[0] ? fmt(s.data[0][field]) : '—';
+}));
+</script>
+
+<script>
+const SM = window.SM;
+// 100% stacked bars, one per region or occupation
+SM.stacked = function (el, srcId, key, order) {
+  const src = dash.data(srcId);
+  if (src.status !== 'ok') {
+    el.replaceChildren();
+    const p = document.createElement('p');
+    p.className = 'sm-note';
+    p.textContent = src.status === 'error' ? 'Failed to load' : '—';
+    el.append(p);
+    return;
+  }
+  const mode = SM.mode;
+  const segs = SM.SEGS.map((s) => s[0]).filter((s) => mode === 'all' || !SM.INACTIVE.has(s));
+  const groups = d3.group(src.data, (d) => d[key]);
+  const names = order ? order.filter((k) => groups.has(k)) : [...groups.keys()];
+  if (!order) names.sort((a, b) => d3.sum(groups.get(b), (d) => d.customers) - d3.sum(groups.get(a), (d) => d.customers));
+  const rows = names.map((name) => {
+    const g = groups.get(name);
+    const bySeg = new Map(g.map((d) => [d.segment, d]));
+    const base = mode === 'all' ? d3.sum(g, (d) => d.customers) : d3.sum(g.filter((d) => !SM.INACTIVE.has(d.segment)), (d) => d.customers);
+    let x = 0;
+    const parts = segs.map((s) => {
+      const c = bySeg.get(s) ? bySeg.get(s).customers : 0;
+      const p = { segment: s, customers: c, share: base ? c / base : 0, x0: x };
+      x += p.share;
+      return p;
+    });
+    return { name, base, total: d3.sum(g, (d) => d.customers), parts };
+  });
+
+  el.replaceChildren();
+  const W = Math.max(280, el.clientWidth || 600);
+  const rowH = 30, gap = 10, top = 4;
+  const H = top + rows.length * (rowH + gap);
+  const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H).attr('role', 'img')
+    .attr('aria-label', `Segment mix by ${key}, as a share of ${mode === 'all' ? 'all' : 'active'} customers`);
+  const labels = svg.append('g');
+  labels.selectAll('text').data(rows).join('text').attr('x', 0).attr('y', (d, i) => top + i * (rowH + gap) + rowH / 2).attr('dy', '0.35em').text((d) => d.name);
+  const lw = d3.max(labels.selectAll('text').nodes(), (n) => n.getComputedTextLength()) + 10;
+  const rw = 58;
+  const bw = Math.max(80, W - lw - rw);
+  const tip = d3.select(el).append('div').attr('class', 'sm-tip').style('display', 'none');
+  rows.forEach((r, i) => {
+    const y = top + i * (rowH + gap);
+    const g = svg.append('g').attr('transform', `translate(${lw},${y})`);
+    g.selectAll('rect').data(r.parts.filter((p) => p.share > 0)).join('rect')
+      .attr('x', (p) => p.x0 * bw).attr('width', (p) => Math.max(0, p.share * bw - 1)).attr('height', rowH)
+      .style('fill', (p) => SM.COLOR.get(p.segment))
+      .on('pointermove', (ev, p) => {
+        const [mx, my] = d3.pointer(ev, el);
+        tip.style('display', null).html('');
+        tip.append('div').text(`${r.name} · ${p.segment}`);
+        tip.append('b').text(`${SM.num(p.customers)} customers, ${SM.pct(p.share)}`);
+        const tw = tip.node().offsetWidth;
+        tip.style('left', `${Math.min(Math.max(0, mx + 12), el.clientWidth - tw)}px`).style('top', `${my + 14}px`);
+      })
+      .on('pointerleave', () => tip.style('display', 'none'));
+    g.selectAll('text.sm-in').data(r.parts.filter((p) => p.share * bw > 34)).join('text').attr('class', 'sm-in')
+      .attr('x', (p) => (p.x0 + p.share / 2) * bw).attr('y', rowH / 2).attr('dy', '0.35em').attr('text-anchor', 'middle')
+      .style('fill', (p) => (['#1F3A5F', '#3A5A85', '#5374A8', '#0F6D64', '#2BA597'].includes(SM.COLOR.get(p.segment)) ? '#FFFFFF' : '#1C2733'))
+      .text((p) => d3.format('.0f')(p.share * 100) + '%');
+    svg.append('text').attr('class', 'sm-muted').attr('x', W).attr('y', y + rowH / 2).attr('dy', '0.35em').attr('text-anchor', 'end').text(SM.num(r.base));
+  });
+};
+dash.draw('regionBars', (el) => SM.stacked(el, 'regionMix', 'region', SM.REGIONS));
+dash.draw('occBars', (el) => SM.stacked(el, 'occMix', 'occupation', null));
+</script>
+
+<script>
+const SM = window.SM;
+// occupation × region grid
+dash.draw('heat', (el) => {
+  const src = dash.data('cellMix');
+  if (src.status !== 'ok') {
+    el.replaceChildren();
+    const p = document.createElement('p');
+    p.className = 'sm-note';
+    p.textContent = src.status === 'error' ? 'Failed to load' : '—';
+    el.append(p);
+    return;
+  }
+  const pick = SM.heat;
+  const set = new Set(SM.GROUPS[pick] || [pick]);
+  const color = SM.GROUP_COLOR[pick] || SM.COLOR.get(pick) || '#1AA39A';
+  const num = new Map(), den = new Map();
+  const add = (m, k, v) => m.set(k, (m.get(k) || 0) + v);
+  for (const d of src.data) {
+    for (const k of [`${d.occupation}|${d.region}`, `${d.occupation}|All`, `All|${d.region}`, 'All|All']) {
+      add(den, k, d.customers);
+      if (set.has(d.segment)) add(num, k, d.customers);
+    }
+  }
+  const occs = [...d3.rollup(src.data, (v) => d3.sum(v, (d) => d.customers), (d) => d.occupation)].sort((a, b) => b[1] - a[1]).map((d) => d[0]).concat('All');
+  const cols = SM.REGIONS.concat('All');
+  const share = (k) => (den.get(k) ? (num.get(k) || 0) / den.get(k) : null);
+  const max = d3.max(occs.flatMap((o) => cols.map((c) => share(`${o}|${c}`)))) || 1;
+
+  el.replaceChildren();
+  const W = Math.max(520, el.clientWidth || 700);
+  const headH = 26, cellH = 30;
+  const H = headH + occs.length * cellH + 6;
+  const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H).attr('role', 'img')
+    .attr('aria-label', `Share of customers who are ${pick}, by occupation and region`);
+  const labels = svg.append('g');
+  labels.selectAll('text').data(occs).join('text').attr('x', 0).attr('y', (d, i) => headH + i * cellH + cellH / 2).attr('dy', '0.35em')
+    .style('font-weight', (d) => (d === 'All' ? 600 : null)).text((d) => d);
+  const lw = d3.max(labels.selectAll('text').nodes(), (n) => n.getComputedTextLength()) + 12;
+  const cw = (W - lw) / cols.length;
+  svg.append('g').selectAll('text').data(cols).join('text').attr('class', 'sm-muted').attr('x', (d, i) => lw + i * cw + cw / 2).attr('y', headH / 2)
+    .attr('text-anchor', 'middle').style('font-weight', (d) => (d === 'All' ? 600 : null)).text((d) => SM.REGION_SHORT[d] || d);
+  const tip = d3.select(el).append('div').attr('class', 'sm-tip').style('display', 'none');
+  occs.forEach((o, i) => {
+    cols.forEach((c, j) => {
+      const k = `${o}|${c}`, v = share(k);
+      if (v == null) return;
+      const x = lw + j * cw, y = headH + i * cellH;
+      const t = v / max;
+      svg.append('rect').attr('x', x + 1).attr('y', y + 1).attr('width', cw - 2).attr('height', cellH - 2).attr('rx', 3)
+        .style('fill', color).style('fill-opacity', 0.08 + 0.92 * t)
+        .style('stroke', o === 'All' || c === 'All' ? 'var(--color-border-line)' : null)
+        .on('pointermove', (ev) => {
+          const [mx, my] = d3.pointer(ev, el);
+          tip.style('display', null).html('');
+          tip.append('div').text(`${o} · ${c === 'All' ? 'all regions' : c}`);
+          tip.append('b').text(`${SM.num(num.get(k) || 0)} of ${SM.num(den.get(k))} customers, ${SM.pct(v)}`);
+          const tw = tip.node().offsetWidth;
+          tip.style('left', `${Math.min(Math.max(0, mx + 12), el.clientWidth - tw)}px`).style('top', `${my + 14}px`);
+        })
+        .on('pointerleave', () => tip.style('display', 'none'));
+      const dark = t > 0.55 && !['#B3E0DA', '#B8C1CC', '#DDE2E8', '#8FA9D3', '#7CC5BA', '#E3A15F'].includes(color);
+      svg.append('text').attr('class', 'sm-in').attr('x', x + cw / 2).attr('y', y + cellH / 2).attr('dy', '0.35em').attr('text-anchor', 'middle')
+        .style('fill', dark ? '#FFFFFF' : 'var(--color-fg)').style('font-weight', o === 'All' || c === 'All' ? 600 : null).text(SM.pct(v));
+    });
+  });
+});
+</script>
+
+<script>
+const SM = window.SM;
+// controls: listen and set pressed state, then redraw
+document.querySelectorAll('.sm-mode').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    SM.mode = btn.getAttribute('data-mode');
+    document.querySelectorAll('.sm-mode').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    document.querySelectorAll('.sm-mode-note').forEach((n) => { n.hidden = n.getAttribute('data-for') !== SM.mode; });
+    document.querySelectorAll('.sm-inactive-key').forEach((n) => { n.hidden = SM.mode !== 'all'; });
+    dash.draw('regionBars');
+    dash.draw('occBars');
+  });
+});
+document.querySelectorAll('#sm-heat-pick').forEach((sel) => {
+  sel.value = SM.heat;
+  sel.addEventListener('change', () => { SM.heat = sel.value; dash.draw('heat'); });
+});
+</script>

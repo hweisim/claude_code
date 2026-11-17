@@ -1,0 +1,964 @@
+region,province,occupation,segment,customers
+Bangkok,Bangkok,Agriculture,Balance ฿1–100 only,127
+Bangkok,Bangkok,Agriculture,Borrower + transactor,12
+Bangkok,Bangkok,Agriculture,Borrower only,43
+Bangkok,Bangkok,Agriculture,Core saver,35
+Bangkok,Bangkok,Agriculture,Core saver who pay,9
+Bangkok,Bangkok,Agriculture,Emerging saver + transactor,35
+Bangkok,Bangkok,Agriculture,Emerging saver only,92
+Bangkok,Bangkok,Agriculture,No product (฿0),684
+Bangkok,Bangkok,Agriculture,Pays only,35
+Bangkok,Bangkok,Agriculture,Saver + borrower,10
+Bangkok,Bangkok,Agriculture,Saver + borrower who pay,3
+Bangkok,Bangkok,Blue collar,Balance ฿1–100 only,2767
+Bangkok,Bangkok,Blue collar,Borrower + transactor,1076
+Bangkok,Bangkok,Blue collar,Borrower only,2755
+Bangkok,Bangkok,Blue collar,Core saver,219
+Bangkok,Bangkok,Blue collar,Core saver who pay,46
+Bangkok,Bangkok,Blue collar,Emerging saver + transactor,500
+Bangkok,Bangkok,Blue collar,Emerging saver only,572
+Bangkok,Bangkok,Blue collar,No product (฿0),27633
+Bangkok,Bangkok,Blue collar,Pays only,735
+Bangkok,Bangkok,Blue collar,Saver + borrower,374
+Bangkok,Bangkok,Blue collar,Saver + borrower who pay,253
+Bangkok,Bangkok,Freelance,Balance ฿1–100 only,3193
+Bangkok,Bangkok,Freelance,Borrower + transactor,542
+Bangkok,Bangkok,Freelance,Borrower only,1334
+Bangkok,Bangkok,Freelance,Core saver,1093
+Bangkok,Bangkok,Freelance,Core saver who pay,228
+Bangkok,Bangkok,Freelance,Emerging saver + transactor,866
+Bangkok,Bangkok,Freelance,Emerging saver only,1584
+Bangkok,Bangkok,Freelance,No product (฿0),21551
+Bangkok,Bangkok,Freelance,Pays only,925
+Bangkok,Bangkok,Freelance,Saver + borrower,191
+Bangkok,Bangkok,Freelance,Saver + borrower who pay,169
+Bangkok,Bangkok,Offline merchant,Balance ฿1–100 only,2569
+Bangkok,Bangkok,Offline merchant,Borrower + transactor,379
+Bangkok,Bangkok,Offline merchant,Borrower only,975
+Bangkok,Bangkok,Offline merchant,Core saver,1035
+Bangkok,Bangkok,Offline merchant,Core saver who pay,275
+Bangkok,Bangkok,Offline merchant,Emerging saver + transactor,826
+Bangkok,Bangkok,Offline merchant,Emerging saver only,1905
+Bangkok,Bangkok,Offline merchant,No product (฿0),12501
+Bangkok,Bangkok,Offline merchant,Pays only,628
+Bangkok,Bangkok,Offline merchant,Saver + borrower,185
+Bangkok,Bangkok,Offline merchant,Saver + borrower who pay,175
+Bangkok,Bangkok,Online merchant,Balance ฿1–100 only,1840
+Bangkok,Bangkok,Online merchant,Borrower + transactor,371
+Bangkok,Bangkok,Online merchant,Borrower only,780
+Bangkok,Bangkok,Online merchant,Core saver,330
+Bangkok,Bangkok,Online merchant,Core saver who pay,92
+Bangkok,Bangkok,Online merchant,Emerging saver + transactor,505
+Bangkok,Bangkok,Online merchant,Emerging saver only,791
+Bangkok,Bangkok,Online merchant,No product (฿0),9529
+Bangkok,Bangkok,Online merchant,Pays only,578
+Bangkok,Bangkok,Online merchant,Saver + borrower,100
+Bangkok,Bangkok,Online merchant,Saver + borrower who pay,118
+Bangkok,Bangkok,Other or unknown,Balance ฿1–100 only,713
+Bangkok,Bangkok,Other or unknown,Borrower + transactor,1
+Bangkok,Bangkok,Other or unknown,Core saver,1128
+Bangkok,Bangkok,Other or unknown,Core saver who pay,183
+Bangkok,Bangkok,Other or unknown,Emerging saver + transactor,330
+Bangkok,Bangkok,Other or unknown,Emerging saver only,795
+Bangkok,Bangkok,Other or unknown,No product (฿0),2706
+Bangkok,Bangkok,Other or unknown,Pays only,215
+Bangkok,Bangkok,Other or unknown,Saver + borrower,1
+Bangkok,Bangkok,Rider,Balance ฿1–100 only,1383
+Bangkok,Bangkok,Rider,Borrower + transactor,219
+Bangkok,Bangkok,Rider,Borrower only,556
+Bangkok,Bangkok,Rider,Core saver,34
+Bangkok,Bangkok,Rider,Core saver who pay,13
+Bangkok,Bangkok,Rider,Emerging saver + transactor,301
+Bangkok,Bangkok,Rider,Emerging saver only,273
+Bangkok,Bangkok,Rider,No product (฿0),12103
+Bangkok,Bangkok,Rider,Pays only,493
+Bangkok,Bangkok,Rider,Saver + borrower,46
+Bangkok,Bangkok,Rider,Saver + borrower who pay,59
+Bangkok,Bangkok,Salaried (company),Balance ฿1–100 only,10486
+Bangkok,Bangkok,Salaried (company),Borrower + transactor,3422
+Bangkok,Bangkok,Salaried (company),Borrower only,7090
+Bangkok,Bangkok,Salaried (company),Core saver,5371
+Bangkok,Bangkok,Salaried (company),Core saver who pay,1012
+Bangkok,Bangkok,Salaried (company),Emerging saver + transactor,2425
+Bangkok,Bangkok,Salaried (company),Emerging saver only,5447
+Bangkok,Bangkok,Salaried (company),No product (฿0),64054
+Bangkok,Bangkok,Salaried (company),Pays only,2306
+Bangkok,Bangkok,Salaried (company),Saver + borrower,1201
+Bangkok,Bangkok,Salaried (company),Saver + borrower who pay,1155
+Bangkok,Bangkok,Salaried (government),Balance ฿1–100 only,2238
+Bangkok,Bangkok,Salaried (government),Borrower + transactor,785
+Bangkok,Bangkok,Salaried (government),Borrower only,3221
+Bangkok,Bangkok,Salaried (government),Core saver,1091
+Bangkok,Bangkok,Salaried (government),Core saver who pay,225
+Bangkok,Bangkok,Salaried (government),Emerging saver + transactor,598
+Bangkok,Bangkok,Salaried (government),Emerging saver only,1471
+Bangkok,Bangkok,Salaried (government),No product (฿0),14105
+Bangkok,Bangkok,Salaried (government),Pays only,529
+Bangkok,Bangkok,Salaried (government),Saver + borrower,361
+Bangkok,Bangkok,Salaried (government),Saver + borrower who pay,301
+Bangkok,Bangkok,Wage earner,Balance ฿1–100 only,1159
+Bangkok,Bangkok,Wage earner,Borrower + transactor,170
+Bangkok,Bangkok,Wage earner,Borrower only,423
+Bangkok,Bangkok,Wage earner,Core saver,136
+Bangkok,Bangkok,Wage earner,Core saver who pay,46
+Bangkok,Bangkok,Wage earner,Emerging saver + transactor,274
+Bangkok,Bangkok,Wage earner,Emerging saver only,399
+Bangkok,Bangkok,Wage earner,No product (฿0),8255
+Bangkok,Bangkok,Wage earner,Pays only,340
+Bangkok,Bangkok,Wage earner,Saver + borrower,45
+Bangkok,Bangkok,Wage earner,Saver + borrower who pay,55
+East,Chon Buri,Agriculture,Balance ฿1–100 only,75
+East,Chon Buri,Agriculture,Borrower + transactor,12
+East,Chon Buri,Agriculture,Borrower only,43
+East,Chon Buri,Agriculture,Core saver,11
+East,Chon Buri,Agriculture,Core saver who pay,3
+East,Chon Buri,Agriculture,Emerging saver + transactor,11
+East,Chon Buri,Agriculture,Emerging saver only,28
+East,Chon Buri,Agriculture,No product (฿0),614
+East,Chon Buri,Agriculture,Pays only,30
+East,Chon Buri,Agriculture,Saver + borrower,8
+East,Chon Buri,Agriculture,Saver + borrower who pay,2
+East,Chon Buri,Blue collar,Balance ฿1–100 only,1194
+East,Chon Buri,Blue collar,Borrower + transactor,639
+East,Chon Buri,Blue collar,Borrower only,1387
+East,Chon Buri,Blue collar,Core saver,28
+East,Chon Buri,Blue collar,Core saver who pay,13
+East,Chon Buri,Blue collar,Emerging saver + transactor,170
+East,Chon Buri,Blue collar,Emerging saver only,196
+East,Chon Buri,Blue collar,No product (฿0),15296
+East,Chon Buri,Blue collar,Pays only,321
+East,Chon Buri,Blue collar,Saver + borrower,129
+East,Chon Buri,Blue collar,Saver + borrower who pay,127
+East,Chon Buri,Freelance,Balance ฿1–100 only,899
+East,Chon Buri,Freelance,Borrower + transactor,214
+East,Chon Buri,Freelance,Borrower only,439
+East,Chon Buri,Freelance,Core saver,95
+East,Chon Buri,Freelance,Core saver who pay,24
+East,Chon Buri,Freelance,Emerging saver + transactor,188
+East,Chon Buri,Freelance,Emerging saver only,243
+East,Chon Buri,Freelance,No product (฿0),8496
+East,Chon Buri,Freelance,Pays only,293
+East,Chon Buri,Freelance,Saver + borrower,49
+East,Chon Buri,Freelance,Saver + borrower who pay,57
+East,Chon Buri,Offline merchant,Balance ฿1–100 only,874
+East,Chon Buri,Offline merchant,Borrower + transactor,139
+East,Chon Buri,Offline merchant,Borrower only,364
+East,Chon Buri,Offline merchant,Core saver,130
+East,Chon Buri,Offline merchant,Core saver who pay,70
+East,Chon Buri,Offline merchant,Emerging saver + transactor,235
+East,Chon Buri,Offline merchant,Emerging saver only,401
+East,Chon Buri,Offline merchant,No product (฿0),4548
+East,Chon Buri,Offline merchant,Pays only,217
+East,Chon Buri,Offline merchant,Saver + borrower,70
+East,Chon Buri,Offline merchant,Saver + borrower who pay,68
+East,Chon Buri,Online merchant,Balance ฿1–100 only,413
+East,Chon Buri,Online merchant,Borrower + transactor,99
+East,Chon Buri,Online merchant,Borrower only,209
+East,Chon Buri,Online merchant,Core saver,29
+East,Chon Buri,Online merchant,Core saver who pay,22
+East,Chon Buri,Online merchant,Emerging saver + transactor,107
+East,Chon Buri,Online merchant,Emerging saver only,123
+East,Chon Buri,Online merchant,No product (฿0),2382
+East,Chon Buri,Online merchant,Pays only,161
+East,Chon Buri,Online merchant,Saver + borrower,31
+East,Chon Buri,Online merchant,Saver + borrower who pay,22
+East,Chon Buri,Other or unknown,Balance ฿1–100 only,120
+East,Chon Buri,Other or unknown,Core saver,69
+East,Chon Buri,Other or unknown,Core saver who pay,13
+East,Chon Buri,Other or unknown,Emerging saver + transactor,43
+East,Chon Buri,Other or unknown,Emerging saver only,76
+East,Chon Buri,Other or unknown,No product (฿0),538
+East,Chon Buri,Other or unknown,Pays only,43
+East,Chon Buri,Rider,Balance ฿1–100 only,257
+East,Chon Buri,Rider,Borrower + transactor,53
+East,Chon Buri,Rider,Borrower only,142
+East,Chon Buri,Rider,Core saver,3
+East,Chon Buri,Rider,Core saver who pay,3
+East,Chon Buri,Rider,Emerging saver + transactor,53
+East,Chon Buri,Rider,Emerging saver only,34
+East,Chon Buri,Rider,No product (฿0),2524
+East,Chon Buri,Rider,Pays only,95
+East,Chon Buri,Rider,Saver + borrower,14
+East,Chon Buri,Rider,Saver + borrower who pay,12
+East,Chon Buri,Salaried (company),Balance ฿1–100 only,2017
+East,Chon Buri,Salaried (company),Borrower + transactor,780
+East,Chon Buri,Salaried (company),Borrower only,1542
+East,Chon Buri,Salaried (company),Core saver,255
+East,Chon Buri,Salaried (company),Core saver who pay,87
+East,Chon Buri,Salaried (company),Emerging saver + transactor,401
+East,Chon Buri,Salaried (company),Emerging saver only,599
+East,Chon Buri,Salaried (company),No product (฿0),14721
+East,Chon Buri,Salaried (company),Pays only,517
+East,Chon Buri,Salaried (company),Saver + borrower,170
+East,Chon Buri,Salaried (company),Saver + borrower who pay,202
+East,Chon Buri,Salaried (government),Balance ฿1–100 only,451
+East,Chon Buri,Salaried (government),Borrower + transactor,200
+East,Chon Buri,Salaried (government),Borrower only,757
+East,Chon Buri,Salaried (government),Core saver,74
+East,Chon Buri,Salaried (government),Core saver who pay,17
+East,Chon Buri,Salaried (government),Emerging saver + transactor,135
+East,Chon Buri,Salaried (government),Emerging saver only,183
+East,Chon Buri,Salaried (government),No product (฿0),3535
+East,Chon Buri,Salaried (government),Pays only,134
+East,Chon Buri,Salaried (government),Saver + borrower,72
+East,Chon Buri,Salaried (government),Saver + borrower who pay,56
+East,Chon Buri,Wage earner,Balance ฿1–100 only,372
+East,Chon Buri,Wage earner,Borrower + transactor,67
+East,Chon Buri,Wage earner,Borrower only,155
+East,Chon Buri,Wage earner,Core saver,15
+East,Chon Buri,Wage earner,Core saver who pay,9
+East,Chon Buri,Wage earner,Emerging saver + transactor,69
+East,Chon Buri,Wage earner,Emerging saver only,85
+East,Chon Buri,Wage earner,No product (฿0),3003
+East,Chon Buri,Wage earner,Pays only,147
+East,Chon Buri,Wage earner,Saver + borrower,21
+East,Chon Buri,Wage earner,Saver + borrower who pay,20
+East,Rayong,Agriculture,Balance ฿1–100 only,80
+East,Rayong,Agriculture,Borrower + transactor,11
+East,Rayong,Agriculture,Borrower only,45
+East,Rayong,Agriculture,Core saver,7
+East,Rayong,Agriculture,Core saver who pay,2
+East,Rayong,Agriculture,Emerging saver + transactor,18
+East,Rayong,Agriculture,Emerging saver only,28
+East,Rayong,Agriculture,No product (฿0),655
+East,Rayong,Agriculture,Pays only,29
+East,Rayong,Agriculture,Saver + borrower,7
+East,Rayong,Agriculture,Saver + borrower who pay,2
+East,Rayong,Blue collar,Balance ฿1–100 only,608
+East,Rayong,Blue collar,Borrower + transactor,303
+East,Rayong,Blue collar,Borrower only,726
+East,Rayong,Blue collar,Core saver,20
+East,Rayong,Blue collar,Core saver who pay,9
+East,Rayong,Blue collar,Emerging saver + transactor,94
+East,Rayong,Blue collar,Emerging saver only,101
+East,Rayong,Blue collar,No product (฿0),8125
+East,Rayong,Blue collar,Pays only,169
+East,Rayong,Blue collar,Saver + borrower,82
+East,Rayong,Blue collar,Saver + borrower who pay,76
+East,Rayong,Freelance,Balance ฿1–100 only,379
+East,Rayong,Freelance,Borrower + transactor,98
+East,Rayong,Freelance,Borrower only,190
+East,Rayong,Freelance,Core saver,24
+East,Rayong,Freelance,Core saver who pay,11
+East,Rayong,Freelance,Emerging saver + transactor,103
+East,Rayong,Freelance,Emerging saver only,103
+East,Rayong,Freelance,No product (฿0),3926
+East,Rayong,Freelance,Pays only,138
+East,Rayong,Freelance,Saver + borrower,19
+East,Rayong,Freelance,Saver + borrower who pay,19
+East,Rayong,Offline merchant,Balance ฿1–100 only,362
+East,Rayong,Offline merchant,Borrower + transactor,78
+East,Rayong,Offline merchant,Borrower only,165
+East,Rayong,Offline merchant,Core saver,39
+East,Rayong,Offline merchant,Core saver who pay,15
+East,Rayong,Offline merchant,Emerging saver + transactor,89
+East,Rayong,Offline merchant,Emerging saver only,137
+East,Rayong,Offline merchant,No product (฿0),1939
+East,Rayong,Offline merchant,Pays only,60
+East,Rayong,Offline merchant,Saver + borrower,20
+East,Rayong,Offline merchant,Saver + borrower who pay,23
+East,Rayong,Online merchant,Balance ฿1–100 only,183
+East,Rayong,Online merchant,Borrower + transactor,51
+East,Rayong,Online merchant,Borrower only,85
+East,Rayong,Online merchant,Core saver,6
+East,Rayong,Online merchant,Core saver who pay,7
+East,Rayong,Online merchant,Emerging saver + transactor,37
+East,Rayong,Online merchant,Emerging saver only,36
+East,Rayong,Online merchant,No product (฿0),1064
+East,Rayong,Online merchant,Pays only,63
+East,Rayong,Online merchant,Saver + borrower,11
+East,Rayong,Online merchant,Saver + borrower who pay,11
+East,Rayong,Other or unknown,Balance ฿1–100 only,55
+East,Rayong,Other or unknown,Borrower only,1
+East,Rayong,Other or unknown,Core saver,30
+East,Rayong,Other or unknown,Core saver who pay,7
+East,Rayong,Other or unknown,Emerging saver + transactor,9
+East,Rayong,Other or unknown,Emerging saver only,29
+East,Rayong,Other or unknown,No product (฿0),261
+East,Rayong,Other or unknown,Pays only,20
+East,Rayong,Rider,Balance ฿1–100 only,74
+East,Rayong,Rider,Borrower + transactor,13
+East,Rayong,Rider,Borrower only,28
+East,Rayong,Rider,Core saver,2
+East,Rayong,Rider,Core saver who pay,2
+East,Rayong,Rider,Emerging saver + transactor,16
+East,Rayong,Rider,Emerging saver only,6
+East,Rayong,Rider,No product (฿0),650
+East,Rayong,Rider,Pays only,24
+East,Rayong,Rider,Saver + borrower,2
+East,Rayong,Rider,Saver + borrower who pay,4
+East,Rayong,Salaried (company),Balance ฿1–100 only,934
+East,Rayong,Salaried (company),Borrower + transactor,417
+East,Rayong,Salaried (company),Borrower only,746
+East,Rayong,Salaried (company),Core saver,107
+East,Rayong,Salaried (company),Core saver who pay,37
+East,Rayong,Salaried (company),Emerging saver + transactor,174
+East,Rayong,Salaried (company),Emerging saver only,315
+East,Rayong,Salaried (company),No product (฿0),7269
+East,Rayong,Salaried (company),Pays only,228
+East,Rayong,Salaried (company),Saver + borrower,81
+East,Rayong,Salaried (company),Saver + borrower who pay,94
+East,Rayong,Salaried (government),Balance ฿1–100 only,186
+East,Rayong,Salaried (government),Borrower + transactor,91
+East,Rayong,Salaried (government),Borrower only,338
+East,Rayong,Salaried (government),Core saver,33
+East,Rayong,Salaried (government),Core saver who pay,11
+East,Rayong,Salaried (government),Emerging saver + transactor,45
+East,Rayong,Salaried (government),Emerging saver only,83
+East,Rayong,Salaried (government),No product (฿0),1408
+East,Rayong,Salaried (government),Pays only,41
+East,Rayong,Salaried (government),Saver + borrower,43
+East,Rayong,Salaried (government),Saver + borrower who pay,27
+East,Rayong,Wage earner,Balance ฿1–100 only,173
+East,Rayong,Wage earner,Borrower + transactor,25
+East,Rayong,Wage earner,Borrower only,71
+East,Rayong,Wage earner,Core saver,4
+East,Rayong,Wage earner,Core saver who pay,3
+East,Rayong,Wage earner,Emerging saver + transactor,42
+East,Rayong,Wage earner,Emerging saver only,34
+East,Rayong,Wage earner,No product (฿0),1453
+East,Rayong,Wage earner,Pays only,75
+East,Rayong,Wage earner,Saver + borrower,8
+East,Rayong,Wage earner,Saver + borrower who pay,5
+Greater Bangkok,Nonthaburi,Agriculture,Balance ฿1–100 only,38
+Greater Bangkok,Nonthaburi,Agriculture,Borrower + transactor,5
+Greater Bangkok,Nonthaburi,Agriculture,Borrower only,15
+Greater Bangkok,Nonthaburi,Agriculture,Core saver,12
+Greater Bangkok,Nonthaburi,Agriculture,Core saver who pay,6
+Greater Bangkok,Nonthaburi,Agriculture,Emerging saver + transactor,8
+Greater Bangkok,Nonthaburi,Agriculture,Emerging saver only,39
+Greater Bangkok,Nonthaburi,Agriculture,No product (฿0),217
+Greater Bangkok,Nonthaburi,Agriculture,Pays only,9
+Greater Bangkok,Nonthaburi,Agriculture,Saver + borrower,2
+Greater Bangkok,Nonthaburi,Agriculture,Saver + borrower who pay,1
+Greater Bangkok,Nonthaburi,Blue collar,Balance ฿1–100 only,539
+Greater Bangkok,Nonthaburi,Blue collar,Borrower + transactor,200
+Greater Bangkok,Nonthaburi,Blue collar,Borrower only,504
+Greater Bangkok,Nonthaburi,Blue collar,Core saver,36
+Greater Bangkok,Nonthaburi,Blue collar,Core saver who pay,12
+Greater Bangkok,Nonthaburi,Blue collar,Emerging saver + transactor,95
+Greater Bangkok,Nonthaburi,Blue collar,Emerging saver only,110
+Greater Bangkok,Nonthaburi,Blue collar,No product (฿0),5239
+Greater Bangkok,Nonthaburi,Blue collar,Pays only,166
+Greater Bangkok,Nonthaburi,Blue collar,Saver + borrower,65
+Greater Bangkok,Nonthaburi,Blue collar,Saver + borrower who pay,53
+Greater Bangkok,Nonthaburi,Freelance,Balance ฿1–100 only,793
+Greater Bangkok,Nonthaburi,Freelance,Borrower + transactor,140
+Greater Bangkok,Nonthaburi,Freelance,Borrower only,312
+Greater Bangkok,Nonthaburi,Freelance,Core saver,190
+Greater Bangkok,Nonthaburi,Freelance,Core saver who pay,70
+Greater Bangkok,Nonthaburi,Freelance,Emerging saver + transactor,195
+Greater Bangkok,Nonthaburi,Freelance,Emerging saver only,328
+Greater Bangkok,Nonthaburi,Freelance,No product (฿0),5166
+Greater Bangkok,Nonthaburi,Freelance,Pays only,224
+Greater Bangkok,Nonthaburi,Freelance,Saver + borrower,35
+Greater Bangkok,Nonthaburi,Freelance,Saver + borrower who pay,47
+Greater Bangkok,Nonthaburi,Offline merchant,Balance ฿1–100 only,698
+Greater Bangkok,Nonthaburi,Offline merchant,Borrower + transactor,96
+Greater Bangkok,Nonthaburi,Offline merchant,Borrower only,264
+Greater Bangkok,Nonthaburi,Offline merchant,Core saver,189
+Greater Bangkok,Nonthaburi,Offline merchant,Core saver who pay,63
+Greater Bangkok,Nonthaburi,Offline merchant,Emerging saver + transactor,218
+Greater Bangkok,Nonthaburi,Offline merchant,Emerging saver only,376
+Greater Bangkok,Nonthaburi,Offline merchant,No product (฿0),3333
+Greater Bangkok,Nonthaburi,Offline merchant,Pays only,179
+Greater Bangkok,Nonthaburi,Offline merchant,Saver + borrower,51
+Greater Bangkok,Nonthaburi,Offline merchant,Saver + borrower who pay,51
+Greater Bangkok,Nonthaburi,Online merchant,Balance ฿1–100 only,491
+Greater Bangkok,Nonthaburi,Online merchant,Borrower + transactor,89
+Greater Bangkok,Nonthaburi,Online merchant,Borrower only,205
+Greater Bangkok,Nonthaburi,Online merchant,Core saver,60
+Greater Bangkok,Nonthaburi,Online merchant,Core saver who pay,24
+Greater Bangkok,Nonthaburi,Online merchant,Emerging saver + transactor,128
+Greater Bangkok,Nonthaburi,Online merchant,Emerging saver only,208
+Greater Bangkok,Nonthaburi,Online merchant,No product (฿0),2438
+Greater Bangkok,Nonthaburi,Online merchant,Pays only,118
+Greater Bangkok,Nonthaburi,Online merchant,Saver + borrower,29
+Greater Bangkok,Nonthaburi,Online merchant,Saver + borrower who pay,41
+Greater Bangkok,Nonthaburi,Other or unknown,Balance ฿1–100 only,191
+Greater Bangkok,Nonthaburi,Other or unknown,Core saver,201
+Greater Bangkok,Nonthaburi,Other or unknown,Core saver who pay,36
+Greater Bangkok,Nonthaburi,Other or unknown,Emerging saver + transactor,79
+Greater Bangkok,Nonthaburi,Other or unknown,Emerging saver only,186
+Greater Bangkok,Nonthaburi,Other or unknown,No product (฿0),568
+Greater Bangkok,Nonthaburi,Other or unknown,Pays only,63
+Greater Bangkok,Nonthaburi,Rider,Balance ฿1–100 only,325
+Greater Bangkok,Nonthaburi,Rider,Borrower + transactor,60
+Greater Bangkok,Nonthaburi,Rider,Borrower only,133
+Greater Bangkok,Nonthaburi,Rider,Core saver,3
+Greater Bangkok,Nonthaburi,Rider,Core saver who pay,8
+Greater Bangkok,Nonthaburi,Rider,Emerging saver + transactor,63
+Greater Bangkok,Nonthaburi,Rider,Emerging saver only,46
+Greater Bangkok,Nonthaburi,Rider,No product (฿0),2693
+Greater Bangkok,Nonthaburi,Rider,Pays only,102
+Greater Bangkok,Nonthaburi,Rider,Saver + borrower,9
+Greater Bangkok,Nonthaburi,Rider,Saver + borrower who pay,9
+Greater Bangkok,Nonthaburi,Salaried (company),Balance ฿1–100 only,2625
+Greater Bangkok,Nonthaburi,Salaried (company),Borrower + transactor,856
+Greater Bangkok,Nonthaburi,Salaried (company),Borrower only,1622
+Greater Bangkok,Nonthaburi,Salaried (company),Core saver,896
+Greater Bangkok,Nonthaburi,Salaried (company),Core saver who pay,212
+Greater Bangkok,Nonthaburi,Salaried (company),Emerging saver + transactor,564
+Greater Bangkok,Nonthaburi,Salaried (company),Emerging saver only,1257
+Greater Bangkok,Nonthaburi,Salaried (company),No product (฿0),14554
+Greater Bangkok,Nonthaburi,Salaried (company),Pays only,576
+Greater Bangkok,Nonthaburi,Salaried (company),Saver + borrower,246
+Greater Bangkok,Nonthaburi,Salaried (company),Saver + borrower who pay,252
+Greater Bangkok,Nonthaburi,Salaried (government),Balance ฿1–100 only,677
+Greater Bangkok,Nonthaburi,Salaried (government),Borrower + transactor,226
+Greater Bangkok,Nonthaburi,Salaried (government),Borrower only,952
+Greater Bangkok,Nonthaburi,Salaried (government),Core saver,271
+Greater Bangkok,Nonthaburi,Salaried (government),Core saver who pay,70
+Greater Bangkok,Nonthaburi,Salaried (government),Emerging saver + transactor,210
+Greater Bangkok,Nonthaburi,Salaried (government),Emerging saver only,497
+Greater Bangkok,Nonthaburi,Salaried (government),No product (฿0),4240
+Greater Bangkok,Nonthaburi,Salaried (government),Pays only,194
+Greater Bangkok,Nonthaburi,Salaried (government),Saver + borrower,107
+Greater Bangkok,Nonthaburi,Salaried (government),Saver + borrower who pay,86
+Greater Bangkok,Nonthaburi,Wage earner,Balance ฿1–100 only,247
+Greater Bangkok,Nonthaburi,Wage earner,Borrower + transactor,49
+Greater Bangkok,Nonthaburi,Wage earner,Borrower only,111
+Greater Bangkok,Nonthaburi,Wage earner,Core saver,32
+Greater Bangkok,Nonthaburi,Wage earner,Core saver who pay,13
+Greater Bangkok,Nonthaburi,Wage earner,Emerging saver + transactor,68
+Greater Bangkok,Nonthaburi,Wage earner,Emerging saver only,71
+Greater Bangkok,Nonthaburi,Wage earner,No product (฿0),1890
+Greater Bangkok,Nonthaburi,Wage earner,Pays only,80
+Greater Bangkok,Nonthaburi,Wage earner,Saver + borrower,15
+Greater Bangkok,Nonthaburi,Wage earner,Saver + borrower who pay,14
+Greater Bangkok,Pathum Thani,Agriculture,Balance ฿1–100 only,57
+Greater Bangkok,Pathum Thani,Agriculture,Borrower + transactor,8
+Greater Bangkok,Pathum Thani,Agriculture,Borrower only,15
+Greater Bangkok,Pathum Thani,Agriculture,Core saver,6
+Greater Bangkok,Pathum Thani,Agriculture,Core saver who pay,2
+Greater Bangkok,Pathum Thani,Agriculture,Emerging saver + transactor,12
+Greater Bangkok,Pathum Thani,Agriculture,Emerging saver only,21
+Greater Bangkok,Pathum Thani,Agriculture,No product (฿0),359
+Greater Bangkok,Pathum Thani,Agriculture,Pays only,11
+Greater Bangkok,Pathum Thani,Agriculture,Saver + borrower,1
+Greater Bangkok,Pathum Thani,Agriculture,Saver + borrower who pay,3
+Greater Bangkok,Pathum Thani,Blue collar,Balance ฿1–100 only,704
+Greater Bangkok,Pathum Thani,Blue collar,Borrower + transactor,294
+Greater Bangkok,Pathum Thani,Blue collar,Borrower only,770
+Greater Bangkok,Pathum Thani,Blue collar,Core saver,20
+Greater Bangkok,Pathum Thani,Blue collar,Core saver who pay,12
+Greater Bangkok,Pathum Thani,Blue collar,Emerging saver + transactor,104
+Greater Bangkok,Pathum Thani,Blue collar,Emerging saver only,138
+Greater Bangkok,Pathum Thani,Blue collar,No product (฿0),8093
+Greater Bangkok,Pathum Thani,Blue collar,Pays only,171
+Greater Bangkok,Pathum Thani,Blue collar,Saver + borrower,88
+Greater Bangkok,Pathum Thani,Blue collar,Saver + borrower who pay,65
+Greater Bangkok,Pathum Thani,Freelance,Balance ฿1–100 only,690
+Greater Bangkok,Pathum Thani,Freelance,Borrower + transactor,114
+Greater Bangkok,Pathum Thani,Freelance,Borrower only,304
+Greater Bangkok,Pathum Thani,Freelance,Core saver,94
+Greater Bangkok,Pathum Thani,Freelance,Core saver who pay,21
+Greater Bangkok,Pathum Thani,Freelance,Emerging saver + transactor,165
+Greater Bangkok,Pathum Thani,Freelance,Emerging saver only,229
+Greater Bangkok,Pathum Thani,Freelance,No product (฿0),5491
+Greater Bangkok,Pathum Thani,Freelance,Pays only,199
+Greater Bangkok,Pathum Thani,Freelance,Saver + borrower,35
+Greater Bangkok,Pathum Thani,Freelance,Saver + borrower who pay,34
+Greater Bangkok,Pathum Thani,Offline merchant,Balance ฿1–100 only,682
+Greater Bangkok,Pathum Thani,Offline merchant,Borrower + transactor,105
+Greater Bangkok,Pathum Thani,Offline merchant,Borrower only,256
+Greater Bangkok,Pathum Thani,Offline merchant,Core saver,90
+Greater Bangkok,Pathum Thani,Offline merchant,Core saver who pay,49
+Greater Bangkok,Pathum Thani,Offline merchant,Emerging saver + transactor,179
+Greater Bangkok,Pathum Thani,Offline merchant,Emerging saver only,313
+Greater Bangkok,Pathum Thani,Offline merchant,No product (฿0),3436
+Greater Bangkok,Pathum Thani,Offline merchant,Pays only,172
+Greater Bangkok,Pathum Thani,Offline merchant,Saver + borrower,36
+Greater Bangkok,Pathum Thani,Offline merchant,Saver + borrower who pay,40
+Greater Bangkok,Pathum Thani,Online merchant,Balance ฿1–100 only,436
+Greater Bangkok,Pathum Thani,Online merchant,Borrower + transactor,90
+Greater Bangkok,Pathum Thani,Online merchant,Borrower only,199
+Greater Bangkok,Pathum Thani,Online merchant,Core saver,40
+Greater Bangkok,Pathum Thani,Online merchant,Core saver who pay,20
+Greater Bangkok,Pathum Thani,Online merchant,Emerging saver + transactor,129
+Greater Bangkok,Pathum Thani,Online merchant,Emerging saver only,169
+Greater Bangkok,Pathum Thani,Online merchant,No product (฿0),2498
+Greater Bangkok,Pathum Thani,Online merchant,Pays only,125
+Greater Bangkok,Pathum Thani,Online merchant,Saver + borrower,18
+Greater Bangkok,Pathum Thani,Online merchant,Saver + borrower who pay,29
+Greater Bangkok,Pathum Thani,Other or unknown,Balance ฿1–100 only,138
+Greater Bangkok,Pathum Thani,Other or unknown,Borrower + transactor,1
+Greater Bangkok,Pathum Thani,Other or unknown,Core saver,101
+Greater Bangkok,Pathum Thani,Other or unknown,Core saver who pay,17
+Greater Bangkok,Pathum Thani,Other or unknown,Emerging saver + transactor,44
+Greater Bangkok,Pathum Thani,Other or unknown,Emerging saver only,117
+Greater Bangkok,Pathum Thani,Other or unknown,No product (฿0),606
+Greater Bangkok,Pathum Thani,Other or unknown,Pays only,42
+Greater Bangkok,Pathum Thani,Other or unknown,Saver + borrower who pay,1
+Greater Bangkok,Pathum Thani,Rider,Balance ฿1–100 only,297
+Greater Bangkok,Pathum Thani,Rider,Borrower + transactor,48
+Greater Bangkok,Pathum Thani,Rider,Borrower only,110
+Greater Bangkok,Pathum Thani,Rider,Core saver,3
+Greater Bangkok,Pathum Thani,Rider,Core saver who pay,6
+Greater Bangkok,Pathum Thani,Rider,Emerging saver + transactor,68
+Greater Bangkok,Pathum Thani,Rider,Emerging saver only,46
+Greater Bangkok,Pathum Thani,Rider,No product (฿0),2475
+Greater Bangkok,Pathum Thani,Rider,Pays only,93
+Greater Bangkok,Pathum Thani,Rider,Saver + borrower,8
+Greater Bangkok,Pathum Thani,Rider,Saver + borrower who pay,9
+Greater Bangkok,Pathum Thani,Salaried (company),Balance ฿1–100 only,1943
+Greater Bangkok,Pathum Thani,Salaried (company),Borrower + transactor,705
+Greater Bangkok,Pathum Thani,Salaried (company),Borrower only,1418
+Greater Bangkok,Pathum Thani,Salaried (company),Core saver,368
+Greater Bangkok,Pathum Thani,Salaried (company),Core saver who pay,94
+Greater Bangkok,Pathum Thani,Salaried (company),Emerging saver + transactor,407
+Greater Bangkok,Pathum Thani,Salaried (company),Emerging saver only,736
+Greater Bangkok,Pathum Thani,Salaried (company),No product (฿0),13626
+Greater Bangkok,Pathum Thani,Salaried (company),Pays only,460
+Greater Bangkok,Pathum Thani,Salaried (company),Saver + borrower,194
+Greater Bangkok,Pathum Thani,Salaried (company),Saver + borrower who pay,191
+Greater Bangkok,Pathum Thani,Salaried (government),Balance ฿1–100 only,499
+Greater Bangkok,Pathum Thani,Salaried (government),Borrower + transactor,160
+Greater Bangkok,Pathum Thani,Salaried (government),Borrower only,615
+Greater Bangkok,Pathum Thani,Salaried (government),Core saver,81
+Greater Bangkok,Pathum Thani,Salaried (government),Core saver who pay,32
+Greater Bangkok,Pathum Thani,Salaried (government),Emerging saver + transactor,107
+Greater Bangkok,Pathum Thani,Salaried (government),Emerging saver only,238
+Greater Bangkok,Pathum Thani,Salaried (government),No product (฿0),2989
+Greater Bangkok,Pathum Thani,Salaried (government),Pays only,121
+Greater Bangkok,Pathum Thani,Salaried (government),Saver + borrower,64
+Greater Bangkok,Pathum Thani,Salaried (government),Saver + borrower who pay,59
+Greater Bangkok,Pathum Thani,Wage earner,Balance ฿1–100 only,253
+Greater Bangkok,Pathum Thani,Wage earner,Borrower + transactor,40
+Greater Bangkok,Pathum Thani,Wage earner,Borrower only,105
+Greater Bangkok,Pathum Thani,Wage earner,Core saver,26
+Greater Bangkok,Pathum Thani,Wage earner,Core saver who pay,9
+Greater Bangkok,Pathum Thani,Wage earner,Emerging saver + transactor,74
+Greater Bangkok,Pathum Thani,Wage earner,Emerging saver only,91
+Greater Bangkok,Pathum Thani,Wage earner,No product (฿0),2298
+Greater Bangkok,Pathum Thani,Wage earner,Pays only,98
+Greater Bangkok,Pathum Thani,Wage earner,Saver + borrower,14
+Greater Bangkok,Pathum Thani,Wage earner,Saver + borrower who pay,14
+Greater Bangkok,Samut Prakan,Agriculture,Balance ฿1–100 only,45
+Greater Bangkok,Samut Prakan,Agriculture,Borrower + transactor,11
+Greater Bangkok,Samut Prakan,Agriculture,Borrower only,12
+Greater Bangkok,Samut Prakan,Agriculture,Core saver,7
+Greater Bangkok,Samut Prakan,Agriculture,Core saver who pay,1
+Greater Bangkok,Samut Prakan,Agriculture,Emerging saver + transactor,11
+Greater Bangkok,Samut Prakan,Agriculture,Emerging saver only,10
+Greater Bangkok,Samut Prakan,Agriculture,No product (฿0),286
+Greater Bangkok,Samut Prakan,Agriculture,Pays only,8
+Greater Bangkok,Samut Prakan,Agriculture,Saver + borrower,2
+Greater Bangkok,Samut Prakan,Agriculture,Saver + borrower who pay,2
+Greater Bangkok,Samut Prakan,Blue collar,Balance ฿1–100 only,962
+Greater Bangkok,Samut Prakan,Blue collar,Borrower + transactor,429
+Greater Bangkok,Samut Prakan,Blue collar,Borrower only,1178
+Greater Bangkok,Samut Prakan,Blue collar,Core saver,36
+Greater Bangkok,Samut Prakan,Blue collar,Core saver who pay,17
+Greater Bangkok,Samut Prakan,Blue collar,Emerging saver + transactor,157
+Greater Bangkok,Samut Prakan,Blue collar,Emerging saver only,185
+Greater Bangkok,Samut Prakan,Blue collar,No product (฿0),12222
+Greater Bangkok,Samut Prakan,Blue collar,Pays only,232
+Greater Bangkok,Samut Prakan,Blue collar,Saver + borrower,147
+Greater Bangkok,Samut Prakan,Blue collar,Saver + borrower who pay,87
+Greater Bangkok,Samut Prakan,Freelance,Balance ฿1–100 only,720
+Greater Bangkok,Samut Prakan,Freelance,Borrower + transactor,145
+Greater Bangkok,Samut Prakan,Freelance,Borrower only,288
+Greater Bangkok,Samut Prakan,Freelance,Core saver,82
+Greater Bangkok,Samut Prakan,Freelance,Core saver who pay,28
+Greater Bangkok,Samut Prakan,Freelance,Emerging saver + transactor,149
+Greater Bangkok,Samut Prakan,Freelance,Emerging saver only,254
+Greater Bangkok,Samut Prakan,Freelance,No product (฿0),5907
+Greater Bangkok,Samut Prakan,Freelance,Pays only,193
+Greater Bangkok,Samut Prakan,Freelance,Saver + borrower,32
+Greater Bangkok,Samut Prakan,Freelance,Saver + borrower who pay,35
+Greater Bangkok,Samut Prakan,Offline merchant,Balance ฿1–100 only,583
+Greater Bangkok,Samut Prakan,Offline merchant,Borrower + transactor,110
+Greater Bangkok,Samut Prakan,Offline merchant,Borrower only,233
+Greater Bangkok,Samut Prakan,Offline merchant,Core saver,116
+Greater Bangkok,Samut Prakan,Offline merchant,Core saver who pay,49
+Greater Bangkok,Samut Prakan,Offline merchant,Emerging saver + transactor,160
+Greater Bangkok,Samut Prakan,Offline merchant,Emerging saver only,311
+Greater Bangkok,Samut Prakan,Offline merchant,No product (฿0),3152
+Greater Bangkok,Samut Prakan,Offline merchant,Pays only,129
+Greater Bangkok,Samut Prakan,Offline merchant,Saver + borrower,52
+Greater Bangkok,Samut Prakan,Offline merchant,Saver + borrower who pay,36
+Greater Bangkok,Samut Prakan,Online merchant,Balance ฿1–100 only,378
+Greater Bangkok,Samut Prakan,Online merchant,Borrower + transactor,78
+Greater Bangkok,Samut Prakan,Online merchant,Borrower only,143
+Greater Bangkok,Samut Prakan,Online merchant,Core saver,33
+Greater Bangkok,Samut Prakan,Online merchant,Core saver who pay,14
+Greater Bangkok,Samut Prakan,Online merchant,Emerging saver + transactor,101
+Greater Bangkok,Samut Prakan,Online merchant,Emerging saver only,152
+Greater Bangkok,Samut Prakan,Online merchant,No product (฿0),2319
+Greater Bangkok,Samut Prakan,Online merchant,Pays only,107
+Greater Bangkok,Samut Prakan,Online merchant,Saver + borrower,23
+Greater Bangkok,Samut Prakan,Online merchant,Saver + borrower who pay,21
+Greater Bangkok,Samut Prakan,Other or unknown,Balance ฿1–100 only,115
+Greater Bangkok,Samut Prakan,Other or unknown,Borrower only,1
+Greater Bangkok,Samut Prakan,Other or unknown,Core saver,92
+Greater Bangkok,Samut Prakan,Other or unknown,Core saver who pay,23
+Greater Bangkok,Samut Prakan,Other or unknown,Emerging saver + transactor,45
+Greater Bangkok,Samut Prakan,Other or unknown,Emerging saver only,93
+Greater Bangkok,Samut Prakan,Other or unknown,No product (฿0),519
+Greater Bangkok,Samut Prakan,Other or unknown,Pays only,40
+Greater Bangkok,Samut Prakan,Rider,Balance ฿1–100 only,309
+Greater Bangkok,Samut Prakan,Rider,Borrower + transactor,49
+Greater Bangkok,Samut Prakan,Rider,Borrower only,127
+Greater Bangkok,Samut Prakan,Rider,Core saver,5
+Greater Bangkok,Samut Prakan,Rider,Core saver who pay,8
+Greater Bangkok,Samut Prakan,Rider,Emerging saver + transactor,69
+Greater Bangkok,Samut Prakan,Rider,Emerging saver only,51
+Greater Bangkok,Samut Prakan,Rider,No product (฿0),3021
+Greater Bangkok,Samut Prakan,Rider,Pays only,99
+Greater Bangkok,Samut Prakan,Rider,Saver + borrower,5
+Greater Bangkok,Samut Prakan,Rider,Saver + borrower who pay,9
+Greater Bangkok,Samut Prakan,Salaried (company),Balance ฿1–100 only,2472
+Greater Bangkok,Samut Prakan,Salaried (company),Borrower + transactor,899
+Greater Bangkok,Samut Prakan,Salaried (company),Borrower only,1776
+Greater Bangkok,Samut Prakan,Salaried (company),Core saver,498
+Greater Bangkok,Samut Prakan,Salaried (company),Core saver who pay,137
+Greater Bangkok,Samut Prakan,Salaried (company),Emerging saver + transactor,497
+Greater Bangkok,Samut Prakan,Salaried (company),Emerging saver only,908
+Greater Bangkok,Samut Prakan,Salaried (company),No product (฿0),17456
+Greater Bangkok,Samut Prakan,Salaried (company),Pays only,542
+Greater Bangkok,Samut Prakan,Salaried (company),Saver + borrower,240
+Greater Bangkok,Samut Prakan,Salaried (company),Saver + borrower who pay,252
+Greater Bangkok,Samut Prakan,Salaried (government),Balance ฿1–100 only,322
+Greater Bangkok,Samut Prakan,Salaried (government),Borrower + transactor,109
+Greater Bangkok,Samut Prakan,Salaried (government),Borrower only,517
+Greater Bangkok,Samut Prakan,Salaried (government),Core saver,75
+Greater Bangkok,Samut Prakan,Salaried (government),Core saver who pay,27
+Greater Bangkok,Samut Prakan,Salaried (government),Emerging saver + transactor,74
+Greater Bangkok,Samut Prakan,Salaried (government),Emerging saver only,165
+Greater Bangkok,Samut Prakan,Salaried (government),No product (฿0),2321
+Greater Bangkok,Samut Prakan,Salaried (government),Pays only,73
+Greater Bangkok,Samut Prakan,Salaried (government),Saver + borrower,48
+Greater Bangkok,Samut Prakan,Salaried (government),Saver + borrower who pay,42
+Greater Bangkok,Samut Prakan,Wage earner,Balance ฿1–100 only,245
+Greater Bangkok,Samut Prakan,Wage earner,Borrower + transactor,35
+Greater Bangkok,Samut Prakan,Wage earner,Borrower only,115
+Greater Bangkok,Samut Prakan,Wage earner,Core saver,19
+Greater Bangkok,Samut Prakan,Wage earner,Core saver who pay,5
+Greater Bangkok,Samut Prakan,Wage earner,Emerging saver + transactor,64
+Greater Bangkok,Samut Prakan,Wage earner,Emerging saver only,80
+Greater Bangkok,Samut Prakan,Wage earner,No product (฿0),2385
+Greater Bangkok,Samut Prakan,Wage earner,Pays only,71
+Greater Bangkok,Samut Prakan,Wage earner,Saver + borrower,15
+Greater Bangkok,Samut Prakan,Wage earner,Saver + borrower who pay,4
+North,Chiang Mai,Agriculture,Balance ฿1–100 only,112
+North,Chiang Mai,Agriculture,Borrower + transactor,13
+North,Chiang Mai,Agriculture,Borrower only,29
+North,Chiang Mai,Agriculture,Core saver,9
+North,Chiang Mai,Agriculture,Core saver who pay,4
+North,Chiang Mai,Agriculture,Emerging saver + transactor,17
+North,Chiang Mai,Agriculture,Emerging saver only,53
+North,Chiang Mai,Agriculture,No product (฿0),607
+North,Chiang Mai,Agriculture,Pays only,28
+North,Chiang Mai,Agriculture,Saver + borrower,8
+North,Chiang Mai,Agriculture,Saver + borrower who pay,2
+North,Chiang Mai,Blue collar,Balance ฿1–100 only,305
+North,Chiang Mai,Blue collar,Borrower + transactor,211
+North,Chiang Mai,Blue collar,Borrower only,407
+North,Chiang Mai,Blue collar,Core saver,19
+North,Chiang Mai,Blue collar,Core saver who pay,5
+North,Chiang Mai,Blue collar,Emerging saver + transactor,62
+North,Chiang Mai,Blue collar,Emerging saver only,55
+North,Chiang Mai,Blue collar,No product (฿0),3254
+North,Chiang Mai,Blue collar,Pays only,91
+North,Chiang Mai,Blue collar,Saver + borrower,31
+North,Chiang Mai,Blue collar,Saver + borrower who pay,38
+North,Chiang Mai,Freelance,Balance ฿1–100 only,569
+North,Chiang Mai,Freelance,Borrower + transactor,127
+North,Chiang Mai,Freelance,Borrower only,291
+North,Chiang Mai,Freelance,Core saver,58
+North,Chiang Mai,Freelance,Core saver who pay,19
+North,Chiang Mai,Freelance,Emerging saver + transactor,147
+North,Chiang Mai,Freelance,Emerging saver only,202
+North,Chiang Mai,Freelance,No product (฿0),4097
+North,Chiang Mai,Freelance,Pays only,201
+North,Chiang Mai,Freelance,Saver + borrower,31
+North,Chiang Mai,Freelance,Saver + borrower who pay,46
+North,Chiang Mai,Offline merchant,Balance ฿1–100 only,681
+North,Chiang Mai,Offline merchant,Borrower + transactor,174
+North,Chiang Mai,Offline merchant,Borrower only,287
+North,Chiang Mai,Offline merchant,Core saver,89
+North,Chiang Mai,Offline merchant,Core saver who pay,46
+North,Chiang Mai,Offline merchant,Emerging saver + transactor,196
+North,Chiang Mai,Offline merchant,Emerging saver only,320
+North,Chiang Mai,Offline merchant,No product (฿0),3362
+North,Chiang Mai,Offline merchant,Pays only,207
+North,Chiang Mai,Offline merchant,Saver + borrower,46
+North,Chiang Mai,Offline merchant,Saver + borrower who pay,51
+North,Chiang Mai,Online merchant,Balance ฿1–100 only,324
+North,Chiang Mai,Online merchant,Borrower + transactor,90
+North,Chiang Mai,Online merchant,Borrower only,160
+North,Chiang Mai,Online merchant,Core saver,17
+North,Chiang Mai,Online merchant,Core saver who pay,12
+North,Chiang Mai,Online merchant,Emerging saver + transactor,83
+North,Chiang Mai,Online merchant,Emerging saver only,87
+North,Chiang Mai,Online merchant,No product (฿0),1778
+North,Chiang Mai,Online merchant,Pays only,127
+North,Chiang Mai,Online merchant,Saver + borrower,18
+North,Chiang Mai,Online merchant,Saver + borrower who pay,27
+North,Chiang Mai,Other or unknown,Balance ฿1–100 only,106
+North,Chiang Mai,Other or unknown,Core saver,53
+North,Chiang Mai,Other or unknown,Core saver who pay,11
+North,Chiang Mai,Other or unknown,Emerging saver + transactor,41
+North,Chiang Mai,Other or unknown,Emerging saver only,90
+North,Chiang Mai,Other or unknown,No product (฿0),398
+North,Chiang Mai,Other or unknown,Pays only,42
+North,Chiang Mai,Rider,Balance ฿1–100 only,139
+North,Chiang Mai,Rider,Borrower + transactor,49
+North,Chiang Mai,Rider,Borrower only,76
+North,Chiang Mai,Rider,Core saver,2
+North,Chiang Mai,Rider,Core saver who pay,2
+North,Chiang Mai,Rider,Emerging saver + transactor,31
+North,Chiang Mai,Rider,Emerging saver only,26
+North,Chiang Mai,Rider,No product (฿0),1358
+North,Chiang Mai,Rider,Pays only,68
+North,Chiang Mai,Rider,Saver + borrower,5
+North,Chiang Mai,Rider,Saver + borrower who pay,3
+North,Chiang Mai,Salaried (company),Balance ฿1–100 only,909
+North,Chiang Mai,Salaried (company),Borrower + transactor,467
+North,Chiang Mai,Salaried (company),Borrower only,866
+North,Chiang Mai,Salaried (company),Core saver,142
+North,Chiang Mai,Salaried (company),Core saver who pay,51
+North,Chiang Mai,Salaried (company),Emerging saver + transactor,198
+North,Chiang Mai,Salaried (company),Emerging saver only,315
+North,Chiang Mai,Salaried (company),No product (฿0),6311
+North,Chiang Mai,Salaried (company),Pays only,230
+North,Chiang Mai,Salaried (company),Saver + borrower,119
+North,Chiang Mai,Salaried (company),Saver + borrower who pay,130
+North,Chiang Mai,Salaried (government),Balance ฿1–100 only,429
+North,Chiang Mai,Salaried (government),Borrower + transactor,219
+North,Chiang Mai,Salaried (government),Borrower only,749
+North,Chiang Mai,Salaried (government),Core saver,97
+North,Chiang Mai,Salaried (government),Core saver who pay,32
+North,Chiang Mai,Salaried (government),Emerging saver + transactor,141
+North,Chiang Mai,Salaried (government),Emerging saver only,243
+North,Chiang Mai,Salaried (government),No product (฿0),2982
+North,Chiang Mai,Salaried (government),Pays only,122
+North,Chiang Mai,Salaried (government),Saver + borrower,72
+North,Chiang Mai,Salaried (government),Saver + borrower who pay,78
+North,Chiang Mai,Wage earner,Balance ฿1–100 only,183
+North,Chiang Mai,Wage earner,Borrower + transactor,44
+North,Chiang Mai,Wage earner,Borrower only,104
+North,Chiang Mai,Wage earner,Core saver,12
+North,Chiang Mai,Wage earner,Core saver who pay,5
+North,Chiang Mai,Wage earner,Emerging saver + transactor,45
+North,Chiang Mai,Wage earner,Emerging saver only,64
+North,Chiang Mai,Wage earner,No product (฿0),1697
+North,Chiang Mai,Wage earner,Pays only,96
+North,Chiang Mai,Wage earner,Saver + borrower,16
+North,Chiang Mai,Wage earner,Saver + borrower who pay,9
+Northeast,Nakhon Ratchasima,Agriculture,Balance ฿1–100 only,195
+Northeast,Nakhon Ratchasima,Agriculture,Borrower + transactor,41
+Northeast,Nakhon Ratchasima,Agriculture,Borrower only,104
+Northeast,Nakhon Ratchasima,Agriculture,Core saver,7
+Northeast,Nakhon Ratchasima,Agriculture,Core saver who pay,4
+Northeast,Nakhon Ratchasima,Agriculture,Emerging saver + transactor,21
+Northeast,Nakhon Ratchasima,Agriculture,Emerging saver only,51
+Northeast,Nakhon Ratchasima,Agriculture,No product (฿0),1890
+Northeast,Nakhon Ratchasima,Agriculture,Pays only,46
+Northeast,Nakhon Ratchasima,Agriculture,Saver + borrower,12
+Northeast,Nakhon Ratchasima,Agriculture,Saver + borrower who pay,4
+Northeast,Nakhon Ratchasima,Blue collar,Balance ฿1–100 only,445
+Northeast,Nakhon Ratchasima,Blue collar,Borrower + transactor,246
+Northeast,Nakhon Ratchasima,Blue collar,Borrower only,672
+Northeast,Nakhon Ratchasima,Blue collar,Core saver,7
+Northeast,Nakhon Ratchasima,Blue collar,Core saver who pay,3
+Northeast,Nakhon Ratchasima,Blue collar,Emerging saver + transactor,61
+Northeast,Nakhon Ratchasima,Blue collar,Emerging saver only,67
+Northeast,Nakhon Ratchasima,Blue collar,No product (฿0),6237
+Northeast,Nakhon Ratchasima,Blue collar,Pays only,123
+Northeast,Nakhon Ratchasima,Blue collar,Saver + borrower,62
+Northeast,Nakhon Ratchasima,Blue collar,Saver + borrower who pay,43
+Northeast,Nakhon Ratchasima,Freelance,Balance ฿1–100 only,662
+Northeast,Nakhon Ratchasima,Freelance,Borrower + transactor,168
+Northeast,Nakhon Ratchasima,Freelance,Borrower only,373
+Northeast,Nakhon Ratchasima,Freelance,Core saver,42
+Northeast,Nakhon Ratchasima,Freelance,Core saver who pay,17
+Northeast,Nakhon Ratchasima,Freelance,Emerging saver + transactor,151
+Northeast,Nakhon Ratchasima,Freelance,Emerging saver only,157
+Northeast,Nakhon Ratchasima,Freelance,No product (฿0),6703
+Northeast,Nakhon Ratchasima,Freelance,Pays only,242
+Northeast,Nakhon Ratchasima,Freelance,Saver + borrower,35
+Northeast,Nakhon Ratchasima,Freelance,Saver + borrower who pay,25
+Northeast,Nakhon Ratchasima,Offline merchant,Balance ฿1–100 only,601
+Northeast,Nakhon Ratchasima,Offline merchant,Borrower + transactor,140
+Northeast,Nakhon Ratchasima,Offline merchant,Borrower only,294
+Northeast,Nakhon Ratchasima,Offline merchant,Core saver,71
+Northeast,Nakhon Ratchasima,Offline merchant,Core saver who pay,29
+Northeast,Nakhon Ratchasima,Offline merchant,Emerging saver + transactor,152
+Northeast,Nakhon Ratchasima,Offline merchant,Emerging saver only,214
+Northeast,Nakhon Ratchasima,Offline merchant,No product (฿0),3723
+Northeast,Nakhon Ratchasima,Offline merchant,Pays only,164
+Northeast,Nakhon Ratchasima,Offline merchant,Saver + borrower,45
+Northeast,Nakhon Ratchasima,Offline merchant,Saver + borrower who pay,43
+Northeast,Nakhon Ratchasima,Online merchant,Balance ฿1–100 only,384
+Northeast,Nakhon Ratchasima,Online merchant,Borrower + transactor,81
+Northeast,Nakhon Ratchasima,Online merchant,Borrower only,180
+Northeast,Nakhon Ratchasima,Online merchant,Core saver,15
+Northeast,Nakhon Ratchasima,Online merchant,Core saver who pay,18
+Northeast,Nakhon Ratchasima,Online merchant,Emerging saver + transactor,111
+Northeast,Nakhon Ratchasima,Online merchant,Emerging saver only,91
+Northeast,Nakhon Ratchasima,Online merchant,No product (฿0),2455
+Northeast,Nakhon Ratchasima,Online merchant,Pays only,140
+Northeast,Nakhon Ratchasima,Online merchant,Saver + borrower,26
+Northeast,Nakhon Ratchasima,Online merchant,Saver + borrower who pay,29
+Northeast,Nakhon Ratchasima,Other or unknown,Balance ฿1–100 only,117
+Northeast,Nakhon Ratchasima,Other or unknown,Core saver,35
+Northeast,Nakhon Ratchasima,Other or unknown,Core saver who pay,7
+Northeast,Nakhon Ratchasima,Other or unknown,Emerging saver + transactor,30
+Northeast,Nakhon Ratchasima,Other or unknown,Emerging saver only,60
+Northeast,Nakhon Ratchasima,Other or unknown,No product (฿0),625
+Northeast,Nakhon Ratchasima,Other or unknown,Pays only,46
+Northeast,Nakhon Ratchasima,Rider,Balance ฿1–100 only,124
+Northeast,Nakhon Ratchasima,Rider,Borrower + transactor,20
+Northeast,Nakhon Ratchasima,Rider,Borrower only,80
+Northeast,Nakhon Ratchasima,Rider,Core saver,1
+Northeast,Nakhon Ratchasima,Rider,Core saver who pay,1
+Northeast,Nakhon Ratchasima,Rider,Emerging saver + transactor,32
+Northeast,Nakhon Ratchasima,Rider,Emerging saver only,19
+Northeast,Nakhon Ratchasima,Rider,No product (฿0),1199
+Northeast,Nakhon Ratchasima,Rider,Pays only,48
+Northeast,Nakhon Ratchasima,Rider,Saver + borrower,2
+Northeast,Nakhon Ratchasima,Rider,Saver + borrower who pay,6
+Northeast,Nakhon Ratchasima,Salaried (company),Balance ฿1–100 only,973
+Northeast,Nakhon Ratchasima,Salaried (company),Borrower + transactor,536
+Northeast,Nakhon Ratchasima,Salaried (company),Borrower only,970
+Northeast,Nakhon Ratchasima,Salaried (company),Core saver,78
+Northeast,Nakhon Ratchasima,Salaried (company),Core saver who pay,34
+Northeast,Nakhon Ratchasima,Salaried (company),Emerging saver + transactor,183
+Northeast,Nakhon Ratchasima,Salaried (company),Emerging saver only,241
+Northeast,Nakhon Ratchasima,Salaried (company),No product (฿0),7743
+Northeast,Nakhon Ratchasima,Salaried (company),Pays only,253
+Northeast,Nakhon Ratchasima,Salaried (company),Saver + borrower,93
+Northeast,Nakhon Ratchasima,Salaried (company),Saver + borrower who pay,117
+Northeast,Nakhon Ratchasima,Salaried (government),Balance ฿1–100 only,531
+Northeast,Nakhon Ratchasima,Salaried (government),Borrower + transactor,318
+Northeast,Nakhon Ratchasima,Salaried (government),Borrower only,1028
+Northeast,Nakhon Ratchasima,Salaried (government),Core saver,55
+Northeast,Nakhon Ratchasima,Salaried (government),Core saver who pay,22
+Northeast,Nakhon Ratchasima,Salaried (government),Emerging saver + transactor,122
+Northeast,Nakhon Ratchasima,Salaried (government),Emerging saver only,209
+Northeast,Nakhon Ratchasima,Salaried (government),No product (฿0),4211
+Northeast,Nakhon Ratchasima,Salaried (government),Pays only,124
+Northeast,Nakhon Ratchasima,Salaried (government),Saver + borrower,79
+Northeast,Nakhon Ratchasima,Salaried (government),Saver + borrower who pay,82
+Northeast,Nakhon Ratchasima,Wage earner,Balance ฿1–100 only,341
+Northeast,Nakhon Ratchasima,Wage earner,Borrower + transactor,70
+Northeast,Nakhon Ratchasima,Wage earner,Borrower only,163
+Northeast,Nakhon Ratchasima,Wage earner,Core saver,8
+Northeast,Nakhon Ratchasima,Wage earner,Core saver who pay,5
+Northeast,Nakhon Ratchasima,Wage earner,Emerging saver + transactor,72
+Northeast,Nakhon Ratchasima,Wage earner,Emerging saver only,80
+Northeast,Nakhon Ratchasima,Wage earner,No product (฿0),3580
+Northeast,Nakhon Ratchasima,Wage earner,Pays only,138
+Northeast,Nakhon Ratchasima,Wage earner,Saver + borrower,11
+Northeast,Nakhon Ratchasima,Wage earner,Saver + borrower who pay,14
+Other provinces,Others,Agriculture,Balance ฿1–100 only,4555
+Other provinces,Others,Agriculture,Borrower + transactor,605
+Other provinces,Others,Agriculture,Borrower only,1809
+Other provinces,Others,Agriculture,Core saver,234
+Other provinces,Others,Agriculture,Core saver who pay,99
+Other provinces,Others,Agriculture,Emerging saver + transactor,826
+Other provinces,Others,Agriculture,Emerging saver only,1315
+Other provinces,Others,Agriculture,No product (฿0),36960
+Other provinces,Others,Agriculture,Pays only,1500
+Other provinces,Others,Agriculture,Saver + borrower,223
+Other provinces,Others,Agriculture,Saver + borrower who pay,166
+Other provinces,Others,Blue collar,Balance ฿1–100 only,6684
+Other provinces,Others,Blue collar,Borrower + transactor,3331
+Other provinces,Others,Blue collar,Borrower only,8906
+Other provinces,Others,Blue collar,Core saver,134
+Other provinces,Others,Blue collar,Core saver who pay,63
+Other provinces,Others,Blue collar,Emerging saver + transactor,946
+Other provinces,Others,Blue collar,Emerging saver only,1033
+Other provinces,Others,Blue collar,No product (฿0),87346
+Other provinces,Others,Blue collar,Pays only,1800
+Other provinces,Others,Blue collar,Saver + borrower,813
+Other provinces,Others,Blue collar,Saver + borrower who pay,689
+Other provinces,Others,Freelance,Balance ฿1–100 only,11110
+Other provinces,Others,Freelance,Borrower + transactor,2217
+Other provinces,Others,Freelance,Borrower only,5646
+Other provinces,Others,Freelance,Core saver,566
+Other provinces,Others,Freelance,Core saver who pay,254
+Other provinces,Others,Freelance,Emerging saver + transactor,2205
+Other provinces,Others,Freelance,Emerging saver only,2583
+Other provinces,Others,Freelance,No product (฿0),103263
+Other provinces,Others,Freelance,Pays only,4079
+Other provinces,Others,Freelance,Saver + borrower,479
+Other provinces,Others,Freelance,Saver + borrower who pay,441
+Other provinces,Others,Offline merchant,Balance ฿1–100 only,10146
+Other provinces,Others,Offline merchant,Borrower + transactor,1892
+Other provinces,Others,Offline merchant,Borrower only,4780
+Other provinces,Others,Offline merchant,Core saver,1013
+Other provinces,Others,Offline merchant,Core saver who pay,464
+Other provinces,Others,Offline merchant,Emerging saver + transactor,2616
+Other provinces,Others,Offline merchant,Emerging saver only,3931
+Other provinces,Others,Offline merchant,No product (฿0),61836
+Other provinces,Others,Offline merchant,Pays only,2785
+Other provinces,Others,Offline merchant,Saver + borrower,590
+Other provinces,Others,Offline merchant,Saver + borrower who pay,576
+Other provinces,Others,Online merchant,Balance ฿1–100 only,6363
+Other provinces,Others,Online merchant,Borrower + transactor,1305
+Other provinces,Others,Online merchant,Borrower only,2942
+Other provinces,Others,Online merchant,Core saver,317
+Other provinces,Others,Online merchant,Core saver who pay,191
+Other provinces,Others,Online merchant,Emerging saver + transactor,1571
+Other provinces,Others,Online merchant,Emerging saver only,1857
+Other provinces,Others,Online merchant,No product (฿0),40094
+Other provinces,Others,Online merchant,Pays only,2174
+Other provinces,Others,Online merchant,Saver + borrower,272
+Other provinces,Others,Online merchant,Saver + borrower who pay,330
+Other provinces,Others,Other or unknown,Balance ฿1–100 only,2174
+Other provinces,Others,Other or unknown,Borrower + transactor,2
+Other provinces,Others,Other or unknown,Borrower only,11
+Other provinces,Others,Other or unknown,Core saver,472
+Other provinces,Others,Other or unknown,Core saver who pay,126
+Other provinces,Others,Other or unknown,Emerging saver + transactor,685
+Other provinces,Others,Other or unknown,Emerging saver only,942
+Other provinces,Others,Other or unknown,No product (฿0),10317
+Other provinces,Others,Other or unknown,Pays only,987
+Other provinces,Others,Other or unknown,Saver + borrower who pay,1
+Other provinces,Others,Rider,Balance ฿1–100 only,2066
+Other provinces,Others,Rider,Borrower + transactor,439
+Other provinces,Others,Rider,Borrower only,962
+Other provinces,Others,Rider,Core saver,40
+Other provinces,Others,Rider,Core saver who pay,21
+Other provinces,Others,Rider,Emerging saver + transactor,403
+Other provinces,Others,Rider,Emerging saver only,355
+Other provinces,Others,Rider,No product (฿0),19798
+Other provinces,Others,Rider,Pays only,888
+Other provinces,Others,Rider,Saver + borrower,51
+Other provinces,Others,Rider,Saver + borrower who pay,83
+Other provinces,Others,Salaried (company),Balance ฿1–100 only,14652
+Other provinces,Others,Salaried (company),Borrower + transactor,6415
+Other provinces,Others,Salaried (company),Borrower only,14077
+Other provinces,Others,Salaried (company),Core saver,1216
+Other provinces,Others,Salaried (company),Core saver who pay,474
+Other provinces,Others,Salaried (company),Emerging saver + transactor,2609
+Other provinces,Others,Salaried (company),Emerging saver only,3891
+Other provinces,Others,Salaried (company),No product (฿0),120886
+Other provinces,Others,Salaried (company),Pays only,3629
+Other provinces,Others,Salaried (company),Saver + borrower,1478
+Other provinces,Others,Salaried (company),Saver + borrower who pay,1536
+Other provinces,Others,Salaried (government),Balance ฿1–100 only,10007
+Other provinces,Others,Salaried (government),Borrower + transactor,4890
+Other provinces,Others,Salaried (government),Borrower only,17007
+Other provinces,Others,Salaried (government),Core saver,1160
+Other provinces,Others,Salaried (government),Core saver who pay,447
+Other provinces,Others,Salaried (government),Emerging saver + transactor,2128
+Other provinces,Others,Salaried (government),Emerging saver only,3850
+Other provinces,Others,Salaried (government),No product (฿0),72736
+Other provinces,Others,Salaried (government),Pays only,2415
+Other provinces,Others,Salaried (government),Saver + borrower,1541
+Other provinces,Others,Salaried (government),Saver + borrower who pay,1237
+Other provinces,Others,Wage earner,Balance ฿1–100 only,6156
+Other provinces,Others,Wage earner,Borrower + transactor,998
+Other provinces,Others,Wage earner,Borrower only,2782
+Other provinces,Others,Wage earner,Core saver,178
+Other provinces,Others,Wage earner,Core saver who pay,98
+Other provinces,Others,Wage earner,Emerging saver + transactor,1215
+Other provinces,Others,Wage earner,Emerging saver only,1270
+Other provinces,Others,Wage earner,No product (฿0),56563
+Other provinces,Others,Wage earner,Pays only,2413
+Other provinces,Others,Wage earner,Saver + borrower,236
+Other provinces,Others,Wage earner,Saver + borrower who pay,236
