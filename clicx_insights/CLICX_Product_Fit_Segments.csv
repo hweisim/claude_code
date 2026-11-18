@@ -1,0 +1,16 @@
+segment_id,segment,rule,customers,share_pct,active_pct,applied_no_loan_pct,booked_loan_pct,balance_over_20k_pct,paid_in_app_oct_pct,bangkok_area_pct
+1,Students and young non-earners,"Age under 20, or under 30 with no job on file",21503,1.4,17.7,60.3,0.0,1.6,12.1,20.3
+2,Seniors,Age 60+,25103,1.7,31.6,48.4,0.0,11.5,8.3,41.8
+3,"SME owners, Bangkok area","Offline merchant group (business owner or family business), Bangkok area, 20-59",35516,2.4,27.1,69.6,8.6,4.7,10.5,100.0
+4,"SME owners, up-country","Offline merchant group, outside Bangkok area, 20-59",108225,7.2,21.0,76.9,9.1,1.7,9.5,0.0
+5,Online sellers,"Online merchant group, 20-59",91912,6.1,20.4,76.9,9.0,1.4,10.2,27.3
+6,Farm households,"Agriculture group, 20-59",53342,3.5,14.2,80.1,6.2,0.8,6.6,4.1
+7,Government and state staff,"Salary-Gov group, 20-59",175504,11.6,30.6,65.4,20.8,2.2,9.7,23.1
+8,Young company staff,"Salary-Corp group, 20-29",105077,7.0,19.2,77.8,13.4,1.1,8.1,38.3
+9,"Prime company staff, Bangkok area","Salary-Corp group, 30-59, Bangkok area",131999,8.8,28.5,66.0,12.4,5.9,10.2,100.0
+10,"Prime company staff, up-country","Salary-Corp group, 30-59, outside Bangkok area",157670,10.5,22.1,74.9,13.8,1.4,9.3,0.0
+11,Blue-collar workers,"Blue collar group, 20-59",222662,14.8,16.3,81.2,12.2,0.3,6.4,31.2
+12,Riders and drivers,"Rider group, 20-59",57198,3.8,12.7,86.0,6.1,0.3,7.1,44.2
+13,Freelancers,"Freelance group, 20-59",210756,14.0,15.3,79.8,7.0,1.2,7.3,24.7
+14,Wage earners,"Wage earner group, 20-59",101566,6.7,13.7,80.9,6.2,0.6,7.1,18.9
+15,Non-working adults,"Other/unknown occupation, 30-59",9385,0.6,29.1,48.6,0.1,10.9,10.0,37.0
